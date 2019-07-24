@@ -34,19 +34,12 @@ public class TaskInfo : MonoBehaviour
     // This class (defined at the bottom), can be expanded a lot to add condition specific start positions, 
     // target positions,... 
     public GameObject[] CueOnsetTriggers;
-    //public bool CueNavTrigger = true;
-    //[Tooltip("Use gaze to trigger cue onsets.")] public bool CueGazeTrigger = false;
-    //public Material[] CueMaterials;
     public GameObject[] CueObjects;
-    // [Tooltip("Timed cue duration (s). Set to Infinity for trigger based cues.")] public float CueDuration = Mathf.Infinity;
     
     [Header("Targets/Distractors")]
     public GameObject[] TargetOnsetTriggers;
-    //public bool TargetNavTrigger = true;
-    //[Tooltip("Use gaze to trigger target onsets/hits.")] public bool TargetGazeTrigger = false; 
     public int NTargets = 1;
     [Tooltip("Set to 0 to not use Distractors")]public int NDistractors = 1; 
-    //public Material[] TargetMaterials;
     public GameObject[] TargetObjects;
     public GameObject[] DistractorObjects;
     public GameObject[] PossiblePositions;

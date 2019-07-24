@@ -4,11 +4,10 @@
  * the FrameOutlet will publish: 
     * Position X, Y, Z 
     * Rotation
-    * TODO: Add more
+    * ...
  * 
- * the Trial Outlet will publish at the start of trial: 
-    * Current Target
-    * TODO: Add more
+ * the Trial Outlet will publish at the end of the trial and is used by MonkeyLogic to trigger
+ * the end of the trial and get the outcome. 
  *
  * This script is based on the LSLMarkerStream.cs script in LSL/Scripts/. 
  * 
@@ -20,10 +19,7 @@
  * 
  * */
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Assets.LSL4Unity.Scripts;
 using LSL;
 
 

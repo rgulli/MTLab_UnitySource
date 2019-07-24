@@ -24,19 +24,19 @@ public class ExperimentController : MonoBehaviour
     // Load the current experiment configuration, and generate trials. 
     #region ExperimentConfig
     // Controllers
-    public FirstPerson.PlayerController playerController;
-    public MonkeyLogicController monkeyLogicController;
-    public EyeLinkController eyeLinkController;
-    public UserInputController userInputController;
+    public FirstPerson.PlayerController PlayerController;
+    public MonkeyLogicController MonkeyLogicController;
+    public EyeLinkController EyeLinkController;
+    public UserInputController UserInputController;
 
     // Data structures
-    private FrameData _frameData = new FrameData();
-    private TrialData _currentTrial = new TrialData();
-    private List<TrialData> _allTrials = new List<TrialData>();
+    private FrameData frameData = new FrameData();
+    private TrialData currentTrial = new TrialData();
+    private List<TrialData> allTrials = new List<TrialData>();
 
     // Generate Trials
     // Structure holding all the parameters that are set in the Editor. 
-    public TaskInfo taskInfo;
+    public TaskInfo TaskInfo;
 
     public void PrepareAllTrials()
     {
@@ -58,15 +58,15 @@ public class ExperimentController : MonoBehaviour
         List<GameObject[]> all_distractors_comb = new List<GameObject[]>();
         List<GameObject[]> all_positions_perm = new List<GameObject[]>();
 
-        GenerateCombinations(taskInfo.TargetObjects.ToList(), taskInfo.NTargets, new List<GameObject>(), all_targets_comb);
-        GenerateCombinations(taskInfo.DistractorObjects.ToList(), taskInfo.NDistractors, new List<GameObject>(), all_distractors_comb);
-        GeneratePermutations(taskInfo.PossiblePositions.ToList(), taskInfo.NTargets + taskInfo.NDistractors, new List<GameObject>(), all_positions_perm);
+        GenerateCombinations(TaskInfo.TargetObjects.ToList(), TaskInfo.NTargets, new List<GameObject>(), all_targets_comb);
+        GenerateCombinations(TaskInfo.DistractorObjects.ToList(), TaskInfo.NDistractors, new List<GameObject>(), all_distractors_comb);
+        GeneratePermutations(TaskInfo.PossiblePositions.ToList(), TaskInfo.NTargets + TaskInfo.NDistractors, new List<GameObject>(), all_positions_perm);
 
         // Loop for start positions (only 1 per trial)
-        for (int start_index = 0; start_index < taskInfo.StartPositions.Length; start_index++)
+        for (int start_index = 0; start_index < TaskInfo.StartPositions.Length; start_index++)
         {
             // Loop through all the conditions defined in the list
-            for (int cnd_index = 0; cnd_index < taskInfo.Conditions.Length; cnd_index++)
+            for (int cnd_index = 0; cnd_index < TaskInfo.Conditions.Length; cnd_index++)
             {
                 foreach (GameObject[] targs in all_targets_comb)
                 {
@@ -80,13 +80,13 @@ public class ExperimentController : MonoBehaviour
                         for (int ii = 0; ii < targs.Length; ii++)
                         {
                             targ_mat[ii] = 
-                                taskInfo.Conditions[cnd_index].TargetMaterials[Mathf.Min(ii, taskInfo.Conditions[cnd_index].TargetMaterials.Length-1)];
+                                TaskInfo.Conditions[cnd_index].TargetMaterials[Mathf.Min(ii, TaskInfo.Conditions[cnd_index].TargetMaterials.Length-1)];
                         }
 
                         for (int ii = 0; ii < dists.Length; ii++)
                         {
                             dist_mat[ii] =
-                                taskInfo.Conditions[cnd_index].DistractorMaterials[Mathf.Min(ii, taskInfo.Conditions[cnd_index].DistractorMaterials.Length - 1)];
+                                TaskInfo.Conditions[cnd_index].DistractorMaterials[Mathf.Min(ii, TaskInfo.Conditions[cnd_index].DistractorMaterials.Length - 1)];
                         }
 
                         foreach (GameObject[] poss in all_positions_perm)
@@ -108,16 +108,16 @@ public class ExperimentController : MonoBehaviour
                             }
 
                             // At this point we have everything. Add to trial list N times:
-                            for (int ii = 0; ii < taskInfo.NumberOfSets; ii++)
+                            for (int ii = 0; ii < TaskInfo.NumberOfSets; ii++)
                             {
-                                _allTrials.Add(
+                                allTrials.Add(
                                     new TrialData
                                     {
                                         Trial_Number = 0,
-                                        Start_Position = taskInfo.StartPositions[start_index].transform.position,
+                                        Start_Position = TaskInfo.StartPositions[start_index].transform.position,
                                         // Current Cue
-                                        Cue_Objects = taskInfo.CueObjects,
-                                        Cue_Material = taskInfo.Conditions[cnd_index].CueMaterial,
+                                        Cue_Objects = TaskInfo.CueObjects,
+                                        Cue_Material = TaskInfo.Conditions[cnd_index].CueMaterial,
                                         // Targets
                                         Target_Objects = targs,
                                         Target_Materials = targ_mat,
@@ -135,7 +135,7 @@ public class ExperimentController : MonoBehaviour
             }
         }
         // shuffle trials
-        _allTrials = _allTrials.OrderBy(x => UnityEngine.Random.value).ToList();
+        allTrials = allTrials.OrderBy(x => UnityEngine.Random.value).ToList();
     }
 
     // The following scripts (GenerateCombinations and GeneratePermutations) are not intuitive to follow. 
@@ -214,12 +214,13 @@ public class ExperimentController : MonoBehaviour
 
     }
 
+
     private void Start()
     {
         // Get Controllers instance
-        playerController.OnBlack(true);
+        PlayerController.OnBlack(true);
         PrepareAllTrials();
-        Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count/taskInfo.NumberOfSets) + " of which are different.");
+        Debug.Log("Generated :" + allTrials.Count + " trials. " + (allTrials.Count/TaskInfo.NumberOfSets) + " of which are different.");
     }
 
     #endregion ExperimentConfig
@@ -239,7 +240,7 @@ public class ExperimentController : MonoBehaviour
     private void StopExperiment()
     {
         IsRunning = false;
-        playerController.OnBlack(true);
+        PlayerController.OnBlack(true);
     }
 
     private void PauseExperiment()
@@ -247,14 +248,14 @@ public class ExperimentController : MonoBehaviour
         if(IsRunning && !IsPaused)
         {
             IsPaused = true;
-            currentState = "Paused";
+            _currentState = "Paused";
             // Need to put absolute value because when trial timer is Infinite, the
             // pause trial timer would be -Infinity.
             _pauseTrialTimer = Mathf.Abs(Time.realtimeSinceStartup - _trialTimer);
             _trialTimer = Mathf.Infinity;
             _pauseStateTimer = Mathf.Abs(Time.realtimeSinceStartup - _stateTimer);
             _stateTimer = Mathf.Infinity;
-            playerController.OnBlack(true);
+            PlayerController.OnBlack(true);
 
         }
     }
@@ -263,13 +264,13 @@ public class ExperimentController : MonoBehaviour
     {
         if (IsRunning && IsPaused)
         {
-            currentState = "Resumed";
+            _currentState = "Resumed";
             _trialTimer = Mathf.Abs(Time.realtimeSinceStartup - _pauseTrialTimer);
             _pauseTrialTimer = Mathf.Infinity;
             _stateTimer = Mathf.Abs(Time.realtimeSinceStartup - _pauseStateTimer);
             _pauseStateTimer = Mathf.Infinity;
             if(_stateTimer != Mathf.Infinity && _trialTimer != Mathf.Infinity)
-                playerController.OnBlack(false);
+                PlayerController.OnBlack(false);
             IsPaused = false;
         }
     }
@@ -285,10 +286,10 @@ public class ExperimentController : MonoBehaviour
     public void PrepareTrial()
     {
         // get current trial
-        _currentTrial = _allTrials[_trialNumber];
+        currentTrial = allTrials[_trialNumber];
         // increment counter after since we number trials 1: but indices are 0:
         _trialNumber++;
-        _currentTrial.Trial_Number = _trialNumber;
+        currentTrial.Trial_Number = _trialNumber;
 
         // Prepare cues and targets. 
         HideCues();
@@ -299,9 +300,9 @@ public class ExperimentController : MonoBehaviour
         PrepareDistractors();
 
         //teleport player to the start position
-        if (!taskInfo.ContinuousTrials)
+        if (!TaskInfo.ContinuousTrials)
         {
-            playerController.ToStart(_currentTrial.Start_Position, Quaternion.identity);
+            PlayerController.ToStart(currentTrial.Start_Position, Quaternion.identity);
         }
 
         // Sanity checks
@@ -312,7 +313,7 @@ public class ExperimentController : MonoBehaviour
     public void StartTrial()
     {
         _trialTimer = Time.realtimeSinceStartup;
-        playerController.OnBlack(false);
+        PlayerController.OnBlack(false);
 
     }
 
@@ -323,11 +324,11 @@ public class ExperimentController : MonoBehaviour
     public virtual void ShowCues()
     {
         // loop through all the cues. IN this example we do not set the cues position. 
-        foreach (GameObject go in _currentTrial.Cue_Objects)
+        foreach (GameObject go in currentTrial.Cue_Objects)
         {
             default_cue_material = go.GetComponentInChildren<MeshRenderer>()?.material;
             if (default_cue_material != null)
-                go.GetComponentInChildren<MeshRenderer>().material = _currentTrial.Cue_Material;
+                go.GetComponentInChildren<MeshRenderer>().material = currentTrial.Cue_Material;
             if (!go.activeSelf)
                 go.SetActive(true);
         }
@@ -336,13 +337,11 @@ public class ExperimentController : MonoBehaviour
     public virtual void HideCues()
     {
         // loop through all the cues. IN this example we do not set the cues position. 
-        foreach (GameObject go in taskInfo.CueObjects)
+        foreach (GameObject go in TaskInfo.CueObjects)
         {
             if (default_cue_material != null)
                 go.GetComponentInChildren<MeshRenderer>().material = default_cue_material;
-            // Can be set to hide the objects too. 
-            //if (!go.activeSelf)
-            //    go.SetActive(false);
+            // Could be used to hide the objects too. 
         }
 
     }
@@ -353,21 +352,21 @@ public class ExperimentController : MonoBehaviour
         int mat_idx;
         int pos_idx;
 
-        for(int ii = 0; ii < _currentTrial.Target_Objects.Length; ii++)
+        for(int ii = 0; ii < currentTrial.Target_Objects.Length; ii++)
         {
-            mat_idx = Mathf.Min(_currentTrial.Target_Materials.Length-1, ii);
-            pos_idx = Mathf.Min(_currentTrial.Target_Positions.Length-1, ii);
+            mat_idx = Mathf.Min(currentTrial.Target_Materials.Length-1, ii);
+            pos_idx = Mathf.Min(currentTrial.Target_Positions.Length-1, ii);
 
-            _currentTrial.Target_Objects[ii].transform.position = _currentTrial.Target_Positions[pos_idx];
-            _currentTrial.Target_Objects[ii].GetComponent<MeshRenderer>().material = _currentTrial.Target_Materials[mat_idx];
-            _currentTrial.Target_Objects[ii].GetComponent<BoxCollider>().enabled = false;
-            _currentTrial.Target_Objects[ii].GetComponent<Renderer>().enabled = false;
+            currentTrial.Target_Objects[ii].transform.position = currentTrial.Target_Positions[pos_idx];
+            currentTrial.Target_Objects[ii].GetComponent<MeshRenderer>().material = currentTrial.Target_Materials[mat_idx];
+            currentTrial.Target_Objects[ii].GetComponent<BoxCollider>().enabled = false;
+            currentTrial.Target_Objects[ii].GetComponent<Renderer>().enabled = false;
         }
     }
     
     public virtual void ShowTargets()
     {
-        foreach (GameObject go in _currentTrial.Target_Objects)
+        foreach (GameObject go in currentTrial.Target_Objects)
         {
             go.GetComponent<BoxCollider>().enabled = true;
             go.GetComponent<Renderer>().enabled = true;
@@ -376,17 +375,17 @@ public class ExperimentController : MonoBehaviour
 
     public virtual void HideTargets()
     {
-        foreach (GameObject go in taskInfo.TargetObjects)
+        foreach (GameObject go in TaskInfo.TargetObjects)
         {
             go.GetComponent<BoxCollider>().enabled = false;
             go.GetComponent<Renderer>().enabled = false;
         }
     }
 
-    private bool ResponseOK = false;
+    private bool _responseOK = false;
     public void CanRespond(bool OK)
     {
-        ResponseOK = OK;
+        _responseOK = OK;
     }
 
     // Distractors
@@ -395,20 +394,20 @@ public class ExperimentController : MonoBehaviour
         int mat_idx;
         int pos_idx;
 
-        for (int ii = 0; ii < _currentTrial.Distractor_Objects.Length; ii++)
+        for (int ii = 0; ii < currentTrial.Distractor_Objects.Length; ii++)
         {
-            mat_idx = Mathf.Min(_currentTrial.Distractor_Materials.Length - 1, ii);
-            pos_idx = Mathf.Min(_currentTrial.Distractor_Positions.Length - 1, ii);
+            mat_idx = Mathf.Min(currentTrial.Distractor_Materials.Length - 1, ii);
+            pos_idx = Mathf.Min(currentTrial.Distractor_Positions.Length - 1, ii);
 
-            _currentTrial.Distractor_Objects[ii].transform.position = _currentTrial.Distractor_Positions[pos_idx];
-            _currentTrial.Distractor_Objects[ii].GetComponent<MeshRenderer>().material = _currentTrial.Distractor_Materials[mat_idx];
-            _currentTrial.Distractor_Objects[ii].GetComponent<BoxCollider>().enabled = false;
-            _currentTrial.Distractor_Objects[ii].GetComponent<Renderer>().enabled = false;
+            currentTrial.Distractor_Objects[ii].transform.position = currentTrial.Distractor_Positions[pos_idx];
+            currentTrial.Distractor_Objects[ii].GetComponent<MeshRenderer>().material = currentTrial.Distractor_Materials[mat_idx];
+            currentTrial.Distractor_Objects[ii].GetComponent<BoxCollider>().enabled = false;
+            currentTrial.Distractor_Objects[ii].GetComponent<Renderer>().enabled = false;
         }
     }
     public virtual void ShowDistractors()
     {
-        foreach (GameObject go in _currentTrial.Distractor_Objects)
+        foreach (GameObject go in currentTrial.Distractor_Objects)
         {
             go.GetComponent<BoxCollider>().enabled = true;
             go.GetComponent<Renderer>().enabled = true;
@@ -417,7 +416,7 @@ public class ExperimentController : MonoBehaviour
 
     public virtual void HideDistractors()
     {
-        foreach (GameObject go in taskInfo.DistractorObjects)
+        foreach (GameObject go in TaskInfo.DistractorObjects)
         {
             go.GetComponent<BoxCollider>().enabled = false;
             go.GetComponent<Renderer>().enabled = false;
@@ -427,7 +426,7 @@ public class ExperimentController : MonoBehaviour
     // MISC
     public void FreezePlayer(bool ON)
     {
-        playerController.Freeze(ON);
+        PlayerController.Freeze(ON);
     }
 
 
@@ -438,16 +437,16 @@ public class ExperimentController : MonoBehaviour
     public void EndTrial()
     {
         _trialTimer = Mathf.Infinity;
-        ResponseOK = false;
+        _responseOK = false;
         
-        if (!taskInfo.ContinuousTrials)
+        if (!TaskInfo.ContinuousTrials)
         {
-            playerController.OnBlack(true);
+            PlayerController.OnBlack(true);
         }
         // When switching to onblack and teleporting to the start position the trigger volume
         // is not "exited" properly so we need to clear the state. If not it triggers a end of trial
         // as soon as the trial starts. 
-        playerController.ClearCollisionStatus();
+        PlayerController.ClearCollisionStatus();
 
         HideCues();
         HideTargets();
@@ -467,54 +466,54 @@ public class ExperimentController : MonoBehaviour
             // check if target or distractor
             if (_trialTimer != Mathf.Infinity)
             {
-                foreach (GameObject go in _currentTrial.Target_Objects)
+                foreach (GameObject go in currentTrial.Target_Objects)
                 {
-                    if (_frameData.Player_State == go.name)
+                    if (frameData.Player_State == go.name)
                     {
                         targ = true;
                     }
                 }
 
-                foreach (GameObject go in _currentTrial.Distractor_Objects)
+                foreach (GameObject go in currentTrial.Distractor_Objects)
                 {
-                    if (_frameData.Player_State == go.name)
+                    if (frameData.Player_State == go.name)
                     {
                         dist = true;
                     }
 
                 }
 
-                if (ResponseOK && targ)
+                if (_responseOK && targ)
                 {
                     Outcome = "correct";
                     _previousTrialError = 0;
                     return true;
                 }
-                else if (ResponseOK && dist)
+                else if (_responseOK && dist)
                 {
                     Outcome = "distractor";
                     _previousTrialError = 1;
                     return true;
                 }
-                else if (!ResponseOK && (targ || dist))
+                else if (!_responseOK && (targ || dist))
                 {
                     Outcome = "early_response";
                     _previousTrialError = 1;
                     return true;
                 }
-                else if (ResponseOK && (Time.realtimeSinceStartup - _trialTimer) > taskInfo.MaxTrialTime)
+                else if (_responseOK && (Time.realtimeSinceStartup - _trialTimer) > TaskInfo.MaxTrialTime)
                 {
                     Outcome = "no_response";
                     _previousTrialError = 2;
                     return true;
                 }
-                else if (!ResponseOK && (Time.realtimeSinceStartup - _trialTimer) > taskInfo.MaxTrialTime)
+                else if (!_responseOK && (Time.realtimeSinceStartup - _trialTimer) > TaskInfo.MaxTrialTime)
                 {
                     Outcome = "ignored";
                     _previousTrialError = 2;
                     return true;
                 }
-                else if (fixRequired && !isFixating)
+                else if (_fixRequired && !_isFixating)
                 {
                     Outcome = "break_fixation";
                     _previousTrialError = 1;
@@ -525,7 +524,7 @@ public class ExperimentController : MonoBehaviour
                     return false; 
                 }
             }
-            else if(_currentTrial != null)
+            else if(currentTrial != null)
             {
                 return false;
             }
@@ -540,21 +539,21 @@ public class ExperimentController : MonoBehaviour
     #region State Handling
     // These properties will determine whether the current frame information triggers a state 
     // change in the state system. 
-    private string currentState;
-    private float stateDuration;
+    private string _currentState;
+    private float _stateDuration;
     private float _stateTimer;
 
-    private bool fixRequired;
-    private bool isFixating = false;
+    private bool _fixRequired;
+    private bool _isFixating = false;
 
     private List<string> triggerGroup = new List<string>();
     public bool IsTouchingTrigger
     {
         get
         {
-            if (_frameData.Player_State != "" && triggerGroup.Count > 0)
+            if (frameData.Player_State != "" && triggerGroup.Count > 0)
             {
-                return triggerGroup.IndexOf(_frameData.Player_State) != -1;
+                return triggerGroup.IndexOf(frameData.Player_State) != -1;
             }
             else
             {
@@ -565,22 +564,22 @@ public class ExperimentController : MonoBehaviour
 
     public void StartState(string name, float duration, bool fixation, string triggers)
     {
-        currentState = name;
-        stateDuration = duration;
-        fixRequired = fixation;
+        _currentState = name;
+        _stateDuration = duration;
+        _fixRequired = fixation;
 
         triggerGroup.Clear();
         GameObject[] temp_array;
         switch (triggers)
         {
             case "Cue":
-                temp_array = taskInfo.CueOnsetTriggers;
+                temp_array = TaskInfo.CueOnsetTriggers;
                 break;
             case "Targets":
-                temp_array = taskInfo.TargetOnsetTriggers;
+                temp_array = TaskInfo.TargetOnsetTriggers;
                 break;
             case "Misc":
-                temp_array = taskInfo.MiscTriggers;
+                temp_array = TaskInfo.MiscTriggers;
                 break;
             case "None":
                 temp_array = new GameObject[0];
@@ -594,12 +593,12 @@ public class ExperimentController : MonoBehaviour
 
         _stateTimer = Time.realtimeSinceStartup;
         // Add ITI penalties
-        if (currentState == "ITI")
+        if (_currentState == "ITI")
         {
             if (_previousTrialError == 1)
-                _stateTimer += taskInfo.ErrorPenalty;
+                _stateTimer += TaskInfo.ErrorPenalty;
             if (_previousTrialError == 2)
-                _stateTimer += taskInfo.IgnorePenalty;
+                _stateTimer += TaskInfo.IgnorePenalty;
         }
     }
 
@@ -615,7 +614,7 @@ public class ExperimentController : MonoBehaviour
             if (IsPaused)
                 return false;
             else
-                return (Time.realtimeSinceStartup - _stateTimer) > stateDuration || IsTouchingTrigger;
+                return (Time.realtimeSinceStartup - _stateTimer) > _stateDuration || IsTouchingTrigger;
         }
     }
     #endregion State Handling
@@ -646,17 +645,17 @@ public class ExperimentController : MonoBehaviour
 
     void UpdatePlayer(Vector3 position, float rotation, string status, float hInput, float vInput)
     {
-        _frameData.Position = position;
-        _frameData.Rotation = rotation;
-        _frameData.Player_State = status;
-        _frameData.JoystickPosition.x = hInput;
-        _frameData.JoystickPosition.y = vInput;
+        frameData.Position = position;
+        frameData.Rotation = rotation;
+        frameData.Player_State = status;
+        frameData.JoystickPosition.x = hInput;
+        frameData.JoystickPosition.y = vInput;
     }
 
     void UpdateEye(Vector2 gazePosition, string gazeTargets)
     {
-        _frameData.GazePosition = gazePosition;
-        _frameData.GazeTargets = gazeTargets;
+        frameData.GazePosition = gazePosition;
+        frameData.GazeTargets = gazeTargets;
     }
     #endregion Event handling
 
@@ -675,17 +674,17 @@ public class ExperimentController : MonoBehaviour
         yield return new WaitForEndOfFrame();
         if (TrialEnded)
         {
-            _currentTrial.Outcome = Outcome;
-            monkeyLogicController.PublishTrial(_currentTrial.GetData(monkeyLogicController.GetLSLTime()));
+            currentTrial.Outcome = Outcome;
+            MonkeyLogicController.PublishTrial(currentTrial.GetData(MonkeyLogicController.GetLSLTime()));
             TrialEnded = false;
         }
 
         // Read data at the last minute to make sure every other controller has updated the values. 
         // Time information in defined in the _frameData.GetData() script; 
         // Set current frame trial state; 
-        _frameData.Trial_State = currentState;
-        monkeyLogicController.PublishFrame(_frameData.GetData(monkeyLogicController.GetLSLTime()));
-        _frameData.Clear();
+        frameData.Trial_State = _currentState;
+        MonkeyLogicController.PublishFrame(frameData.GetData(MonkeyLogicController.GetLSLTime()));
+        frameData.Clear();
 
         yield return null;
     }

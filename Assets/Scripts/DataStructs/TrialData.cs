@@ -1,12 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TrialData
 {
     public int Trial_Number;
     public Vector3 Start_Position;
 
+    // The NonSerialized decorator means that this property will be ignored
+    // during serialization when converting to JSON. We only want the strings
+    // containing the objects names to be added to the byte stream. 
     [System.NonSerialized] public GameObject[] Cue_Objects;
     public string[] cue_Objects;
 

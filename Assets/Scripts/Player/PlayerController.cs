@@ -6,7 +6,6 @@
     We have no running, no jumping, no bobbing, no animations
 
 */
-using System;
 using UnityEngine;
 
 namespace FirstPerson
@@ -122,9 +121,9 @@ namespace FirstPerson
             _CollisionStatus = "";
         }
        
-        private void OnControllerColliderHit(ControllerColliderHit hit)
+        /*private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-           /* Rigidbody body = hit.collider.attachedRigidbody;
+            Rigidbody body = hit.collider.attachedRigidbody;
             //dont move the rigidbody if the character is on top of it
             if (m_CollisionFlags == CollisionFlags.Below)
             {
@@ -135,8 +134,8 @@ namespace FirstPerson
             {
                 return;
             }
-            body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);*/
-        }
+            body.AddForceAtPosition(m_CharacterController.velocity*0.1f, hit.point, ForceMode.Impulse);
+        }*/
         
         // For ITI, Pause and before the experiment starts. 
         public void OnBlack(bool OnOff)

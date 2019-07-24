@@ -108,9 +108,13 @@ public class EyeLinkController : MonoBehaviour
                 if (el_Eye == EL_EYE.EL_BINOCULAR)
                     el_Eye = EL_EYE.EL_LEFT;
 
+                // Gets raw eye position values
                 _eyeRaw.x = s.get_px(el_Eye);
                 _eyeRaw.y = s.get_py(el_Eye);
 
+                // uses the eyecalibration values from monkeylogic to return 
+                // eye position in degrees and pixels. 
+                // TODO: add update option to eye cal. 
                 eyecal.RawToPix(_eyeRaw, out _eyeDeg, out _eyePix);
                 _gazeTargets = gaze.ProcessGaze(_eyePix);
 
@@ -123,13 +127,16 @@ public class EyeLinkController : MonoBehaviour
         }
 
         // Update values to the experiment controller
+        // you can either send the eye positions in degrees or in pixels. 
+        // Monkeylogic stores them in degrees so it's easier to match that way. 
         EventsController.instance.SendEyeLateUpdateEvent(_eyeDeg, _gazeTargets);
     }
     
     private void OnDestroy()
     {
-        el.stopRecording();
-        el.closeDataFile();
+        // Should be handled by Monkeylogic
+        //el.stopRecording();
+        //el.closeDataFile();
         el.close();
             
     }
