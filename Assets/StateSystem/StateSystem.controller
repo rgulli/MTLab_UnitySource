@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: CueOffset
+  StateName: 4
   MinStateDuration: 0
   MaxStateDuration: -1
   RequiresFixation: 0
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: EndOfTrial
+  StateName: 9
   MinStateDuration: 0
   MaxStateDuration: 0
   RequiresFixation: 0
@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: Feedback
+  StateName: 10
   MinStateDuration: 0
   MaxStateDuration: 0
   RequiresFixation: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: ITI
+  StateName: 0
   MinStateDuration: 1.5
   MaxStateDuration: 5
   RequiresFixation: 0
@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: PreCue
+  StateName: 2
   MinStateDuration: 0
   MaxStateDuration: -1
   RequiresFixation: 0
@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: ResponseWindow
+  StateName: 8
   MinStateDuration: 0
   MaxStateDuration: -1
   RequiresFixation: 0
@@ -596,7 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: CueOnset
+  StateName: 3
   MinStateDuration: 0.1
   MaxStateDuration: 0.5
   RequiresFixation: 0
@@ -638,7 +638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: StartOfTrial
+  StateName: 1
   MinStateDuration: 0
   MaxStateDuration: 0
   RequiresFixation: 0
@@ -660,13 +660,13 @@ AnimatorStateMachine:
     m_Position: {x: 490, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4548616471429435033}
-    m_Position: {x: 490, y: 260, z: 0}
+    m_Position: {x: 492, y: 264, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2090475646489986205}
     m_Position: {x: 490, y: 200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5501894838629234234}
-    m_Position: {x: 640, y: 380, z: 0}
+    m_Position: {x: 636, y: 384, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5454532786424989897}
     m_Position: {x: 640, y: 440, z: 0}
@@ -675,7 +675,7 @@ AnimatorStateMachine:
     m_Position: {x: 490, y: 500, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -910206599052169037}
-    m_Position: {x: 490, y: 320, z: 0}
+    m_Position: {x: 490, y: 330, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5269470058543631}
     m_Position: {x: 490, y: 560, z: 0}
@@ -798,7 +798,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: WaitForML
+  StateName: 0
   MinStateDuration: 0
   MaxStateDuration: -1
   RequiresFixation: 0
@@ -905,7 +905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1aa0ba17840bd2a4c94acb4e0142c6f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StateName: TargetOnset
+  StateName: 7
   MinStateDuration: 0
   MaxStateDuration: 0
   RequiresFixation: 0

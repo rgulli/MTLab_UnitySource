@@ -74,7 +74,7 @@ public class GazeProcessing : MonoBehaviour
     // Called on Update from the EyeLinkController when it has the calibration value
     // and a connection to the eyelink. Input gaze position in pixels and maps to objects
     // in the environment. 
-    public string ProcessGaze(Vector2 eyePix)
+    public void ProcessGaze(Vector2 eyePix, out string[] targets, out float[] counts)
     {
         _gaze = eyePix;
         Dictionary<string, int> gazeDict = new Dictionary<string, int>();
@@ -140,19 +140,25 @@ public class GazeProcessing : MonoBehaviour
             gazeDict.Add("None", 0);
         }
 
-        return DictToString(gazeDict);
+        DictToArray(gazeDict, out targets, out counts);
     }
 
-    private string DictToString(Dictionary<string, int> gazeDict)
+    private void DictToArray(Dictionary<string, int> gazeDict, out string[] targets, out float[] counts)
     {
-        string out_string = "";
+        int cntr = 0;
+        string[] tar = new string[5];
+        float[] cnts = new float[5];
 
         foreach (KeyValuePair<string, int> kvp in gazeDict)
         {
-            out_string += kvp.Key + "_" + kvp.Value + "/";
+            tar[cntr] = kvp.Key;
+            cnts[cntr] = kvp.Value;
+            cntr++;
+            if (cntr >= tar.Length)
+                break;
         }
-
-        return out_string;
+        targets = tar;
+        counts = cnts;
     }
 
     // Uncomment to display the gaze location on the screen that the grid of rays

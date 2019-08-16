@@ -4,6 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Profiling;
 using System.Linq;
+using Misc;
 
 public class ExperimentController : MonoBehaviour
 {
@@ -33,6 +34,9 @@ public class ExperimentController : MonoBehaviour
     private FrameData _frameData = new FrameData();
     private TrialData _currentTrial = new TrialData();
     private List<TrialData> _allTrials = new List<TrialData>();
+
+    [HideInInspector]
+    public Dictionary<string, int> InstanceIDMap = new Dictionary<string, int>();
 
     // Generate Trials
     // Structure holding all the parameters that are set in the Editor. 
@@ -218,8 +222,44 @@ public class ExperimentController : MonoBehaviour
     {
         // Get Controllers instance
         playerController.OnBlack(true);
+
+        // Colliders name: gameObject instance ID to send to stream
+        GenerateIDMap();
+        
         PrepareAllTrials();
         Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count/taskInfo.NumberOfSets) + " of which are different.");
+    }
+
+    // Generate dictionary mapping object name to instance ID
+    private void GenerateIDMap()
+    {
+        // Get all colliders and create a dictionary of name:instanceID
+        Collider[] colliders = FindObjectsOfType<Collider>();
+        foreach (Collider col in colliders)
+        {
+            string name = col.gameObject.name;
+            int ID = col.gameObject.GetInstanceID();
+            InstanceIDMap.Add(name, ID);
+            Debug.Log(name + ID);
+        }
+
+    }
+    public int NameToID(string name)
+    {
+        if (InstanceIDMap.TryGetValue(name, out int ID))
+            return ID;
+        else
+            return -1;
+    }
+
+    public string IDToName(int ID)
+    {
+        foreach(KeyValuePair<string, int> kv in InstanceIDMap)
+        {
+            if (kv.Value == ID)
+                return kv.Key;
+        }
+        return null;
     }
 
     #endregion ExperimentConfig
@@ -247,7 +287,7 @@ public class ExperimentController : MonoBehaviour
         if(IsRunning && !IsPaused)
         {
             IsPaused = true;
-            currentState = "Paused";
+            currentState = StateNames.Pause;
             // Need to put absolute value because when trial timer is Infinite, the
             // pause trial timer would be -Infinity.
             _pauseTrialTimer = Mathf.Abs(Time.realtimeSinceStartup - _trialTimer);
@@ -263,7 +303,7 @@ public class ExperimentController : MonoBehaviour
     {
         if (IsRunning && IsPaused)
         {
-            currentState = "Resumed";
+            currentState = StateNames.Resume;
             _trialTimer = Mathf.Abs(Time.realtimeSinceStartup - _pauseTrialTimer);
             _pauseTrialTimer = Mathf.Infinity;
             _stateTimer = Mathf.Abs(Time.realtimeSinceStartup - _pauseStateTimer);
@@ -458,89 +498,87 @@ public class ExperimentController : MonoBehaviour
 
     // Will check whether the TRIAL is over (fixation break, time run out)
     [HideInInspector]
-    public bool IsTrialOver
+    public bool IsTrialOver()
     {
-        get
+        bool targ = false;
+        bool dist = false;
+        // check if target or distractor
+        if (_trialTimer != Mathf.Infinity)
         {
-            bool targ = false;
-            bool dist = false;
-            // check if target or distractor
-            if (_trialTimer != Mathf.Infinity)
+            foreach (GameObject go in _currentTrial.Target_Objects)
             {
-                foreach (GameObject go in _currentTrial.Target_Objects)
+                if (IDToName((int)_frameData.Player_State) == go.name)
                 {
-                    if (_frameData.Player_State == go.name)
-                    {
-                        targ = true;
-                    }
-                }
-
-                foreach (GameObject go in _currentTrial.Distractor_Objects)
-                {
-                    if (_frameData.Player_State == go.name)
-                    {
-                        dist = true;
-                    }
-
-                }
-
-                if (ResponseOK && targ)
-                {
-                    Outcome = "correct";
-                    _previousTrialError = 0;
-                    return true;
-                }
-                else if (ResponseOK && dist)
-                {
-                    Outcome = "distractor";
-                    _previousTrialError = 1;
-                    return true;
-                }
-                else if (!ResponseOK && (targ || dist))
-                {
-                    Outcome = "early_response";
-                    _previousTrialError = 1;
-                    return true;
-                }
-                else if (ResponseOK && (Time.realtimeSinceStartup - _trialTimer) > taskInfo.MaxTrialTime)
-                {
-                    Outcome = "no_response";
-                    _previousTrialError = 2;
-                    return true;
-                }
-                else if (!ResponseOK && (Time.realtimeSinceStartup - _trialTimer) > taskInfo.MaxTrialTime)
-                {
-                    Outcome = "ignored";
-                    _previousTrialError = 2;
-                    return true;
-                }
-                else if (fixRequired && !isFixating)
-                {
-                    Outcome = "break_fixation";
-                    _previousTrialError = 1;
-                    return true;
-                }
-                else
-                {
-                    return false; 
+                    targ = true;
                 }
             }
-            else if(_currentTrial != null)
+
+            foreach (GameObject go in _currentTrial.Distractor_Objects)
             {
-                return false;
+                if (IDToName((int)_frameData.Player_State) == go.name)
+                {
+                    dist = true;
+                }
+
+            }
+
+            if (ResponseOK && targ)
+            {
+                Outcome = "correct";
+                _previousTrialError = 0;
+                return true;
+            }
+            else if (ResponseOK && dist)
+            {
+                Outcome = "distractor";
+                _previousTrialError = 1;
+                return true;
+            }
+            else if (!ResponseOK && (targ || dist))
+            {
+                Outcome = "early_response";
+                _previousTrialError = 1;
+                return true;
+            }
+            else if (ResponseOK && (Time.realtimeSinceStartup - _trialTimer) > taskInfo.MaxTrialTime)
+            {
+                Outcome = "no_response";
+                _previousTrialError = 2;
+                return true;
+            }
+            else if (!ResponseOK && (Time.realtimeSinceStartup - _trialTimer) > taskInfo.MaxTrialTime)
+            {
+                Outcome = "ignored";
+                _previousTrialError = 2;
+                return true;
+            }
+            else if (fixRequired && !isFixating)
+            {
+                Outcome = "break_fixation";
+                _previousTrialError = 1;
+                return true;
             }
             else
             {
-                return false;
+                return false; 
             }
         }
+        else if(_currentTrial != null)
+        {
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+   
     }
     #endregion Trial Flow
 
     #region State Handling
     // These properties will determine whether the current frame information triggers a state 
     // change in the state system. 
-    private string currentState;
+    private StateNames currentState;
     private float stateDuration;
     private float _stateTimer;
 
@@ -552,9 +590,9 @@ public class ExperimentController : MonoBehaviour
     {
         get
         {
-            if (_frameData.Player_State != "" && triggerGroup.Count > 0)
+            if (_frameData.Player_State != -1 && triggerGroup.Count > 0)
             {
-                return triggerGroup.IndexOf(_frameData.Player_State) != -1;
+                return triggerGroup.IndexOf(IDToName((int)_frameData.Player_State)) != -1;
             }
             else
             {
@@ -563,7 +601,7 @@ public class ExperimentController : MonoBehaviour
         }
     }
 
-    public void StartState(string name, float duration, bool fixation, string triggers)
+    public void StartState(StateNames name, float duration, bool fixation, string triggers)
     {
         currentState = name;
         stateDuration = duration;
@@ -594,7 +632,7 @@ public class ExperimentController : MonoBehaviour
 
         _stateTimer = Time.realtimeSinceStartup;
         // Add ITI penalties
-        if (currentState == "ITI")
+        if (currentState == StateNames.ITI)
         {
             if (_previousTrialError == 1)
                 _stateTimer += taskInfo.ErrorPenalty;
@@ -648,15 +686,22 @@ public class ExperimentController : MonoBehaviour
     {
         _frameData.Position = position;
         _frameData.Rotation = rotation;
-        _frameData.Player_State = status;
+        _frameData.Player_State = NameToID(status);
         _frameData.JoystickPosition.x = hInput;
         _frameData.JoystickPosition.y = vInput;
     }
 
-    void UpdateEye(Vector2 gazePosition, string gazeTargets)
+    void UpdateEye(Vector2 gazePosition, string[] gazeTargets, float[] gazeCounts)
     {
         _frameData.GazePosition = gazePosition;
-        _frameData.GazeTargets = gazeTargets;
+        float[] gazeTargetIDs = new float[5];
+        for (int i = 0; i < Mathf.Min(5, gazeTargets.Length); i++)
+        {
+            gazeTargetIDs[i] = NameToID(gazeTargets[i]);
+
+        }
+        _frameData.GazeTargets = gazeTargetIDs;
+        _frameData.GazeRayCounts = gazeCounts;
     }
     #endregion Event handling
 

@@ -16,11 +16,11 @@ using Assets.LSL4Unity.Scripts;
 public class MonkeyLogicResolver : MonoBehaviour, IEventSystemHandler
 {
 
-    public List<LSLStreamInfoWrapper> knownStreams = new List<LSLStreamInfoWrapper>(); // modified by GD to instantiate the list variable. 
+    public List<liblsl.StreamInfo> knownStreams = new List<liblsl.StreamInfo>(); // modified by GD to instantiate the list variable. 
     public float forgetStreamAfter = 1.0f;
-    public delegate void StreamFound(LSLStreamInfoWrapper wrapper);
+    public delegate void StreamFound(liblsl.StreamInfo wrapper);
     public StreamFound OnStreamFound;
-    public delegate void StreamLost(LSLStreamInfoWrapper wrapper);
+    public delegate void StreamLost(liblsl.StreamInfo wrapper);
     public StreamLost OnStreamLost;
 
     private liblsl.ContinuousResolver resolver;
@@ -46,13 +46,13 @@ public class MonkeyLogicResolver : MonoBehaviour, IEventSystemHandler
         resolve = false;
     }
 
-    public bool IsStreamAvailable(out LSLStreamInfoWrapper info, string streamName = "", string streamType = "", string hostName = "")
+    public bool IsStreamAvailable(out liblsl.StreamInfo info, string streamName = "", string streamType = "", string hostName = "")
     {
         var result = knownStreams.Where(i =>
 
-        (streamName == "" || i.Name.Equals(streamName)) &&
-        (streamType == "" || i.Type.Equals(streamType)) &&
-        (hostName == "" || i.Type.Equals(hostName))
+        (streamName == "" || i.name().Equals(streamName)) &&
+        (streamType == "" || i.type().Equals(streamType)) &&
+        (hostName == "" || i.source_id().Equals(hostName))
         );
 
         if (result.Any())
@@ -75,23 +75,22 @@ public class MonkeyLogicResolver : MonoBehaviour, IEventSystemHandler
 
             foreach (var item in knownStreams)
             {
-                if (!results.Any(r => r.name().Equals(item.Name)))
+                if (!results.Any(r => r.name().Equals(item.name())))
                 {
                     OnStreamLost?.Invoke(item);
                 }
             }
 
             // remove lost streams from cache
-            knownStreams.RemoveAll(s => !results.Any(r => r.name().Equals(s.Name)));
+            knownStreams.RemoveAll(s => !results.Any(r => r.name().Equals(s.name())));
 
             // add new found streams to the cache
             foreach (var item in results)
             {
-                if (!knownStreams.Any(s => s.Name == item.name() && s.Type == item.type()))
+                if (!knownStreams.Any(s => s.name() == item.name() && s.type() == item.type()))
                 {
-                    var newStreamInfo = new LSLStreamInfoWrapper(item);
-                    knownStreams.Add(newStreamInfo);
-                    OnStreamFound?.Invoke(newStreamInfo);
+                    knownStreams.Add(item);
+                    OnStreamFound?.Invoke(item);
                 }
             }
 

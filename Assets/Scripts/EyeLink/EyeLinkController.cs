@@ -19,8 +19,9 @@ public class EyeLinkController : MonoBehaviour
     private Vector2 _eyeRaw = new Vector2();
     private Vector2 _eyeDeg = new Vector2();
     private Vector2 _eyePix = new Vector2();
-    private string _gazeTargets;
-
+    private string[] _gazeTargets;
+    private float[] _gazeCounts;
+    
     // Eye Link settings
     private EL_EYE el_Eye = EL_EYE.EL_EYE_NONE;
     private EyeLinkUtil el_Util;
@@ -112,7 +113,9 @@ public class EyeLinkController : MonoBehaviour
                 _eyeRaw.y = s.get_py(el_Eye);
 
                 eyecal.RawToPix(_eyeRaw, out _eyeDeg, out _eyePix);
-                _gazeTargets = gaze.ProcessGaze(_eyePix);
+                gaze.ProcessGaze(_eyePix, out string[] gazeTargets, out float[] gazeCounts);
+                _gazeTargets = gazeTargets;
+                _gazeCounts = gazeCounts;
 
                 lastSampleTime = s.time;
             }
@@ -123,7 +126,7 @@ public class EyeLinkController : MonoBehaviour
         }
 
         // Update values to the experiment controller
-        EventsController.instance.SendEyeLateUpdateEvent(_eyeDeg, _gazeTargets);
+        EventsController.instance.SendEyeLateUpdateEvent(_eyeDeg, _gazeTargets, _gazeCounts);
     }
     
     private void OnDestroy()

@@ -1,12 +1,12 @@
 ﻿/*
  * Handles the LSL communication for both the Control Inlet and the publication of frame data on the Frame Outlet. 
  * 
- * the FrameOutlet will publish: 
+ * the FrameOutlet will publish as floats: 
     * Position X, Y, Z 
     * Rotation
     * TODO: Add more
  * 
- * the Trial Outlet will publish at the start of trial: 
+ * the Trial Outlet will publish at the end of trial: 
     * Current Target
     * TODO: Add more
  *
@@ -37,9 +37,9 @@ public class MonkeyLogicController : MonoBehaviour
     private string _frameOutletID = "frame1214";
 
     private int trialOutlet;
-    public string _trialOutletName = "ML_TrialData";
-    public string _trialOutletType = "LSL_Marker_Strings";
-    public string _trialOutletID = "trial1214";
+    private string _trialOutletName = "ML_TrialData";
+    private string _trialOutletType = "LSL_Marker_Strings";
+    private string _trialOutletID = "trial1214";
 
     // Inlets
     private MonkeyLogicInlet inlet;
@@ -120,9 +120,9 @@ public class MonkeyLogicController : MonoBehaviour
         return liblsl.local_clock();
     }
 
-    public void PublishFrame(string to_publish)
+    public void PublishFrame(double[] to_publish)
     {
-        outlets.Write(frameOutlet, to_publish);
+        //outlets.Write(frameOutlet, to_publish);
     }
 
     public void PublishTrial(string to_publish)
