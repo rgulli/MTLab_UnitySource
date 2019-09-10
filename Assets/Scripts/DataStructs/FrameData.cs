@@ -36,14 +36,6 @@ public class FrameData
         Unity_Local_Time = .0;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Clear();
-        StateNames test = StateNames.EndOfTrial;
-        Debug.Log((double)test);
-    }
-
     // Data to publish will be a float[] containing:
     //  Pos X
     //  Pos Y

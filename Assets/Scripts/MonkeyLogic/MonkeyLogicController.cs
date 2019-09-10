@@ -122,7 +122,7 @@ public class MonkeyLogicController : MonoBehaviour
 
     public void PublishFrame(double[] to_publish)
     {
-        //outlets.Write(frameOutlet, to_publish);
+        outlets.Write(frameOutlet, to_publish);
     }
 
     public void PublishTrial(string to_publish)
