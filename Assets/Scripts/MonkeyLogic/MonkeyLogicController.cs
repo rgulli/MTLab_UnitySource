@@ -20,12 +20,12 @@
  * 
  * */
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.LSL4Unity.Scripts;
 using LSL;
-
+using Misc;
 
 public class MonkeyLogicController : MonoBehaviour
 {
@@ -70,15 +70,17 @@ public class MonkeyLogicController : MonoBehaviour
                                 _frameOutletType,
                                 1,
                                 liblsl.IRREGULAR_RATE,
-                                liblsl.channel_format_t.cf_string,
-                                _frameOutletID);
+                                liblsl.channel_format_t.cf_float32,
+                                _frameOutletID,
+                                GenerateXMLMetaData());
 
         trialOutlet = outlets.Configure(_trialOutletName,
                                 _trialOutletType,
                                 1,
                                 liblsl.IRREGULAR_RATE,
                                 liblsl.channel_format_t.cf_string,
-                                _trialOutletID);
+                                _trialOutletID,
+                                GenerateXMLMetaData());
 
         inlet.Configure(_controlInletName, _controlInletType, _controlInletID, _resolver);
 
@@ -87,7 +89,25 @@ public class MonkeyLogicController : MonoBehaviour
         inlet.OnCommand += ForwardCommand;
 
 }
-    
+    private IDictionary<string, IDictionary<string, int>> GenerateXMLMetaData()
+    {
+
+        // Get Name - InstanceID dict from Experiment Controller
+        IDictionary<string, int> obj_map = ExperimentController.instance.InstanceIDMap;
+        IDictionary<string, int> phase_map = new Dictionary<string, int>();
+        foreach (var test in Enum.GetValues(typeof(StateNames)))
+        {
+            phase_map.Add(test.ToString(), (int)test);
+        }
+        IDictionary<string, IDictionary<string, int>> metadata_dicts_names = new Dictionary<string, IDictionary<string, int>>()
+            {
+                { "phase_map", phase_map },
+                { "obj_map", obj_map }
+            };
+
+        return metadata_dicts_names;
+    }
+
     // Forward delegates from children classes to the Events Controller. 
     private void ForwardEyecalibration(EyeCalibrationParameters parameters)
     {

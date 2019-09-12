@@ -62,11 +62,21 @@ public class FrameData
         sample[6] = Player_State;
         sample[7] = GazePosition.x;
         sample[8] = GazePosition.y;
-
-        for (int i = 0; i < GazeTargets.Length; i++)
+        if (GazeTargets != null)
         {
-            sample[9 + i] = GazeTargets[i];
-            sample[14 + i] = GazeRayCounts[i];
+            for (int i = 0; i < GazeTargets.Length; i++)
+            {
+                sample[9 + i] = GazeTargets[i];
+                sample[14 + i] = GazeRayCounts[i];
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                sample[9 + i] = -1;
+                sample[14 + i] = 0;
+            }
         }
         sample[19] = (double)Trial_State;
         sample[20] = curr_time;

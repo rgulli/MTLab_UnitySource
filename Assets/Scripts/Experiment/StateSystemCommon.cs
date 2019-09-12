@@ -70,7 +70,7 @@ public class StateSystemCommon : StateMachineBehaviour
                 return;
             }
             
-            if (exp.IsStateOver)
+            if (exp.IsStateOver())
             {
                 animator.SetTrigger("StateOver");
                 return;

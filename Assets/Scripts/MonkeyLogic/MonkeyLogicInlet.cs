@@ -58,7 +58,7 @@ public class MonkeyLogicInlet : MonoBehaviour
 
         Debug.Log(string.Format("LSL Stream {0} found for {1}", stream.name(), name));
 
-        //inlet = new LSL.liblsl.StreamInlet(stream);
+        inlet = new liblsl.StreamInlet(stream);
         expectedChannels = stream.channel_count();
 
         OnStreamAvailable();

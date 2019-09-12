@@ -36,7 +36,7 @@ public class ExperimentController : MonoBehaviour
     private List<TrialData> _allTrials = new List<TrialData>();
 
     [HideInInspector]
-    public Dictionary<string, int> InstanceIDMap = new Dictionary<string, int>();
+    public IDictionary<string, int> InstanceIDMap = new Dictionary<string, int>();
 
     // Generate Trials
     // Structure holding all the parameters that are set in the Editor. 
@@ -240,7 +240,7 @@ public class ExperimentController : MonoBehaviour
             string name = col.gameObject.name;
             int ID = col.gameObject.GetInstanceID();
             InstanceIDMap.Add(name, ID);
-            Debug.Log(name + ID);
+            //Debug.Log(name + ID);
         }
 
     }
@@ -645,16 +645,12 @@ public class ExperimentController : MonoBehaviour
     // Will check if
     //  Duration has elapsed.
     //  Triggers were touched. 
-    [HideInInspector]
-    public bool IsStateOver
+    public bool IsStateOver()
     {
-        get
-        {
-            if (IsPaused)
-                return false;
-            else
-                return (Time.realtimeSinceStartup - _stateTimer) > stateDuration || IsTouchingTrigger;
-        }
+        if (IsPaused)
+            return false;
+        else
+            return (Time.realtimeSinceStartup - _stateTimer) > stateDuration || IsTouchingTrigger;
     }
     #endregion State Handling
 

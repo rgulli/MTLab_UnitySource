@@ -20,7 +20,9 @@ public class MonkeyLogicOutlet : MonoBehaviour
         
     }
 
-    public int Configure(string name, string type, int chan_count, double rate, liblsl.channel_format_t format, string unique_id)
+    public int Configure(string name, string type, int chan_count, double rate,
+                    liblsl.channel_format_t format, string unique_id, IDictionary<string, 
+                        IDictionary<string, int>> metadata_dicts_names)
     {
         StreamName = name;
         StreamType = type;
@@ -30,14 +32,27 @@ public class MonkeyLogicOutlet : MonoBehaviour
 
         if (_outletsName.IndexOf(name) == -1)
         {
-            _lslStreamInfos.Add( new liblsl.StreamInfo(
+
+            // Populate XML meta data
+            liblsl.StreamInfo si = new liblsl.StreamInfo(
                                         name,
                                         type,
                                         chan_count,
                                         rate,
                                         format,
-                                        unique_id));
+                                        unique_id);
+            liblsl.XMLElement streamInfoXML = si.desc();
 
+            foreach (var map_name in metadata_dicts_names)
+            {
+                liblsl.XMLElement map_el = si.desc().append_child(map_name.Key);
+                foreach (var property in map_name.Value)
+                {
+                    map_el = map_el.append_child_value(property.Key.ToString(), property.Value.ToString());
+                }
+            };
+
+            _lslStreamInfos.Add(si);
             _outlets.Add(new liblsl.StreamOutlet(_lslStreamInfos[_lslStreamInfos.Count-1]));
             _outletsName.Add(name);
             idx = _outletsName.Count - 1;
