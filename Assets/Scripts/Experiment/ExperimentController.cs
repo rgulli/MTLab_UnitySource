@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿
+
+///<summary>
+/// ToDo: 
+/// Check if input configuration transfers across computers with GitHub 
+/// Implement true input configuration and not project settings hack
+/// Input controller to have a navigation AND and eye controller? 
+/// Replace events with direct function calls? 
+/// </summary>
+
+using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
@@ -180,11 +190,14 @@ public class ExperimentController : MonoBehaviour
 
         }
         // Permutation list populated, add to out_list
-        else
+        else if (N != 0)
         {
             in_array.Add(in_list.ToArray());
         }
-
+        else
+        {
+            in_array.Clear();
+        }
     }
 
     // Unlike Combinations, permutations take order into account, so for the previous example we would get 6
@@ -194,7 +207,7 @@ public class ExperimentController : MonoBehaviour
         // Missing GameObjects in permutation list
         if (in_list.Count < N)
         {
-            
+
             foreach (GameObject go in in_objs)
             {
                 List<GameObject> temp_obj = new List<GameObject>(in_objs);
@@ -206,10 +219,14 @@ public class ExperimentController : MonoBehaviour
 
         }
         // Permutation list populated, add to out_list
-        else
+        else if (N != 0)
         {
 
             in_array.Add(in_list.ToArray());
+        }
+        else
+        {
+            in_array.Clear();
         }
 
     }
@@ -217,6 +234,8 @@ public class ExperimentController : MonoBehaviour
 
     private void Start()
     {
+        string test = "bob";
+        
         // Get Controllers instance
         PlayerController.OnBlack(true);
         PrepareAllTrials();
@@ -690,3 +709,4 @@ public class ExperimentController : MonoBehaviour
     }
     #endregion Frame Publish
 }
+

@@ -83,6 +83,7 @@
     <Compile Include="Assets\Scripts\DataStructs\FrameData.cs" />
     <Compile Include="Assets\Scripts\DataStructs\TrialData.cs" />
     <Compile Include="Assets\Scripts\Events\EventsController.cs" />
+    <Compile Include="Assets\Scripts\Experiment\BaseExperimentController.cs" />
     <Compile Include="Assets\Scripts\Experiment\CueOnset.cs" />
     <Compile Include="Assets\Scripts\Experiment\EndOfTrial.cs" />
     <Compile Include="Assets\Scripts\Experiment\ExperimentController.cs" />

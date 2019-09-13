@@ -9,24 +9,24 @@ public class TrialData
     // during serialization when converting to JSON. We only want the strings
     // containing the objects names to be added to the byte stream. 
     [System.NonSerialized] public GameObject[] Cue_Objects;
-    public string[] cue_Objects;
+    private string[] cue_Objects;
 
     [System.NonSerialized] public Material Cue_Material;
-    public string cue_Material;
+    private string cue_Material;
 
     [System.NonSerialized] public GameObject[] Target_Objects;
-    public string[] target_Objects;
+    private string[] target_Objects;
 
     [System.NonSerialized] public Material[] Target_Materials;
-    public string[] target_Materials; 
+    private string[] target_Materials; 
 
     public Vector3[] Target_Positions;
 
     [System.NonSerialized] public GameObject[] Distractor_Objects;
-    public string[] distractor_Objects;
+    private string[] distractor_Objects;
 
     [System.NonSerialized] public Material[] Distractor_Materials;
-    public string[] distractor_Materials;
+    private string[] distractor_Materials;
 
     public Vector3[] Distractor_Positions;
 
