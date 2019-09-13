@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EyeCalibration : MonoBehaviour
 {
-    private EyeCalibrationParameters eyecal_params;
+    private EyeCalibrationParameters _eyecal_params;
     private int _x_res;
     private int _y_res;
 
@@ -20,7 +20,7 @@ public class EyeCalibration : MonoBehaviour
 
     public void UpdateCalibration(EyeCalibrationParameters parameters)
     {
-        eyecal_params = parameters;
+        _eyecal_params = parameters;
         _x_res = Camera.main.scaledPixelWidth;
         _y_res = Camera.main.scaledPixelWidth;
         _has_calibration = true;
@@ -33,25 +33,25 @@ public class EyeCalibration : MonoBehaviour
         // From MonkeyLogic, 
         // First step: 
         // Output = (Raw - offset) * gain
-        in_eye.x = (in_eye.x - eyecal_params.el_offsets[0]) * eyecal_params.el_gains[0];
-        in_eye.y = (in_eye.y - eyecal_params.el_offsets[1]) * eyecal_params.el_gains[1];
+        in_eye.x = (in_eye.x - _eyecal_params.el_offsets[0]) * _eyecal_params.el_gains[0];
+        in_eye.y = (in_eye.y - _eyecal_params.el_offsets[1]) * _eyecal_params.el_gains[1];
         in_eye.z = 1.0f;
 
         // Second step:
         //      [X,Y,adjust] = [x_raw, y_raw, 1] * t_transform
         // Convert t_transform list into a 4X4 matrix
         Matrix4x4 t_mat = Matrix4x4.zero;
-        t_mat.m00 = eyecal_params.t_transform[0];
-        t_mat.m01 = eyecal_params.t_transform[1];
-        t_mat.m02 = eyecal_params.t_transform[2];
+        t_mat.m00 = _eyecal_params.t_transform[0];
+        t_mat.m01 = _eyecal_params.t_transform[1];
+        t_mat.m02 = _eyecal_params.t_transform[2];
 
-        t_mat.m10 = eyecal_params.t_transform[3];
-        t_mat.m11 = eyecal_params.t_transform[4];
-        t_mat.m12 = eyecal_params.t_transform[5];
+        t_mat.m10 = _eyecal_params.t_transform[3];
+        t_mat.m11 = _eyecal_params.t_transform[4];
+        t_mat.m12 = _eyecal_params.t_transform[5];
 
-        t_mat.m20 = eyecal_params.t_transform[6];
-        t_mat.m21 = eyecal_params.t_transform[7];
-        t_mat.m22 = eyecal_params.t_transform[8];
+        t_mat.m20 = _eyecal_params.t_transform[6];
+        t_mat.m21 = _eyecal_params.t_transform[7];
+        t_mat.m22 = _eyecal_params.t_transform[8];
 
         // Multiply, but need to transpose first
         // TODO: Figure out why we need the transposition
@@ -65,8 +65,8 @@ public class EyeCalibration : MonoBehaviour
         // get eye position in degrees
         eye_deg = new Vector2
         {
-            x = ((in_eye.x - eyecal_params.t_offset[0]) * eyecal_params.t_rotation[0]) + ((in_eye.y - eyecal_params.t_offset[1]) * eyecal_params.t_rotation[2]),
-            y = ((in_eye.x - eyecal_params.t_offset[0]) * eyecal_params.t_rotation[1]) + ((in_eye.y - eyecal_params.t_offset[1]) * eyecal_params.t_rotation[3])
+            x = ((in_eye.x - _eyecal_params.t_offset[0]) * _eyecal_params.t_rotation[0]) + ((in_eye.y - _eyecal_params.t_offset[1]) * _eyecal_params.t_rotation[2]),
+            y = ((in_eye.x - _eyecal_params.t_offset[0]) * _eyecal_params.t_rotation[1]) + ((in_eye.y - _eyecal_params.t_offset[1]) * _eyecal_params.t_rotation[3])
         };
 
         // Fifth step: 
@@ -74,20 +74,22 @@ public class EyeCalibration : MonoBehaviour
         // need to make sure the screen resolutions match between ML and Unity
         eye_pix = new Vector2
         {
-            x = (eye_deg.x * (eyecal_params.pix_per_deg * _x_res / eyecal_params.ml_x_res)) + (0.5f * _x_res),
-            y = (eye_deg.y * (eyecal_params.pix_per_deg * _y_res / eyecal_params.ml_y_res)) + (0.5f * _y_res)
+            x = (eye_deg.x * (_eyecal_params.pix_per_deg * _x_res / _eyecal_params.ml_x_res)) + (0.5f * _x_res),
+            y = (eye_deg.y * (_eyecal_params.pix_per_deg * _y_res / _eyecal_params.ml_y_res)) + (0.5f * _y_res)
         };
     }
 
     public string GetEyeLinkIP()
     {
-        return eyecal_params.el_IP;
+        return "127.0.0.1";
+        //return _eyecal_params.el_IP;
     }
 
     public int GetTrackedEye()
     {
         // 0: Left; 1: Right;
-        return eyecal_params.el_eyeID;
+        return 0;
+        //return _eyecal_params.el_eyeID;
     }
 }
 

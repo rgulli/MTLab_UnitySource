@@ -1,13 +1,14 @@
 ﻿/*
  * Handles the LSL communication for both the Control Inlet and the publication of frame data on the Frame Outlet. 
  * 
- * the FrameOutlet will publish: 
+ * the FrameOutlet will publish as floats: 
     * Position X, Y, Z 
     * Rotation
-    * ...
+    * TODO: Add more
  * 
- * the Trial Outlet will publish at the end of the trial and is used by MonkeyLogic to trigger
- * the end of the trial and get the outcome. 
+ * the Trial Outlet will publish at the end of trial: 
+    * Current Target
+    * TODO: Add more
  *
  * This script is based on the LSLMarkerStream.cs script in LSL/Scripts/. 
  * 
@@ -19,9 +20,12 @@
  * 
  * */
 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Assets.LSL4Unity.Scripts;
 using LSL;
-
+using Misc;
 
 public class MonkeyLogicController : MonoBehaviour
 {
@@ -33,9 +37,9 @@ public class MonkeyLogicController : MonoBehaviour
     private string _frameOutletID = "frame1214";
 
     private int trialOutlet;
-    public string _trialOutletName = "ML_TrialData";
-    public string _trialOutletType = "LSL_Marker_Strings";
-    public string _trialOutletID = "trial1214";
+    private string _trialOutletName = "ML_TrialData";
+    private string _trialOutletType = "LSL_Marker_Strings";
+    private string _trialOutletID = "trial1214";
 
     // Inlets
     private MonkeyLogicInlet inlet;
@@ -66,15 +70,17 @@ public class MonkeyLogicController : MonoBehaviour
                                 _frameOutletType,
                                 1,
                                 liblsl.IRREGULAR_RATE,
-                                liblsl.channel_format_t.cf_string,
-                                _frameOutletID);
+                                liblsl.channel_format_t.cf_float32,
+                                _frameOutletID,
+                                GenerateXMLMetaData());
 
         trialOutlet = outlets.Configure(_trialOutletName,
                                 _trialOutletType,
                                 1,
                                 liblsl.IRREGULAR_RATE,
                                 liblsl.channel_format_t.cf_string,
-                                _trialOutletID);
+                                _trialOutletID,
+                                GenerateXMLMetaData());
 
         inlet.Configure(_controlInletName, _controlInletType, _controlInletID, _resolver);
 
@@ -83,7 +89,25 @@ public class MonkeyLogicController : MonoBehaviour
         inlet.OnCommand += ForwardCommand;
 
 }
-    
+    private IDictionary<string, IDictionary<string, int>> GenerateXMLMetaData()
+    {
+
+        // Get Name - InstanceID dict from Experiment Controller
+        IDictionary<string, int> obj_map = ExperimentController.instance.InstanceIDMap;
+        IDictionary<string, int> phase_map = new Dictionary<string, int>();
+        foreach (var test in Enum.GetValues(typeof(StateNames)))
+        {
+            phase_map.Add(test.ToString(), (int)test);
+        }
+        IDictionary<string, IDictionary<string, int>> metadata_dicts_names = new Dictionary<string, IDictionary<string, int>>()
+            {
+                { "phase_map", phase_map },
+                { "obj_map", obj_map }
+            };
+
+        return metadata_dicts_names;
+    }
+
     // Forward delegates from children classes to the Events Controller. 
     private void ForwardEyecalibration(EyeCalibrationParameters parameters)
     {
@@ -116,7 +140,7 @@ public class MonkeyLogicController : MonoBehaviour
         return liblsl.local_clock();
     }
 
-    public void PublishFrame(string to_publish)
+    public void PublishFrame(double[] to_publish)
     {
         outlets.Write(frameOutlet, to_publish);
     }

@@ -78,6 +78,7 @@ public class StateSystemCommon : StateMachineBehaviour
         }
         else
         {
+            //animator.SetBool("IsTrialOver", true);
             return;
         }
     }
@@ -86,8 +87,9 @@ public class StateSystemCommon : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         // reset states. 
+        //animator.SetBool("IsStateOver", false);
         animator.ResetTrigger("StateOver");
-
+        // except running and trial over. 
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
