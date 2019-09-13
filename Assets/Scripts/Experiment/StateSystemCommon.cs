@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Misc;
 
 public class StateSystemCommon : StateMachineBehaviour
 {
     // Shared by all instances of this class. Used to check experiment status and
     // trigger start / stop events.
+    
     static bool wasRunning = false; 
 
-    public string StateName = "";
+    public StateNames StateName;
+
     public float MinStateDuration = 0.0f;
     [Tooltip("-1:Infinite; 0:1 frame; >0 duration")]public float MaxStateDuration = 0.0f;
     public bool RequiresFixation = false;
@@ -61,13 +64,13 @@ public class StateSystemCommon : StateMachineBehaviour
         // Check for state completion
         else if (exp.IsRunning && wasRunning)
         {
-            if (exp.IsTrialOver)
+            if (exp.IsTrialOver())
             {
                 animator.SetTrigger("TrialOver");
                 return;
             }
             
-            if (exp.IsStateOver)
+            if (exp.IsStateOver())
             {
                 animator.SetTrigger("StateOver");
                 return;

@@ -4,20 +4,26 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using Assets.LSL4Unity.Scripts.AbstractInlets;
-using Assets.LSL4Unity.Scripts;
+using LSL;
 using UnityEngine.Events;
 
-public class MonkeyLogicInlet : InletStringSamples
+public class MonkeyLogicInlet : MonoBehaviour
 {
-    // Outlets settings
-    public string UniqueID;
+    // inlet settings
+    private liblsl.StreamInlet inlet;
+
+    private string StreamName;
+    private string StreamType;
+    private string[] sample;
+
+    private int expectedChannels;
+    private string UniqueID;
     private bool pullSamplesContinuously = false;
-    
+
     // override Resolver definition in Base class because the Resolver class had errors.
     // Created error-less version by copy-pasting. Couldn't sub-class because of private 
     // methods. 
-    new protected MonkeyLogicResolver resolver;
+    private MonkeyLogicResolver resolver;
 
     // Delegates for inlet control events
     public delegate void EyeCalibrationReceived(EyeCalibrationParameters parameters);
@@ -29,7 +35,7 @@ public class MonkeyLogicInlet : InletStringSamples
     // Override the function in the ABaseInlet class: 
     // returns an error if no stream is not found during initialization. 
     // The resolver should still continuously resolve. 
-    protected override void registerAndLookUpStream() { }
+    //protected override void registerAndLookUpStream() { }
 
     // Instead of calling this in the start function, we call it here to pass the parameters of the 
     // expected stream. 
@@ -45,16 +51,72 @@ public class MonkeyLogicInlet : InletStringSamples
         resolver.Run();
     }
 
-    protected override bool isTheExpected(LSLStreamInfoWrapper stream)
+    public virtual void AStreamIsFound(liblsl.StreamInfo stream)
+    {
+        if (!isTheExpected(stream))
+            return;
+
+        Debug.Log(string.Format("LSL Stream {0} found for {1}", stream.name(), name));
+
+        inlet = new liblsl.StreamInlet(stream);
+        expectedChannels = stream.channel_count();
+
+        OnStreamAvailable();
+    }
+
+    /// <summary>
+    /// Callback method for the Resolver gets called each time the resolver misses a stream within its cache
+    /// </summary>
+    /// <param name="stream"></param>
+    public virtual void AStreamGotLost(liblsl.StreamInfo stream)
+    {
+        if (!isTheExpected(stream))
+            return;
+
+        Debug.Log(string.Format("LSL Stream {0} Lost for {1}", stream.name(), name));
+
+        OnStreamLost();
+    }
+
+    protected bool isTheExpected(liblsl.StreamInfo stream)
     {
         // Checks for name, type and Unique ID?
-        bool predicate = StreamName.Equals(stream.Name);
-        predicate &= StreamType.Equals(stream.Type);
-        predicate &= UniqueID.Equals(stream.SourceID);
+        bool predicate = StreamName.Equals(stream.name());
+        predicate &= StreamType.Equals(stream.type());
+        predicate &= UniqueID.Equals(stream.source_id());
         return predicate;
     }
 
-    protected override void Process(string[] newSample, double timeStamp)
+    protected void pullSamples()
+    {
+        sample = new string[expectedChannels];
+
+        try
+        {
+            double lastTimeStamp = inlet.pull_sample(sample, 0.0f);
+
+            if (lastTimeStamp != 0.0)
+            {
+                // do not miss the first one found
+                Process(sample, lastTimeStamp);
+                // pull as long samples are available
+                while ((lastTimeStamp = inlet.pull_sample(sample, 0.0f)) != 0)
+                {
+                    Process(sample, lastTimeStamp);
+                }
+
+            }
+        }
+        catch (ArgumentException aex)
+        {
+            Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
+            enabled = false;
+            Debug.LogException(aex, this);
+        }
+
+    }
+
+    protected void Process(string[] newSample, double timeStamp)
     {
         // Process the MonkeyLogic commands that can be: 
         List<string> Commands = new List<string> { "Begin", "End", "Pause", "Resume" }; // + EyeCalibration
@@ -78,12 +140,12 @@ public class MonkeyLogicInlet : InletStringSamples
         }
     }
 
-    protected override void OnStreamAvailable()
+    protected void OnStreamAvailable()
     {
         pullSamplesContinuously = true;
     }
 
-    protected override void OnStreamLost()
+    protected void OnStreamLost()
     {
         pullSamplesContinuously = false;
     }
