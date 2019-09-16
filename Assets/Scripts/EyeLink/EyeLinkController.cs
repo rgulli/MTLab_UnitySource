@@ -17,6 +17,7 @@ using System.Threading;
 // we will implement a thread to attempt to connect, that way execution won't be affected 
 // when no eyelink is present. There isn't a simple way to test whether the eyelink is 
 //available or not, except by trying to connect to it. 
+
 public class EyeLinkChecker
 {
     public string IP;
@@ -26,18 +27,28 @@ public class EyeLinkChecker
     
     public void StartThread(string elIP)
     {
-        IP = elIP;
-        thread = new Thread(ThreadConnect);
-        thread.Start();
-
+        if (thread == null)
+        {
+            Debug.Log("Eyelink checker thread started");
+            IP = elIP;
+            // It's possible that this is a re-spawn because a connection was lost
+            elOnline = false;
+            thread = new Thread(ThreadConnect);
+            thread.Start();
+        }
     }
+
     public void StopThread()
     {
         threadRunning = false;
         // This waits until the thread exits,
         // ensuring any cleanup we do after this is safe. 
-        thread.Join();
-        Debug.Log("Thread Stopped");
+        if (thread != null)
+        {
+            thread.Join();
+            Debug.Log("Eyelink checker thread stopped.");
+            thread = null;
+        }
     }
    
     public bool RunCheck()
@@ -51,35 +62,35 @@ public class EyeLinkChecker
         
     private void ThreadConnect()
     {
-        EyeLink el = new EyeLink();
-        el.setEyelinkAddress(IP, -1);
+        EyeLink _el = new EyeLink();
+        _el.setEyelinkAddress(IP, -1);
 
         threadRunning = true;
-        bool done = false;
 
-        while (threadRunning && !done)
+        while (threadRunning)
         {
             if (!elOnline)
             {
                 try
                 {
                     //Debug.Log("Trying to connect");
-                    el.broadcastOpen();
+                    _el.broadcastOpen();
 
                 }
                 catch
                 {
 
                 }
-            }
 
-            if (el.isConnected())
-            {
-                elOnline = true;
-                done = true;
+                if (_el.isConnected())
+                {
+                    elOnline = true;
+                    threadRunning = false;
+                    continue;
+                }
             }
+            
         }
-        threadRunning = false;
     }
 
 }
@@ -112,6 +123,7 @@ public class EyeLinkController : MonoBehaviour
         gaze = gameObject.AddComponent<GazeProcessing>();
         el = new EyeLink();
         el_Util = new EyeLinkUtil();
+        checker = new EyeLinkChecker();
 
         // Add Listeners
         EventsController.OnEyeCalibrationUpdate += gaze.UpdateCalibration;
@@ -126,20 +138,18 @@ public class EyeLinkController : MonoBehaviour
         if (checker != null)
         {
             checker.StopThread();
-
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        ISample s;
+        Sample s;
         //Sample s;
         double lastSampleTime = 0.0;
-        
+
         // if not connected, has eye calibration and no thread: Initialize thread
-        //if (!el.isConnected() && eyecal.has_calibration && checker == null)
-        if (!el.isConnected() && checker == null)
+        if (!el.isConnected() && !checker.RunCheck() && !checker.CheckELOnline() && eyecal.has_calibration)
         {
             // Configure eye
             switch (eyecal.GetTrackedEye())
@@ -156,39 +166,37 @@ public class EyeLinkController : MonoBehaviour
             }
 
             // Spawn checker thread to test connection
-            checker = new EyeLinkChecker();
             checker.StartThread(eyecal.GetEyeLinkIP());
             
             s = null;
         }
         // If checker created
-        else if(!el.isConnected() && checker != null)
+        else if(!el.isConnected() && checker.CheckELOnline() && eyecal.has_calibration)
         {
             // Eyelink Online
-            if (checker.CheckELOnline())
+            // Connect
+            el.setEyelinkAddress(eyecal.GetEyeLinkIP(), -1);
+            el.broadcastOpen();
+            if (el.isConnected())
             {
-                // Connect
-                el.setEyelinkAddress(eyecal.GetEyeLinkIP(), -1);
-                el.broadcastOpen();
-            }
-            // Checker stopped running but EL is not online
-            // clear to be re-spawned on next update. 
-            else if (!checker.RunCheck())
-            {
+                Debug.Log("EyeLink Connected");
                 checker.StopThread();
-                checker = null;
             }
             s = null;
         }
+        
         // If connected, has calibration and tracker is in record mode: get sample    
         else if (el.isConnected() && eyecal.has_calibration && el.getTrackerMode() == 14)
         {
             try
             {
+                //el.resetData();
+                //el.dataSwitch(4 | 8);
                 s = el.getNewestSample();
             }
-            catch
+            catch(Exception e)
             {
+                //Debug.Log(e.ToString());
                 s = null;
             }
         }
@@ -209,10 +217,11 @@ public class EyeLinkController : MonoBehaviour
                 _eyeRaw.y = s.get_py(el_Eye);
 
                 eyecal.RawToPix(_eyeRaw, out _eyeDeg, out _eyePix);
+                
                 gaze.ProcessGaze(_eyePix, out string[] gazeTargets, out float[] gazeCounts);
                 _gazeTargets = gazeTargets;
                 _gazeCounts = gazeCounts;
-
+                
                 lastSampleTime = s.time;
             }
             else

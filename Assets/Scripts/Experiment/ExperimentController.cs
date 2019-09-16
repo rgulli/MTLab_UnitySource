@@ -223,9 +223,6 @@ public class ExperimentController : MonoBehaviour
         // Get Controllers instance
         playerController.OnBlack(true);
 
-        // Colliders name: gameObject instance ID to send to stream
-        GenerateIDMap();
-        
         PrepareAllTrials();
         Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count/taskInfo.NumberOfSets) + " of which are different.");
     }
@@ -657,9 +654,14 @@ public class ExperimentController : MonoBehaviour
     #region Event handling
     private void OnEnable()
     {
+        // Colliders name: gameObject instance ID to send to stream
+        // Need to be computed BEFORE Start()
+        GenerateIDMap();
+
         // Add listener for Update Events 
         EventsController.OnPlayerLateUpdate += UpdatePlayer;
         EventsController.OnEyeLateUpdate += UpdateEye;
+        EventsController.OnPhotoDiodeUpdate += UpdatePhotoDiode;
         EventsController.OnBegin += StartExperiment;
         EventsController.OnEnd += StopExperiment;
         EventsController.OnPause += PauseExperiment;
@@ -672,6 +674,7 @@ public class ExperimentController : MonoBehaviour
         // Remove listeners
         EventsController.OnPlayerLateUpdate -= UpdatePlayer;
         EventsController.OnEyeLateUpdate -= UpdateEye;
+        EventsController.OnPhotoDiodeUpdate -= UpdatePhotoDiode;
         EventsController.OnBegin -= StartExperiment;
         EventsController.OnEnd -= StopExperiment;
         EventsController.OnPause -= PauseExperiment;
@@ -693,11 +696,19 @@ public class ExperimentController : MonoBehaviour
         float[] gazeTargetIDs = new float[5];
         for (int i = 0; i < Mathf.Min(5, gazeTargets.Length); i++)
         {
-            gazeTargetIDs[i] = NameToID(gazeTargets[i]);
+            if (gazeTargets[i] != null)
+                gazeTargetIDs[i] = NameToID(gazeTargets[i]);
+            else
+                gazeTargetIDs[i] = -1; 
 
         }
         _frameData.GazeTargets = gazeTargetIDs;
         _frameData.GazeRayCounts = gazeCounts;
+    }
+
+    void UpdatePhotoDiode(float intensity)
+    {
+        _frameData.PhotoDiodeIntensity = intensity; 
     }
     #endregion Event handling
 

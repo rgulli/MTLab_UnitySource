@@ -41,6 +41,14 @@ public class EventsController : MonoBehaviour
         OnPlayerLateUpdate?.Invoke(position, rotation, state, hInput, vInput);
     }
 
+    // PhotoDiode Events
+    public delegate void PhotoDiodeUpdate(float intensity);
+    public static event PhotoDiodeUpdate OnPhotoDiodeUpdate;
+    public void SendPhotoDiodeUpdate(float intensity)
+    {
+        OnPhotoDiodeUpdate?.Invoke(intensity);
+    }
+
     // MonkeyLogic Controller Events. 
     // Out Events
     // Eye Calibration Data received

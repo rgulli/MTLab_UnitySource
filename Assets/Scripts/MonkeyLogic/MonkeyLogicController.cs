@@ -33,12 +33,12 @@ public class MonkeyLogicController : MonoBehaviour
     private MonkeyLogicOutlet outlets;
     private int frameOutlet; // index in the outlets list. 
     private string _frameOutletName = "ML_FrameData";
-    private string _frameOutletType = "Markers";
+    private string _frameOutletType = "Unity";
     private string _frameOutletID = "frame1214";
 
     private int trialOutlet;
     private string _trialOutletName = "ML_TrialData";
-    private string _trialOutletType = "LSL_Marker_Strings";
+    private string _trialOutletType = "Markers";
     private string _trialOutletID = "trial1214";
 
     // Inlets
@@ -68,7 +68,7 @@ public class MonkeyLogicController : MonoBehaviour
         // Configure
         frameOutlet = outlets.Configure(_frameOutletName,
                                 _frameOutletType,
-                                1,
+                                22,
                                 liblsl.IRREGULAR_RATE,
                                 liblsl.channel_format_t.cf_float32,
                                 _frameOutletID,
@@ -99,6 +99,7 @@ public class MonkeyLogicController : MonoBehaviour
         {
             phase_map.Add(test.ToString(), (int)test);
         }
+
         IDictionary<string, IDictionary<string, int>> metadata_dicts_names = new Dictionary<string, IDictionary<string, int>>()
             {
                 { "phase_map", phase_map },

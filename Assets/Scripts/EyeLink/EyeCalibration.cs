@@ -81,15 +81,13 @@ public class EyeCalibration : MonoBehaviour
 
     public string GetEyeLinkIP()
     {
-        return "127.0.0.1";
-        //return _eyecal_params.el_IP;
+        return _eyecal_params.el_IP;
     }
 
     public int GetTrackedEye()
     {
         // 0: Left; 1: Right;
-        return 0;
-        //return _eyecal_params.el_eyeID;
+        return _eyecal_params.el_eyeID;
     }
 }
 

@@ -20,6 +20,9 @@ public class FrameData
     // From the StateSystemController
     public StateNames Trial_State;
 
+    // PhotoDiode
+    public float PhotoDiodeIntensity; 
+
     // From MonkeyLogicController
     public double Unity_Local_Time;
 
@@ -48,11 +51,12 @@ public class FrameData
     //  Gaze Y
     //  <= 5 Gaze collision object instanceIDs
     //  <= 5 Gaze ray hit counts (max 33: 1 center and 4x8 circles)
+    //  Photo Diode intensity
     //  Trial State
     //  Unity LSL local time
     public double[] GetData(double curr_time)
     {
-        double[] sample = new double[21];
+        double[] sample = new double[22];
         sample[0] = Position.x;
         sample[1] = Position.y;
         sample[2] = Position.z;
@@ -79,11 +83,11 @@ public class FrameData
             }
         }
         sample[19] = (double)Trial_State;
-        sample[20] = curr_time;
+        sample[20] = PhotoDiodeIntensity;
+        sample[21] = curr_time;
 
         return sample; 
 
-        //Unity_Local_Time = curr_time;
         //return JsonUtility.ToJson(this);
     }
 }
