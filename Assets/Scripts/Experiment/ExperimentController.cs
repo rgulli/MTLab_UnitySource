@@ -221,7 +221,8 @@ public class ExperimentController : MonoBehaviour
     private void Start()
     {
         // Get Controllers instance
-        playerController.OnBlack(true);
+        //playerController.OnBlack(true);
+        playerController.OnBlack(false);
 
         PrepareAllTrials();
         Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count/taskInfo.NumberOfSets) + " of which are different.");

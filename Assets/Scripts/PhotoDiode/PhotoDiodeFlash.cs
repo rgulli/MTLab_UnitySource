@@ -6,11 +6,9 @@
 ///     update, the screen value will only change at the end of the frame. 
 /// </summary>
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading;
+using UnityEditor;
 
 public class PhotoDiodeFlash : MonoBehaviour
 {
@@ -21,12 +19,41 @@ public class PhotoDiodeFlash : MonoBehaviour
     private int nFrames;
     private int countFrames = -1;
     private float greyScale;
-    private Image square; 
+    private Image square;
+
+    private void OnGUI()
+    {
+        
+    }
     // Start is called before the first frame update
     void Start()
     {
         square = gameObject.GetComponentInChildren<Image>();
 
+
+        /*FullScreenView gw = ScriptableObject.CreateInstance<FullScreenView>();
+        gw.autoRepaintOnSceneChange = true;
+        
+        gw.ShowModalUtility();
+        gw.minSize = new Vector2 { x = 640, y = 480 };
+        gw.position = new Rect { x = 0, y = 0, width = 640, height = 480 };     */
+        
+        
+        var windows = (EditorWindow[])Resources.FindObjectsOfTypeAll(typeof(EditorWindow));
+        foreach (var window in windows)
+        {
+            
+            if (window != null && window.GetType().FullName == "UnityEditor.GameView")
+            {
+                var wd = (EditorWindow)ScriptableObject.CreateInstance(window.GetType().FullName);
+
+                wd.ShowUtility();
+                
+                window.minSize = new Vector2 { x = 1920, y = 1150 };
+                wd.position = new Rect { x = 0, y = 0, width = 1920, height = 1150 };
+            }
+        }
+        
         /*
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 9999;
@@ -38,7 +65,7 @@ public class PhotoDiodeFlash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(1/Time.deltaTime);
+        //Debug.Log(1/Time.deltaTime);
         if (countFrames == -1)
         {
             countFrames = 0;
