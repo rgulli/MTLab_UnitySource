@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
-using UnityEngine;
 
 // Structures holding the parameters from monkey logic to calibrate the eye 
 // data.
