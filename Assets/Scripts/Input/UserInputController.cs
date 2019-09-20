@@ -1,23 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
+using UnityEngine.InputSystem.HID;
 
 public class UserInputController : MonoBehaviour
 {
-    // Read-only params. 
-    private string _inputH = "Null";
-    public string InputH { 
-        get { return _inputH; }
-        set {}
-    }
-
-    private string _inputV = "Null";
-    public string InputV
-    {
-        get { return _inputV; }
-        set {}
-    }
-
+  
     public enum EDevice
     {
         Null,
@@ -31,44 +21,42 @@ public class UserInputController : MonoBehaviour
     public EDevice deviceType = EDevice.Null;
     public float Move_Sensitivity = 2.0f;
     public float Turn_Sensitivity = 2.0f;
-
-    // In order for this to work, the Axis need to be properly labelled in the Edit/Project Settings... 
-    // Inputs section. If your task was created from the original one, this shouldn't be an issue. 
-    private void OnEnable()
+    
+    public Vector2 ReadAxes()
     {
+        Vector2 axes;
+
         switch(deviceType)
         {
             case EDevice.Joystick:
-                _inputH = "Joystick_H";
-                _inputV = "Joystick_V";
+                axes = Joystick.current.stick.ReadValue();
                 break;
             case EDevice.Keyboard:
-                _inputH = "Keyboard_H";
-                _inputV = "Keyboard_V";
+                axes = new Vector2
+                {
+                    x = Keyboard.current.rightArrowKey.ReadValue() - Keyboard.current.leftArrowKey.ReadValue(),
+                    y = Keyboard.current.upArrowKey.ReadValue() - Keyboard.current.downArrowKey.ReadValue()
+                };
                 break;
             case EDevice.Mouse:
-                _inputH = "Mouse_H";
-                _inputV = "Mouse_V";
+                axes = Mouse.current.delta.ReadValue();
                 break;
             case EDevice.Null:
-                _inputH = "Null";
-                _inputV = "Null";
+                axes = Vector2.zero;
                 break;
             default:
-                _inputH = "Null";
-                _inputV = "Null";
+                axes = Vector2.zero;
                 break;
         }
-           
-    }
-
-    void Start()
-    {
+        axes.x *= Turn_Sensitivity;
+        axes.y *= Move_Sensitivity;
+        return axes;
 
     }
 
-    void Update()
+    private void Start()
     {
-
+       
+    
     }
 }

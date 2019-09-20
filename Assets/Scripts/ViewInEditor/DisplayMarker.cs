@@ -20,11 +20,13 @@ public class DisplayMarker : MonoBehaviour
         Target, 
         Cue, 
         Trigger,
+        Gaze,
         Null
     }
     public MarkerType markerType = MarkerType.Null;
 
-    public bool Visible = true; 
+    public bool Visible = true;
+    public float Size = 0.5f;
 
     void OnDrawGizmos()
     {
@@ -35,23 +37,27 @@ public class DisplayMarker : MonoBehaviour
             {
                 case MarkerType.Start:
                     Gizmos.color = Color.green;
-                    Gizmos.DrawSphere(transform.position, 0.5f);
+                    Gizmos.DrawSphere(transform.position, Size);
                     break;
                 case MarkerType.Target:
                     Gizmos.color = Color.red;
-                    Gizmos.DrawSphere(transform.position, 0.5f);
+                    Gizmos.DrawSphere(transform.position, Size);
                     break;
                 case MarkerType.Cue:
                     Gizmos.color = Color.cyan;
-                    Gizmos.DrawSphere(transform.position, 0.5f);
+                    Gizmos.DrawSphere(transform.position, Size);
                     break;
                 case MarkerType.Trigger:
                     Gizmos.color = Color.green;
                     Gizmos.DrawWireCube(transform.position, transform.localScale);
                     break;
-                default:
+                case MarkerType.Gaze:
                     Gizmos.color = Color.black;
-                    Gizmos.DrawSphere(transform.position, 0.5f);
+                    Gizmos.DrawSphere(transform.position, Size);
+                    break;
+                default:
+                    Gizmos.color = Color.white;
+                    Gizmos.DrawSphere(transform.position, Size);
                     break;
             }
         }

@@ -112,27 +112,30 @@ public class EyeLinkController : MonoBehaviour
     private EyeCalibration eyecal;
 
     // Gaze 
-    private GazeProcessing gaze;
+    private GazeProcessing gazeProcess;
+    private GazeView gazeView;
 
     private EyeLinkChecker checker;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         eyecal = gameObject.AddComponent<EyeCalibration>();
-        gaze = gameObject.AddComponent<GazeProcessing>();
+        gazeProcess = gameObject.AddComponent<GazeProcessing>();
+        gazeView = gameObject.AddComponent<GazeView>();
+
         el = new EyeLink();
         el_Util = new EyeLinkUtil();
         checker = new EyeLinkChecker();
 
         // Add Listeners
-        EventsController.OnEyeCalibrationUpdate += gaze.UpdateCalibration;
+        EventsController.OnEyeCalibrationUpdate += gazeProcess.UpdateCalibration;
         EventsController.OnEyeCalibrationUpdate += eyecal.UpdateCalibration;
     }
 
     private void OnDisable()
     {
-        EventsController.OnEyeCalibrationUpdate -= gaze.UpdateCalibration;
+        EventsController.OnEyeCalibrationUpdate -= gazeProcess.UpdateCalibration;
         EventsController.OnEyeCalibrationUpdate -= eyecal.UpdateCalibration;
 
         if (checker != null)
@@ -194,7 +197,7 @@ public class EyeLinkController : MonoBehaviour
                 //el.dataSwitch(4 | 8);
                 s = el.getNewestSample();
             }
-            catch(Exception e)
+            catch
             {
                 //Debug.Log(e.ToString());
                 s = null;
@@ -218,7 +221,9 @@ public class EyeLinkController : MonoBehaviour
 
                 eyecal.RawToPix(_eyeRaw, out _eyeDeg, out _eyePix);
                 
-                gaze.ProcessGaze(_eyePix, out string[] gazeTargets, out float[] gazeCounts);
+                gazeProcess.ProcessGaze(_eyePix, out string[] gazeTargets, out float[] gazeCounts, out Vector3[] hitPoints);
+                gazeView.ShowGaze(hitPoints);
+
                 _gazeTargets = gazeTargets;
                 _gazeCounts = gazeCounts;
                 

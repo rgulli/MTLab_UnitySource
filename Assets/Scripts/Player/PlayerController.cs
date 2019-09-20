@@ -6,8 +6,9 @@
     We have no running, no jumping, no bobbing, no animations
 
 */
-using System;
+
 using UnityEngine;
+ 
 
 namespace FirstPerson
 {
@@ -15,6 +16,7 @@ namespace FirstPerson
     [RequireComponent(typeof (AudioSource))]
     public class PlayerController : MonoBehaviour
     {
+
         // Movement properties
         private float m_WalkSpeed = 5.0f;
         private float m_StickToGroundForce = 10.0f;
@@ -35,7 +37,7 @@ namespace FirstPerson
 
         // Set from the editor
         public UserInputController inputCtrl;
-
+        
         // Save the input data used to compute movement during each frame. To be
         // sent during LateUpdate to the MonkeyLogicController. 
         // We don't need to create position/rotation variables as those are accessible 
@@ -51,33 +53,35 @@ namespace FirstPerson
             m_Camera = Camera.main;
             m_Camera.backgroundColor = Color.black;
             m_CullMask = m_Camera.cullingMask;
-
+            m_Camera.targetDisplay = 0;
             // Default start on black
-            OnBlack(true);
+
         }
 
         private void Update()
         {
+
             // Manual On Black
-            if (Input.GetKey("v"))
-                OnBlack(false);
-            if (Input.GetKey("b"))
-                OnBlack(true);
+            //if (Input.GetKey("v"))
+            //    OnBlack(false);
+            //if (Input.GetKey("b"))
+            //    OnBlack(true);
+            Vector2 move = inputCtrl.ReadAxes();
 
             if (m_CanMove)
             {
                 
                 // set the desired speed to be walking or running
-                speed = m_WalkSpeed * inputCtrl.Move_Sensitivity;
+                //speed = m_WalkSpeed * inputCtrl.Move_Sensitivity;
 
                 if (m_CharacterController.isGrounded)
                 {
                     // Read input
-                    _vInput = Input.GetAxis(inputCtrl.InputV);
+                    //_vInput = Input.GetAxis(inputCtrl.InputV);
 
-                    m_MoveDirection = new Vector3(0, 0, _vInput);
+                    m_MoveDirection = new Vector3(0, 0, move.y);
                     m_MoveDirection = transform.TransformDirection(m_MoveDirection);
-                    m_MoveDirection *= speed;
+                    m_MoveDirection *= m_WalkSpeed;
 
                     m_MoveDirection.y = -m_StickToGroundForce;
 
@@ -92,11 +96,12 @@ namespace FirstPerson
 
                 // Copied from MouseLook.LookRotation
                 // No pitch rotation either. 
-                _hInput = Input.GetAxis(inputCtrl.InputH);
-                transform.localRotation *= Quaternion.Euler(0f, _hInput * inputCtrl.Turn_Sensitivity, 0f);
+                //_hInput = Input.GetAxis(inputCtrl.InputH);
+                
+                transform.localRotation *= Quaternion.Euler(0f, move.x * inputCtrl.Turn_Sensitivity, 0f);
             }
             // Update values to experiment controller
-            EventsController.instance.SendPlayerLateUpdateEvent(transform.position, transform.rotation.eulerAngles.y, _CollisionStatus, _hInput, _vInput);
+            EventsController.instance.SendPlayerLateUpdateEvent(transform.position, transform.rotation.eulerAngles.y, _CollisionStatus, move.y, move.x);
         }
 
         public void ToStart(Vector3 position, Quaternion rotation)

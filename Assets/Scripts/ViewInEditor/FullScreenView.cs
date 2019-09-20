@@ -1,45 +1,53 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-
-using UnityEditor;
 using UnityEngine;
-using UnityEditorInternal;
-using UnityEditor.SceneManagement;
-using UnityEditor.Modules;
-using System.Globalization;
-using UnityEngine.Rendering;
-using System.Linq;
-using JetBrains.Annotations;
-public class FullScreenView : EditorWindow
+using UnityEditor;
+
+public class FullScreenView : MonoBehaviour
 {
-    string myString = "Hello World";
-    public RenderTexture m_renderTexture;
+    public int ScreenWidth = 1920;
+    public int ScreenHeight = 1080;
+    public int ScreenOffset = 0;
+    public int MenuBarHeight = 21; 
 
-    bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
-    
-    
-    void OnGUI()
+    public static int ResolutionX;
+    public static int ResolutionY;
+    public static int XOffset;
+    // The menu bar is exactly 21 pixels in height
+    public static int MenuOffset;
+
+    private void OnValidate()
     {
-        EventType type = Event.current.type;
-        m_renderTexture = RenderTexture.active;
-        
-        if (type == EventType.Repaint)
-        {
-            Graphics.DrawTexture(new Rect { x = 0, y = 0, width = 1920, height = 1080 }, m_renderTexture);
-        }
-            
-        //Handles.DrawCamera(new Rect { x = -1920/2, y = 1080/2, width = 1920, height = 1080 }, Camera.main);
-        /*
-        GUILayout.Label("Base Settings", EditorStyles.boldLabel);
-        myString = EditorGUILayout.TextField("Text Field", myString);
-
-        groupEnabled = EditorGUILayout.BeginToggleGroup("Optional Settings", groupEnabled);
-        myBool = EditorGUILayout.Toggle("Toggle", myBool);
-        myFloat = EditorGUILayout.Slider("Slider", myFloat, -3, 3);
-        EditorGUILayout.EndToggleGroup();*/
+        ResolutionX = ScreenWidth;
+        ResolutionY = ScreenHeight;
+        XOffset = ScreenOffset;
+        MenuOffset = MenuBarHeight;
     }
 
-    
+    // FullScreen Game Window
+    private EditorWindow win;
+
+    private void Start()
+    {
+
+        win = (EditorWindow)ScriptableObject.CreateInstance("UnityEditor.GameView");
+        win.name = "FullScreenView";
+        win.ShowUtility();
+
+        win.minSize = new Vector2 { x = ResolutionX, y = ResolutionY + MenuOffset };
+        win.position = new Rect
+        {
+            x = XOffset,
+            y = -MenuOffset,
+            width = ResolutionX,
+            height = ResolutionY + MenuOffset
+        };
+
+    }
+
+    private void OnDisable()
+    {
+        if (win != null) win.Close();
+    }
+
 }

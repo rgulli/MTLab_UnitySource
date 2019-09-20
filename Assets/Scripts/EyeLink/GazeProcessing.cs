@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class GazeProcessing : MonoBehaviour
 {
@@ -22,14 +23,21 @@ public class GazeProcessing : MonoBehaviour
     {
         // Get screen resolution
         cam = Camera.main;
-        _x_res = cam.scaledPixelWidth;
-        _y_res = cam.scaledPixelWidth;
+
     }
+
+
 
     // Response to event from MonkeyLogicController forwarding the eye calibration values from 
     // Monkeylogic. 
     public void UpdateCalibration(EyeCalibrationParameters parameters)
     {
+        _x_res = FullScreenView.ResolutionX;
+        _y_res = FullScreenView.ResolutionY;
+
+        if (_x_res != parameters.ml_x_res || _y_res != parameters.ml_y_res)
+            Debug.LogWarning("MonkeyLogic and Unity resolutions differ. Is this normal?");
+
         // Just in case there is stretching of the image, wrong aspect ration or a difference in 
         // resolution between the calibration and Unity. 
         _pix_per_deg = parameters.pix_per_deg;
@@ -60,7 +68,7 @@ public class GazeProcessing : MonoBehaviour
                     modif = Mathf.PI / 8;
                 }
                 else
-                {
+                { 
                     modif = 0;
                 }
                 _rays[idx].x = _foveation_radius_pix_x * radii[rad] * Mathf.Sin((angles[ang] / Mathf.Rad2Deg) + modif);
@@ -74,29 +82,58 @@ public class GazeProcessing : MonoBehaviour
     // Called on Update from the EyeLinkController when it has the calibration value
     // and a connection to the eyelink. Input gaze position in pixels and maps to objects
     // in the environment. 
-    public void ProcessGaze(Vector2 eyePix, out string[] targets, out float[] counts)
+    public void ProcessGaze(Vector2 eyePix, out string[] targets, out float[] counts, out Vector3[] hitPoints)
     {
-        _gaze = eyePix;
+        _x_res = FullScreenView.ResolutionX;
+        _y_res = FullScreenView.ResolutionY;
         Dictionary<string, int> gazeDict = new Dictionary<string, int>();
 
+        // at this point the eyePix data assumes that the viewport resolution is 1920x1080
+        // or whatever is defined in the ScreenSettings. We have 2 viewports, one of which is 
+        // of a different resolution. We need to scale the pixel values to match the current 
+        // viewport.
+
         // Compute the gaze position on screen at the start and end of the view frustum
-        Vector3 ptOrig = new Vector3(eyePix.x, eyePix.y, cam.nearClipPlane);
-        Vector3 ptEnd = new Vector3(eyePix.x, eyePix.y, cam.farClipPlane);
+        Vector3 ptOrig = new Vector3
+        {
+            x = eyePix.x / _x_res * cam.scaledPixelWidth,
+            y = eyePix.y / _y_res * cam.scaledPixelHeight,
+            z = cam.nearClipPlane
+        };
+        //  (eyePix.x, eyePix.y, cam.nearClipPlane);
+        Vector3 ptEnd = new Vector3
+        {
+            x = eyePix.x / _x_res * cam.scaledPixelWidth,
+            y = eyePix.y / _y_res * cam.scaledPixelHeight,
+            z = cam.farClipPlane
+        };// (eyePix.x, eyePix.y, cam.farClipPlane);
 
         // Origin of the ray castring from the screen positions
         Vector3 worldPtOrig = new Vector3();
         Vector3 worldPtEnd = new Vector3();
 
         RaycastHit hit;
+        hitPoints = new Vector3[33];
 
+        int idx = -1;
         // Culling mask of 0 is when the player is on black, no gaze then
         if (cam.cullingMask != 0) 
         {
+            float rXMod = cam.scaledPixelWidth / _x_res;
+            float rYMod = cam.scaledPixelHeight / _y_res;
+
+
             // Loop through all the rays and compute hits
             foreach (Vector3 r in _rays)
             {
+                // same as with gaze, we need to convert to local viewport pixels
+                
+
+                idx += 1;
                 // skip if any points fall outside the screen
-                if ((ptOrig.x + r.x) < 0 || (ptOrig.y + r.y) < 0 || (ptOrig.x + r.x) > _x_res || (ptOrig.y + r.y) > _y_res)
+                //if ((ptOrig.x + r.x) < 0 || (ptOrig.y + r.y) < 0 || (ptOrig.x + r.x) > _x_res || (ptOrig.y + r.y) > _y_res)
+                if ((ptOrig.x + (rXMod * r.x)) < 0 || (ptOrig.y + (rYMod * r.y)) < 0 ||
+                    (ptOrig.x + (rXMod * r.x)) > cam.scaledPixelWidth || (ptOrig.y + (rYMod * r.y)) > cam.scaledPixelHeight)
                 {
                     continue;
                 }
@@ -108,9 +145,12 @@ public class GazeProcessing : MonoBehaviour
                 // the z component is the distance along the view frustum
                 // we only care about what is rendered for ray tracing so we set the distances
                 // to the near and far clipping planes. 
-                worldPtOrig = cam.ScreenToWorldPoint(ptOrig + r);
-                worldPtEnd = cam.ScreenToWorldPoint(ptEnd + r);
-
+                
+                worldPtOrig = cam.ScreenToWorldPoint(new Vector3
+                { x = ptOrig.x + (rXMod * r.x), y= ptOrig.y + (rYMod * r.y), z=ptOrig.z });
+                
+                worldPtEnd = cam.ScreenToWorldPoint(new Vector3 
+                { x = ptEnd.x + (rXMod * r.x), y = ptEnd.y + (rYMod * r.y), z = ptEnd.z });
                 // Raycast arguments are: 
                 // Start position
                 // Direction
@@ -118,6 +158,7 @@ public class GazeProcessing : MonoBehaviour
                 Physics.Raycast(worldPtOrig, worldPtEnd - worldPtOrig, out hit, cam.farClipPlane);
                 if (hit.collider != null)
                 {
+                    hitPoints[idx] = hit.point;
                     // Dictionnary contains the name of hit object and the number 
                     // of rays colliding out of the 33. 
                     if (gazeDict.ContainsKey(hit.collider.name))
@@ -129,6 +170,10 @@ public class GazeProcessing : MonoBehaviour
                         gazeDict.Add(hit.collider.name, 1);
                     }
 
+                }
+                else
+                {
+                    hitPoints[idx] = Vector3.positiveInfinity;
                 }
 
 
@@ -164,17 +209,5 @@ public class GazeProcessing : MonoBehaviour
         targets = tar;
         counts = cnts;
     }
-
-    // Uncomment to display the gaze location on the screen that the grid of rays
-    // being cast to compute gaze targets. 
-    private void OnGUI()
-    {
-        Texture2D myTex = new Texture2D(1, 1);
-        myTex.SetPixel(0, 0, Color.black);
-        myTex.Apply();
-        foreach (Vector3 r in _rays)
-        {
-            GUI.DrawTexture(new Rect(_gaze.x + r.x, cam.pixelHeight - _gaze.y + r.y, 2, 2), myTex);
-        }
-    }
+    
 }

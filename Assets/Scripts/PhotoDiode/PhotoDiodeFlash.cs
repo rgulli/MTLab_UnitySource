@@ -7,11 +7,11 @@
 /// </summary>
 
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor;
 
 public class PhotoDiodeFlash : MonoBehaviour
 {
+   
     // Framerate control
     //public float Rate = 10.0f;
     //float currentFrameTime;
@@ -19,41 +19,18 @@ public class PhotoDiodeFlash : MonoBehaviour
     private int nFrames;
     private int countFrames = -1;
     private float greyScale;
-    private Image square;
+    private UnityEngine.UI.Image square;
 
-    private void OnGUI()
-    {
-        
-    }
+    public int SquareWidth = 25;
+    public int SquareHeight = 25;
+    public int MinFrameDuration = 5;
+    public int MaxFrameDuration = 50;
+
     // Start is called before the first frame update
     void Start()
     {
-        square = gameObject.GetComponentInChildren<Image>();
-
-
-        /*FullScreenView gw = ScriptableObject.CreateInstance<FullScreenView>();
-        gw.autoRepaintOnSceneChange = true;
-        
-        gw.ShowModalUtility();
-        gw.minSize = new Vector2 { x = 640, y = 480 };
-        gw.position = new Rect { x = 0, y = 0, width = 640, height = 480 };     */
-        
-        
-        var windows = (EditorWindow[])Resources.FindObjectsOfTypeAll(typeof(EditorWindow));
-        foreach (var window in windows)
-        {
-            
-            if (window != null && window.GetType().FullName == "UnityEditor.GameView")
-            {
-                var wd = (EditorWindow)ScriptableObject.CreateInstance(window.GetType().FullName);
-
-                wd.ShowUtility();
-                
-                window.minSize = new Vector2 { x = 1920, y = 1150 };
-                wd.position = new Rect { x = 0, y = 0, width = 1920, height = 1150 };
-            }
-        }
-        
+        square = gameObject.GetComponentInChildren<UnityEngine.UI.Image>();
+        square.rectTransform.sizeDelta = new Vector2 { x = SquareWidth, y = SquareHeight };
         /*
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 9999;
@@ -65,11 +42,12 @@ public class PhotoDiodeFlash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         //Debug.Log(1/Time.deltaTime);
         if (countFrames == -1)
         {
             countFrames = 0;
-            nFrames = Random.Range(50, 100);
+            nFrames = Random.Range(MinFrameDuration, MaxFrameDuration);
             greyScale = Random.Range(0.0f, 1.0f);
         }
         else if (countFrames == nFrames)
@@ -86,26 +64,11 @@ public class PhotoDiodeFlash : MonoBehaviour
         {
             Color rgb = new Color() { r = greyScale, g = greyScale, b = greyScale, a = 1 };
             square.color = rgb;
-
+            
             // Send data to the experiment controller to be saved on the frame stream
             EventsController.instance.SendPhotoDiodeUpdate(greyScale);
 
         }
     }
-    /*
-    IEnumerator WaitForNextFrame()
-    {
-        while (true)
-        {
-            yield return new WaitForEndOfFrame();
-            currentFrameTime += 1.0f / Rate;
-            var t = Time.realtimeSinceStartup;
-            var sleepTime = currentFrameTime - t - 0.005f;
-            if (sleepTime > 0)
-                Thread.Sleep((int)(sleepTime * 100));
-            while (t < currentFrameTime)
-                t = Time.realtimeSinceStartup;
-        }
-    }
-    */
+    
 }

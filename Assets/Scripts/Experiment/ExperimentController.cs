@@ -47,6 +47,9 @@ public class ExperimentController : MonoBehaviour
         // set the seed
         UnityEngine.Random.InitState(DateTime.Now.Millisecond);
 
+        // Clear trial list
+        _allTrials = new List<TrialData>();
+
         // In this task we will trigger a Cue on the walls and the correct target is the cube with the same 
         // color as the walls. The target will be cube_1, distractor cube_2 and we will use the textures 
         // according to the context to validate trials. 
@@ -212,7 +215,6 @@ public class ExperimentController : MonoBehaviour
         // Permutation list populated, add to out_list
         else
         {
-
             in_array.Add(in_list.ToArray());
         }
 
@@ -221,9 +223,8 @@ public class ExperimentController : MonoBehaviour
     private void Start()
     {
         // Get Controllers instance
-        //playerController.OnBlack(true);
-        playerController.OnBlack(false);
-
+        playerController.OnBlack(true);
+        
         PrepareAllTrials();
         Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count/taskInfo.NumberOfSets) + " of which are different.");
     }
@@ -495,7 +496,6 @@ public class ExperimentController : MonoBehaviour
     }
 
     // Will check whether the TRIAL is over (fixation break, time run out)
-    [HideInInspector]
     public bool IsTrialOver()
     {
         bool targ = false;
@@ -694,14 +694,14 @@ public class ExperimentController : MonoBehaviour
     void UpdateEye(Vector2 gazePosition, string[] gazeTargets, float[] gazeCounts)
     {
         _frameData.GazePosition = gazePosition;
-        float[] gazeTargetIDs = new float[5];
-        for (int i = 0; i < Mathf.Min(5, gazeTargets.Length); i++)
+        float[] gazeTargetIDs = new float[] { -1, -1, -1, -1, -1 };
+        if (gazeTargets != null)
         {
-            if (gazeTargets[i] != null)
-                gazeTargetIDs[i] = NameToID(gazeTargets[i]);
-            else
-                gazeTargetIDs[i] = -1; 
-
+            for (int i = 0; i < Mathf.Min(5, gazeTargets.Length); i++)
+            {
+                if (gazeTargets[i] != null)
+                    gazeTargetIDs[i] = NameToID(gazeTargets[i]);
+            }
         }
         _frameData.GazeTargets = gazeTargetIDs;
         _frameData.GazeRayCounts = gazeCounts;

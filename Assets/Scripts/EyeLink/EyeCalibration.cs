@@ -21,8 +21,9 @@ public class EyeCalibration : MonoBehaviour
     public void UpdateCalibration(EyeCalibrationParameters parameters)
     {
         _eyecal_params = parameters;
-        _x_res = Camera.main.scaledPixelWidth;
-        _y_res = Camera.main.scaledPixelWidth;
+        
+        _x_res = FullScreenView.ResolutionX;
+        _y_res = FullScreenView.ResolutionY;
         _has_calibration = true;
     }
 
@@ -77,6 +78,12 @@ public class EyeCalibration : MonoBehaviour
             x = (eye_deg.x * (_eyecal_params.pix_per_deg * _x_res / _eyecal_params.ml_x_res)) + (0.5f * _x_res),
             y = (eye_deg.y * (_eyecal_params.pix_per_deg * _y_res / _eyecal_params.ml_y_res)) + (0.5f * _y_res)
         };
+
+        // prevent values from falling outside of screen
+        if (eye_pix.x < 0 || eye_pix.x > _x_res)
+            eye_pix.x = -1;
+        if (eye_pix.y < 0 || eye_pix.y > _y_res)
+            eye_pix.y = -1;
     }
 
     public string GetEyeLinkIP()

@@ -87,6 +87,23 @@ public class TaskInfo : MonoBehaviour
             NDistractors = Mathf.Max(0, (NDistractors - diff));
         }
 
+        
+
+    }
+    
+    public void GenerateTrials()
+    {
+        if (ExperimentController.instance != null)
+        {
+            if (ExperimentController.instance.IsRunning && !ExperimentController.instance.IsPaused)
+            {
+                Debug.Log("Wait for Experiment to be paused.");
+            }
+            else
+            {
+                ExperimentController.instance.PrepareAllTrials();
+            }
+        }
     }
 }
 
