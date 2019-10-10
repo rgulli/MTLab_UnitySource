@@ -8,7 +8,8 @@ public class FullScreenView : MonoBehaviour
     public int ScreenWidth = 1920;
     public int ScreenHeight = 1080;
     public int ScreenOffset = 0;
-    public int MenuBarHeight = 21; 
+    public int MenuBarHeight = 21;
+    public bool AutoLaunch = true;
 
     public static int ResolutionX;
     public static int ResolutionY;
@@ -29,20 +30,21 @@ public class FullScreenView : MonoBehaviour
 
     private void Start()
     {
-
-        win = (EditorWindow)ScriptableObject.CreateInstance("UnityEditor.GameView");
-        win.name = "FullScreenView";
-        win.ShowUtility();
-
-        win.minSize = new Vector2 { x = ResolutionX, y = ResolutionY + MenuOffset };
-        win.position = new Rect
+        if (AutoLaunch)
         {
-            x = XOffset,
-            y = -MenuOffset,
-            width = ResolutionX,
-            height = ResolutionY + MenuOffset
-        };
+            win = (EditorWindow)ScriptableObject.CreateInstance("UnityEditor.GameView");
+            win.name = "FullScreenView";
+            win.ShowUtility();
 
+            win.minSize = new Vector2 { x = ResolutionX, y = ResolutionY + MenuOffset };
+            win.position = new Rect
+            {
+                x = XOffset,
+                y = -MenuOffset,
+                width = ResolutionX,
+                height = ResolutionY + MenuOffset
+            };
+        }
     }
 
     private void OnDisable()

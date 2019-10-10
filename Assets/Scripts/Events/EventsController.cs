@@ -59,6 +59,30 @@ public class EventsController : MonoBehaviour
         OnEyeCalibrationUpdate?.Invoke(parameters);
     }
 
+
+    public delegate void PlaybackParamUpdate(PlaybackTrialParameters parameters);
+    public static event PlaybackParamUpdate OnPlaybackParamUpdate;
+    public void SendPlaybackParamUpdate(PlaybackTrialParameters parameters)
+    {
+        OnPlaybackParamUpdate?.Invoke(parameters);
+    }
+
+    public delegate void PlaybackDataUpdate(PlaybackTrialData data);
+    public static event PlaybackDataUpdate OnPlaybackDataUpdate;
+    public void SendPlaybackDataUpdate(PlaybackTrialData data)
+    {
+        OnPlaybackDataUpdate?.Invoke(data);
+    }
+
+    public delegate void PlaybackStart();
+    public static event PlaybackStart OnPlaybackStart;
+    public void StartPlayback()
+    {
+        OnPlaybackStart?.Invoke();
+    }
+
+
+
     public delegate void Begin();
     public static event Begin OnBegin;
     public void SendBegin()

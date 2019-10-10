@@ -749,7 +749,7 @@ MonoBehaviour:
   SquareWidth: 25
   SquareHeight: 25
   MinFrameDuration: 5
-  MaxFrameDuration: 50
+  MaxFrameDuration: 15
 --- !u!4 &689601698
 Transform:
   m_ObjectHideFlags: 0
@@ -967,7 +967,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 753722337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca38dbef80cab12439b18fe997667cc3, type: 3}
+  m_Script: {fileID: 11500000, guid: 073e79a49b0173f428b05850906e4ff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 293642066}
@@ -1604,6 +1604,7 @@ MonoBehaviour:
   ScreenHeight: 1080
   ScreenOffset: 0
   MenuBarHeight: 21
+  AutoLaunch: 1
 --- !u!1 &1437920425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1747,7 +1748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96a190d6ae19cff4c95943395ac77e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deviceType: 1
+  deviceType: 2
   Move_Sensitivity: 1.5
   Turn_Sensitivity: 1
 --- !u!114 &1696364763
@@ -2008,7 +2009,7 @@ GameObject:
   - component: {fileID: 1838012132}
   - component: {fileID: 1838012131}
   m_Layer: 2
-  m_Name: TargetOnset
+  m_Name: TargetTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2083,7 +2084,7 @@ GameObject:
   - component: {fileID: 1925627694}
   - component: {fileID: 1925627693}
   m_Layer: 2
-  m_Name: CueOnset
+  m_Name: CueTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,8 +12,9 @@ public class GazeProcessing : MonoBehaviour
     private float _foveation_radius_deg = 2.0f; // In DVA
     private float _foveation_radius_pix_x; // in pixels
     private float _foveation_radius_pix_y;
-    private int _x_res;
-    private int _y_res;
+    private float _x_res;
+    private float _y_res;
+    
     private Vector3[] _rays = new Vector3[33];
 
     private Camera cam;
@@ -23,27 +24,11 @@ public class GazeProcessing : MonoBehaviour
     {
         // Get screen resolution
         cam = Camera.main;
-
+    
     }
 
-
-
-    // Response to event from MonkeyLogicController forwarding the eye calibration values from 
-    // Monkeylogic. 
-    public void UpdateCalibration(EyeCalibrationParameters parameters)
+    private void GenerateRays()
     {
-        _x_res = FullScreenView.ResolutionX;
-        _y_res = FullScreenView.ResolutionY;
-
-        if (_x_res != parameters.ml_x_res || _y_res != parameters.ml_y_res)
-            Debug.LogWarning("MonkeyLogic and Unity resolutions differ. Is this normal?");
-
-        // Just in case there is stretching of the image, wrong aspect ration or a difference in 
-        // resolution between the calibration and Unity. 
-        _pix_per_deg = parameters.pix_per_deg;
-        _foveation_radius_pix_x = _foveation_radius_deg * (_pix_per_deg * _x_res / parameters.ml_x_res);
-        _foveation_radius_pix_y = _foveation_radius_deg * (_pix_per_deg * _y_res / parameters.ml_y_res);
-
         // Compute rays around the gaze position 
         // generate array of raycast transformations centered on (0,0)
         float[] angles = new float[] { 0f, 45f, 90f, 135f, 180f, 225f, 270f, 315f };
@@ -59,9 +44,9 @@ public class GazeProcessing : MonoBehaviour
 
         int idx = 1;
         float modif = 0;
-        for (int rad = 0; rad < 4; rad++)
+        for (int rad = 0; rad< 4; rad++)
         {
-            for (int ang = 0; ang < 8; ang++)
+            for (int ang = 0; ang< 8; ang++)
             {
                 if (rad == 1 || rad == 3)
                 {
@@ -71,12 +56,31 @@ public class GazeProcessing : MonoBehaviour
                 { 
                     modif = 0;
                 }
-                _rays[idx].x = _foveation_radius_pix_x * radii[rad] * Mathf.Sin((angles[ang] / Mathf.Rad2Deg) + modif);
-                _rays[idx].y = _foveation_radius_pix_y * radii[rad] * Mathf.Cos((angles[ang] / Mathf.Rad2Deg) + modif);
+                _rays[idx].x = _foveation_radius_pix_x* radii[rad] * Mathf.Sin((angles[ang] / Mathf.Rad2Deg) + modif);
+                _rays[idx].y = _foveation_radius_pix_y* radii[rad] * Mathf.Cos((angles[ang] / Mathf.Rad2Deg) + modif);
                 _rays[idx].z = 0f;
                 idx++;
             }
         }
+    }
+
+    // Response to event from MonkeyLogicController forwarding the eye calibration values from 
+    // Monkeylogic. 
+    public void UpdateCalibration(EyeCalibrationParameters parameters)
+    {
+        _x_res = FullScreenView.ResolutionX;
+        _y_res = FullScreenView.ResolutionY;
+        
+        if (_x_res != parameters.ml_x_res || _y_res != parameters.ml_y_res)
+            Debug.LogWarning("MonkeyLogic and Unity resolutions differ. Is this normal?");
+
+        // Just in case there is stretching of the image, wrong aspect ration or a difference in 
+        // resolution between the calibration and Unity. 
+        _pix_per_deg = parameters.pix_per_deg;
+        _foveation_radius_pix_x = _foveation_radius_deg * (_pix_per_deg * _x_res / parameters.ml_x_res);
+        _foveation_radius_pix_y = _foveation_radius_deg * (_pix_per_deg * _y_res / parameters.ml_y_res);
+
+        GenerateRays();
     }
 
     // Called on Update from the EyeLinkController when it has the calibration value
@@ -122,12 +126,10 @@ public class GazeProcessing : MonoBehaviour
             float rXMod = cam.scaledPixelWidth / _x_res;
             float rYMod = cam.scaledPixelHeight / _y_res;
 
-
             // Loop through all the rays and compute hits
             foreach (Vector3 r in _rays)
             {
                 // same as with gaze, we need to convert to local viewport pixels
-                
 
                 idx += 1;
                 // skip if any points fall outside the screen

@@ -29,7 +29,10 @@ public class UserInputController : MonoBehaviour
         switch(deviceType)
         {
             case EDevice.Joystick:
-                axes = Joystick.current.stick.ReadValue();
+                if (Joystick.current != null)
+                    axes = Joystick.current.stick.ReadValue();
+                else
+                    axes = Vector2.zero;
                 break;
             case EDevice.Keyboard:
                 axes = new Vector2

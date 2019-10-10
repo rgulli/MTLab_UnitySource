@@ -70,7 +70,7 @@ public class MonkeyLogicController : MonoBehaviour
                                 _frameOutletType,
                                 22,
                                 liblsl.IRREGULAR_RATE,
-                                liblsl.channel_format_t.cf_float32,
+                                liblsl.channel_format_t.cf_double64,
                                 _frameOutletID,
                                 GenerateXMLMetaData());
 

@@ -36,7 +36,7 @@ public class FrameData
         GazePosition = Vector2.zero;
         GazeTargets = new float[5];
         GazeRayCounts = new float[5];
-        Unity_Local_Time = .0;
+        //Unity_Local_Time = .0;
     }
 
     // Data to publish will be a float[] containing:
@@ -51,8 +51,8 @@ public class FrameData
     //  Gaze Y
     //  <= 5 Gaze collision object instanceIDs
     //  <= 5 Gaze ray hit counts (max 33: 1 center and 4x8 circles)
-    //  Photo Diode intensity
     //  Trial State
+    //  Photo Diode intensity
     //  Unity LSL local time
     public double[] GetData(double curr_time)
     {
@@ -85,7 +85,6 @@ public class FrameData
         sample[19] = (double)Trial_State;
         sample[20] = PhotoDiodeIntensity;
         sample[21] = curr_time;
-
         return sample; 
 
         //return JsonUtility.ToJson(this);

@@ -6,7 +6,7 @@ using UnityEngine.Profiling;
 using System.Linq;
 using Misc;
 
-public class ExperimentController : MonoBehaviour
+public abstract class ExperimentController : MonoBehaviour
 {
     // So that other scripts can access the methods here.
     // Such as the various state system states, collider scripts and player controller. 
@@ -31,9 +31,9 @@ public class ExperimentController : MonoBehaviour
     public UserInputController userInputController;
 
     // Data structures
-    private FrameData _frameData = new FrameData();
-    private TrialData _currentTrial = new TrialData();
-    private List<TrialData> _allTrials = new List<TrialData>();
+    protected FrameData _frameData = new FrameData();
+    protected TrialData _currentTrial = new TrialData();
+    protected List<TrialData> _allTrials = new List<TrialData>();
 
     [HideInInspector]
     public IDictionary<string, int> InstanceIDMap = new Dictionary<string, int>();
@@ -42,7 +42,7 @@ public class ExperimentController : MonoBehaviour
     // Structure holding all the parameters that are set in the Editor. 
     public TaskInfo taskInfo;
 
-    public void PrepareAllTrials()
+    public virtual void PrepareAllTrials()
     {
         // set the seed
         UnityEngine.Random.InitState(DateTime.Now.Millisecond);
@@ -171,7 +171,7 @@ public class ExperimentController : MonoBehaviour
     
     // Combinations are the possible N groups not taking order into account. For example if N = 2 and in_objs = [A,B,C]
     // we get 3 combinations: [AB, AC, BC] since [AB] == [BA] in this case. 
-    private void GenerateCombinations(List<GameObject> in_objs, int N, List<GameObject> in_list, List<GameObject[]> in_array)
+    protected void GenerateCombinations(List<GameObject> in_objs, int N, List<GameObject> in_list, List<GameObject[]> in_array)
     {
         // Missing GameObjects in permutation list
         if (in_list.Count < N)
@@ -196,7 +196,7 @@ public class ExperimentController : MonoBehaviour
 
     // Unlike Combinations, permutations take order into account, so for the previous example we would get 6
     // possibilities: [AB, BA, AC, CA, BC, CB]
-    private void GeneratePermutations(List<GameObject> in_objs, int N, List<GameObject> in_list, List<GameObject[]> in_array)
+    protected void GeneratePermutations(List<GameObject> in_objs, int N, List<GameObject> in_list, List<GameObject[]> in_array)
     {
         // Missing GameObjects in permutation list
         if (in_list.Count < N)
@@ -222,6 +222,10 @@ public class ExperimentController : MonoBehaviour
 
     private void Start()
     {
+        QualitySettings.maxQueuedFrames = 0;
+        // Coroutine to publish at the end of frame. 
+        StartCoroutine("WriteMarkerAfterImageIsRendered");
+
         // Get Controllers instance
         playerController.OnBlack(true);
         
@@ -230,7 +234,7 @@ public class ExperimentController : MonoBehaviour
     }
 
     // Generate dictionary mapping object name to instance ID
-    private void GenerateIDMap()
+    protected void GenerateIDMap()
     {
         // Get all colliders and create a dictionary of name:instanceID
         Collider[] colliders = FindObjectsOfType<Collider>();
@@ -269,19 +273,19 @@ public class ExperimentController : MonoBehaviour
     public bool IsPaused { get; private set; }
 
     // Listeners for events. 
-    private void StartExperiment()
+    protected void StartExperiment()
     {
         IsRunning = true;
         _previousTrialError = 0;
         _previousTrialError = 0;
     }
-    private void StopExperiment()
+    protected void StopExperiment()
     {
         IsRunning = false;
         playerController.OnBlack(true);
     }
 
-    private void PauseExperiment()
+    protected void PauseExperiment()
     {
         if(IsRunning && !IsPaused)
         {
@@ -298,7 +302,7 @@ public class ExperimentController : MonoBehaviour
         }
     }
 
-    private void ResumeExperiment()
+    protected void ResumeExperiment()
     {
         if (IsRunning && IsPaused)
         {
@@ -314,14 +318,14 @@ public class ExperimentController : MonoBehaviour
     }
 
     // Trial start
-    private float _trialTimer = Mathf.Infinity;
-    private float _pauseTrialTimer = Mathf.Infinity;
-    private float _pauseStateTimer = Mathf.Infinity;
-    private int _trialNumber = 0;
-    private int _previousTrialError = 0; // 0:hit, 1: error, 2: ignored. 
+    protected float _trialTimer = Mathf.Infinity;
+    protected float _pauseTrialTimer = Mathf.Infinity;
+    protected float _pauseStateTimer = Mathf.Infinity;
+    protected int _trialNumber = 0;
+    protected int _previousTrialError = 0; // 0:hit, 1: error, 2: ignored. 
 
     // Start Trial will be called after the ITI
-    public void PrepareTrial()
+    public virtual void PrepareTrial()
     {
         // get current trial
         _currentTrial = _allTrials[_trialNumber];
@@ -464,17 +468,17 @@ public class ExperimentController : MonoBehaviour
     }
 
     // MISC
-    public void FreezePlayer(bool ON)
+    public virtual void FreezePlayer(bool ON)
     {
         playerController.Freeze(ON);
     }
 
 
     // End of trial
-    private bool TrialEnded = false;
-    private string Outcome = "";
+    protected bool TrialEnded = false;
+    protected string Outcome = "";
 
-    public void EndTrial()
+    public virtual void EndTrial()
     {
         _trialTimer = Mathf.Infinity;
         ResponseOK = false;
@@ -576,14 +580,14 @@ public class ExperimentController : MonoBehaviour
     #region State Handling
     // These properties will determine whether the current frame information triggers a state 
     // change in the state system. 
-    private StateNames currentState;
-    private float stateDuration;
-    private float _stateTimer;
+    protected StateNames currentState;
+    protected float stateDuration;
+    protected float _stateTimer;
 
-    private bool fixRequired;
-    private bool isFixating = false;
+    protected bool fixRequired;
+    protected bool isFixating = false;
 
-    private List<string> triggerGroup = new List<string>();
+    protected List<string> triggerGroup = new List<string>();
     public bool IsTouchingTrigger
     {
         get
@@ -714,33 +718,31 @@ public class ExperimentController : MonoBehaviour
     #endregion Event handling
 
     #region Frame Publish
-    // Update is called once per frame
-    void Update()
-    {
-        // Coroutine to publish at the end of frame. 
-        StartCoroutine(WriteMarkerAfterImageIsRendered());
-    }
 
     // End of frame publishing
     // Frame Publish
     IEnumerator WriteMarkerAfterImageIsRendered()
     {
-        yield return new WaitForEndOfFrame();
-        if (TrialEnded)
+        while (true)
         {
-            _currentTrial.Outcome = Outcome;
-            monkeyLogicController.PublishTrial(_currentTrial.GetData(monkeyLogicController.GetLSLTime()));
-            TrialEnded = false;
+            yield return new WaitForEndOfFrame();
+            
+            if (TrialEnded)
+            {
+                _currentTrial.Outcome = Outcome;
+                monkeyLogicController.PublishTrial(_currentTrial.GetData(monkeyLogicController.GetLSLTime()));
+                TrialEnded = false;
+            }
+
+            // Read data at the last minute to make sure every other controller has updated the values. 
+            // Time information in defined in the _frameData.GetData() script; 
+            // Set current frame trial state; 
+            _frameData.Trial_State = currentState;
+            monkeyLogicController.PublishFrame(_frameData.GetData(monkeyLogicController.GetLSLTime()));
+            _frameData.Clear();
+            yield return null;
         }
 
-        // Read data at the last minute to make sure every other controller has updated the values. 
-        // Time information in defined in the _frameData.GetData() script; 
-        // Set current frame trial state; 
-        _frameData.Trial_State = currentState;
-        monkeyLogicController.PublishFrame(_frameData.GetData(monkeyLogicController.GetLSLTime()));
-        _frameData.Clear();
-
-        yield return null;
     }
     #endregion Frame Publish
 }

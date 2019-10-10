@@ -29,6 +29,13 @@ public class MonkeyLogicInlet : MonoBehaviour
     public delegate void EyeCalibrationReceived(EyeCalibrationParameters parameters);
     public EyeCalibrationReceived OnCalibrationReceived;
 
+    public delegate void PlaybackTrialParametersReceived(PlaybackTrialParameters parameters);
+    public PlaybackTrialParametersReceived OnTrialParamReceived;
+    public delegate void PlaybackFrameDataReceived(PlaybackTrialData data);
+    public PlaybackFrameDataReceived OnTrialDataReceived;
+    public delegate void PlaybackStartReceived();
+    public PlaybackStartReceived OnPlaybackStartReceived;
+
     public delegate void ML_Command(string command);
     public ML_Command OnCommand;
 
@@ -132,6 +139,18 @@ public class MonkeyLogicInlet : MonoBehaviour
             {
                 OnCalibrationReceived?.Invoke(in_cmd.eyecal_parameters);
             }
+            else if (in_cmd.command_name == "TrialParameters")
+            {
+                OnTrialParamReceived?.Invoke(in_cmd.trial_parameters);
+            }
+            else if (in_cmd.command_name == "TrialData")
+            {
+                OnTrialDataReceived?.Invoke(in_cmd.trial_data);
+            }
+            else if (in_cmd.command_name == "StartPlayback")
+            {
+                OnPlaybackStartReceived?.Invoke();
+            }
             else // Nothing
             {
 
@@ -169,5 +188,29 @@ public class MonkeyLogicInlet : MonoBehaviour
 public class InletCommand
 {
     public string command_name;
-    public EyeCalibrationParameters eyecal_parameters; 
+    public EyeCalibrationParameters eyecal_parameters;
+    public PlaybackTrialParameters trial_parameters;
+    public PlaybackTrialData trial_data;
+}
+
+[Serializable]
+public class PlaybackTrialParameters
+{
+    public int Trial_Number;
+    public Vector3 Start_Position;
+    public string[] cue_Objects;
+    public string cue_Material;
+    public string[] target_Objects;
+    public string[] target_Materials;
+    public Vector3[] Target_Positions;
+    public string[] distractor_Objects;
+    public string[] distractor_Materials;
+    public Vector3[] Distractor_Positions;
+    public int n_Frames; 
+}
+
+[Serializable]
+public class PlaybackTrialData
+{
+    public double[] data;
 }

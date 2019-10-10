@@ -95,8 +95,11 @@
     <Compile Include="Assets\Scripts\MonkeyLogic\MonkeyLogicInlet.cs" />
     <Compile Include="Assets\Scripts\MonkeyLogic\MonkeyLogicOutlet.cs" />
     <Compile Include="Assets\Scripts\MonkeyLogic\MonkeyLogicResolver.cs" />
+    <Compile Include="Assets\Scripts\MonkeyLogic\PlaybackController.cs" />
     <Compile Include="Assets\Scripts\PhotoDiode\PhotoDiodeFlash.cs" />
+    <Compile Include="Assets\Scripts\PlaybackExpController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
+    <Compile Include="Assets\Scripts\SampleTaskExpController.cs" />
     <Compile Include="Assets\Scripts\State System\CueOnset.cs" />
     <Compile Include="Assets\Scripts\State System\EndOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\InterTrialInterval.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="Assets\Scripts\State System\StateSystemCommon.cs" />
     <Compile Include="Assets\Scripts\State System\TargetOnset.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\DisplayMarker.cs" />
+    <Compile Include="Assets\Scripts\ViewInEditor\ForceRenderRate.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\FullScreenView.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\GazeView.cs" />
     <Reference Include="Unity.Timeline.Editor">
