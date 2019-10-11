@@ -21,9 +21,19 @@ public class PlaybackExpController : ExperimentController
     private int N_Frames = 0; 
 
     public override void PrepareAllTrials() {  }
+
+
+    // The taskInfo base class is defined as "dynamic" in the experiment
+    // controller class, this means that the class is implemented at runtime
+    // we therefore need to define it now. 
+    // We use a specific sub-class of task info and set it as "taskInfo" so
+    // all the base scripts will still work. 
+    public PlaybackTaskInfo pTaskInfo;
     
-    private void OnEnable()
+    private new void OnEnable()
     {
+        taskInfo = pTaskInfo;
+
         EventsController.OnPlaybackParamUpdate += UpdateTrialParameters;
         EventsController.OnPlaybackDataUpdate += UpdataTrialData;
         EventsController.OnPlaybackStart += StartPlayback;
@@ -151,6 +161,7 @@ public class PlaybackExpController : ExperimentController
             frames.RemoveAt(0);
             
             // Data is: pos , pos y, pos z, rot, gaze X, gaze Y, trial state
+            // IMPORTANT there is a 0.8 unit offset between the player controller and the camera, manually added here. 
             Camera.main.transform.position = new Vector3 { x = (float)tmp[0], y = (float)(tmp[1] + 0.8), z = (float)tmp[2] };
             Camera.main.transform.rotation = Quaternion.Euler(0f, (float)tmp[3], 0f);
             // TODO Trialstate and gaze
@@ -162,7 +173,6 @@ public class PlaybackExpController : ExperimentController
             Vector2 _eyePix = new Vector2 { x = x, y = y };
             
             // manually convert to pixels
-            //_eyePix = Mouse.current.position.ReadValue();   
             gp.ProcessGaze(_eyePix, out string[] gazeTargets, out float[] gazeCounts, out Vector3[] hitPoints);
             DisplayTargets(gazeTargets, gazeCounts);
             gv.ShowGaze(hitPoints);

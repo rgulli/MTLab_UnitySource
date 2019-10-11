@@ -98,8 +98,10 @@
     <Compile Include="Assets\Scripts\MonkeyLogic\PlaybackController.cs" />
     <Compile Include="Assets\Scripts\PhotoDiode\PhotoDiodeFlash.cs" />
     <Compile Include="Assets\Scripts\PlaybackExpController.cs" />
+    <Compile Include="Assets\Scripts\PlaybackTaskInfo.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
     <Compile Include="Assets\Scripts\SampleTaskExpController.cs" />
+    <Compile Include="Assets\Scripts\SampleTaskTaskInfo.cs" />
     <Compile Include="Assets\Scripts\State System\CueOnset.cs" />
     <Compile Include="Assets\Scripts\State System\EndOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\InterTrialInterval.cs" />

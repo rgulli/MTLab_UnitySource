@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 124398726}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 475, y: 1, z: 500}
+  m_LocalPosition: {x: 475, y: 1, z: 509.4}
   m_LocalScale: {x: 3.1123, y: 3.1123, z: 3.1123}
   m_Children: []
   m_Father: {fileID: 756768445}
@@ -746,9 +746,9 @@ MonoBehaviour:
   monkeyLogicController: {fileID: 0}
   eyeLinkController: {fileID: 0}
   userInputController: {fileID: 0}
-  taskInfo: {fileID: 1760409361}
   pbCtrl: {fileID: 722445614}
   txt_Targets: {fileID: 1173711822}
+  pTaskInfo: {fileID: 1760409361}
 --- !u!1 &756768444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1610,14 +1610,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1760409360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd41e15e54af9e34db84be86bd9e908e, type: 3}
+  m_Script: {fileID: 11500000, guid: e35b209fc08cf1d4bab0c026f518e97e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NumberOfSets: 15
   StartPositions:
   - {fileID: 1998521311}
-  ContinuousTrials: 0
-  MaxTrialTime: 15
+  ContinuousTrials: 1
+  MaxTrialTime: 50
   ErrorPenalty: 0
   IgnorePenalty: 0
   CueOnsetTriggers:
@@ -1639,7 +1639,7 @@ MonoBehaviour:
   - {fileID: 1354769328}
   - {fileID: 556526712}
   - {fileID: 494291830}
-  ResponseTime: -1
+  ResponseTime: 1
   Conditions:
   - CueMaterial: {fileID: 2100000, guid: 2f2fdaa24d954494f8f53dc8c9fd1c7e, type: 2}
     TargetMaterials:
@@ -1693,7 +1693,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1794806191}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 475, y: 1, z: 500}
+  m_LocalPosition: {x: 475, y: 1, z: 505.1}
   m_LocalScale: {x: 3.1123, y: 3.1123, z: 3.1123}
   m_Children: []
   m_Father: {fileID: 756768445}

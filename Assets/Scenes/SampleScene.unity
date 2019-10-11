@@ -149,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 124398726}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 475, y: 1, z: 500}
+  m_LocalPosition: {x: 475, y: 1, z: 507}
   m_LocalScale: {x: 3.1123, y: 3.1123, z: 3.1123}
   m_Children: []
   m_Father: {fileID: 756768445}
@@ -974,7 +974,7 @@ MonoBehaviour:
   monkeyLogicController: {fileID: 722445614}
   eyeLinkController: {fileID: 1783986026}
   userInputController: {fileID: 1696364762}
-  taskInfo: {fileID: 1760409361}
+  sTaskInfo: {fileID: 1760409361}
 --- !u!1 &756768444
 GameObject:
   m_ObjectHideFlags: 0
@@ -1804,14 +1804,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1760409360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd41e15e54af9e34db84be86bd9e908e, type: 3}
+  m_Script: {fileID: 11500000, guid: b594d2dae01e8a049867c1a9ea60f2b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   NumberOfSets: 15
   StartPositions:
   - {fileID: 1998521311}
   ContinuousTrials: 0
-  MaxTrialTime: 15
+  MaxTrialTime: 50
   ErrorPenalty: 0
   IgnorePenalty: 0
   CueOnsetTriggers:
@@ -1820,20 +1820,20 @@ MonoBehaviour:
   - {fileID: 1889925188}
   TargetOnsetTriggers:
   - {fileID: 1838012129}
-  NTargets: 2
-  NDistractors: 2
   TargetObjects:
   - {fileID: 1212506357}
   - {fileID: 1794806191}
   DistractorObjects:
   - {fileID: 1203584620}
   - {fileID: 124398726}
+  NTargets: 2
+  NDistractors: 2
   PossiblePositions:
   - {fileID: 1467267434}
   - {fileID: 1354769328}
   - {fileID: 556526712}
   - {fileID: 494291830}
-  ResponseTime: -1
+  ResponseTime: 1
   Conditions:
   - CueMaterial: {fileID: 2100000, guid: 2f2fdaa24d954494f8f53dc8c9fd1c7e, type: 2}
     TargetMaterials:
@@ -1930,7 +1930,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1794806191}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 475, y: 1, z: 500}
+  m_LocalPosition: {x: 465.9, y: 1, z: 506.8}
   m_LocalScale: {x: 3.1123, y: 3.1123, z: 3.1123}
   m_Children: []
   m_Father: {fileID: 756768445}

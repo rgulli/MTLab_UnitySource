@@ -14,8 +14,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class TaskInfo : MonoBehaviour
+public abstract class TaskInfo : MonoBehaviour
 {
     // Objects will appear in this order in the Inspector panel of the Editor GUI. 
     [Header("Session Parameters")]
@@ -44,11 +45,13 @@ public class TaskInfo : MonoBehaviour
     public GameObject[] TargetOnsetTriggers;
     //public bool TargetNavTrigger = true;
     //[Tooltip("Use gaze to trigger target onsets/hits.")] public bool TargetGazeTrigger = false; 
+    public GameObject[] TargetObjects;
+    public GameObject[] DistractorObjects;
+
     public int NTargets = 1;
     [Tooltip("Set to 0 to not use Distractors")]public int NDistractors = 1; 
     //public Material[] TargetMaterials;
-    public GameObject[] TargetObjects;
-    public GameObject[] DistractorObjects;
+    
     public GameObject[] PossiblePositions;
     [Tooltip("Response time (s).")] public float ResponseTime = 1.0f;
 
@@ -60,6 +63,11 @@ public class TaskInfo : MonoBehaviour
 
     // Options validation
     private void OnValidate()
+    {
+        BaseValidate();
+    }
+
+    protected void BaseValidate()
     {
         // Can't penalize errors if trials are continuous. 
         if (ErrorPenalty > 0)
@@ -87,10 +95,7 @@ public class TaskInfo : MonoBehaviour
             NDistractors = Mathf.Max(0, (NDistractors - diff));
         }
 
-        
-
     }
-    
     public void GenerateTrials()
     {
         if (ExperimentController.instance != null)

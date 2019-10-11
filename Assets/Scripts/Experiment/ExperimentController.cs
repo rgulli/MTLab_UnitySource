@@ -40,7 +40,7 @@ public abstract class ExperimentController : MonoBehaviour
 
     // Generate Trials
     // Structure holding all the parameters that are set in the Editor. 
-    public TaskInfo taskInfo;
+    public dynamic taskInfo;
 
     public virtual void PrepareAllTrials()
     {
@@ -65,9 +65,9 @@ public abstract class ExperimentController : MonoBehaviour
         List<GameObject[]> all_distractors_comb = new List<GameObject[]>();
         List<GameObject[]> all_positions_perm = new List<GameObject[]>();
 
-        GenerateCombinations(taskInfo.TargetObjects.ToList(), taskInfo.NTargets, new List<GameObject>(), all_targets_comb);
-        GenerateCombinations(taskInfo.DistractorObjects.ToList(), taskInfo.NDistractors, new List<GameObject>(), all_distractors_comb);
-        GeneratePermutations(taskInfo.PossiblePositions.ToList(), taskInfo.NTargets + taskInfo.NDistractors, new List<GameObject>(), all_positions_perm);
+        GenerateCombinations(new List<GameObject>(taskInfo.TargetObjects), taskInfo.NTargets, new List<GameObject>(), all_targets_comb);
+        GenerateCombinations(new List<GameObject>(taskInfo.DistractorObjects), taskInfo.NDistractors, new List<GameObject>(), all_distractors_comb);
+        GeneratePermutations(new List<GameObject>(taskInfo.PossiblePositions), taskInfo.NTargets + taskInfo.NDistractors, new List<GameObject>(), all_positions_perm);
 
         // Loop for start positions (only 1 per trial)
         for (int start_index = 0; start_index < taskInfo.StartPositions.Length; start_index++)
@@ -222,15 +222,20 @@ public abstract class ExperimentController : MonoBehaviour
 
     private void Start()
     {
+        Initialize();
+    }
+
+    protected virtual void Initialize()
+    {
         QualitySettings.maxQueuedFrames = 0;
         // Coroutine to publish at the end of frame. 
         StartCoroutine("WriteMarkerAfterImageIsRendered");
 
         // Get Controllers instance
         playerController.OnBlack(true);
-        
+
         PrepareAllTrials();
-        Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count/taskInfo.NumberOfSets) + " of which are different.");
+        Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count / taskInfo.NumberOfSets) + " of which are different.");
     }
 
     // Generate dictionary mapping object name to instance ID
@@ -657,7 +662,7 @@ public abstract class ExperimentController : MonoBehaviour
     #endregion State Handling
 
     #region Event handling
-    private void OnEnable()
+    protected void OnEnable()
     {
         // Colliders name: gameObject instance ID to send to stream
         // Need to be computed BEFORE Start()
@@ -674,7 +679,7 @@ public abstract class ExperimentController : MonoBehaviour
 
     }
 
-    private void OnDisable()
+    protected void OnDisable()
     {
         // Remove listeners
         EventsController.OnPlayerLateUpdate -= UpdatePlayer;
