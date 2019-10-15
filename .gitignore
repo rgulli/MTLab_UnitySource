@@ -11,6 +11,9 @@
 /[Mm]emoryCaptures/
 PackageCache
 
+# Ignore Tasks folder
+/[Aa]ssets/[Ss]cripts/[Tt]asks
+
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
 

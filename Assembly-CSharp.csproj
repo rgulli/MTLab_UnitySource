@@ -97,11 +97,7 @@
     <Compile Include="Assets\Scripts\MonkeyLogic\MonkeyLogicResolver.cs" />
     <Compile Include="Assets\Scripts\MonkeyLogic\PlaybackController.cs" />
     <Compile Include="Assets\Scripts\PhotoDiode\PhotoDiodeFlash.cs" />
-    <Compile Include="Assets\Scripts\PlaybackExpController.cs" />
-    <Compile Include="Assets\Scripts\PlaybackTaskInfo.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\SampleTaskExpController.cs" />
-    <Compile Include="Assets\Scripts\SampleTaskTaskInfo.cs" />
     <Compile Include="Assets\Scripts\State System\CueOnset.cs" />
     <Compile Include="Assets\Scripts\State System\EndOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\InterTrialInterval.cs" />
@@ -109,6 +105,10 @@
     <Compile Include="Assets\Scripts\State System\StartOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\StateSystemCommon.cs" />
     <Compile Include="Assets\Scripts\State System\TargetOnset.cs" />
+    <Compile Include="Assets\Scripts\Tasks\PlaybackTask\PlaybackExpController.cs" />
+    <Compile Include="Assets\Scripts\Tasks\PlaybackTask\PlaybackTaskInfo.cs" />
+    <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskExpController.cs" />
+    <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskTaskInfo.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\DisplayMarker.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\ForceRenderRate.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\FullScreenView.cs" />

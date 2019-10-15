@@ -248,7 +248,6 @@ public abstract class ExperimentController : MonoBehaviour
             string name = col.gameObject.name;
             int ID = col.gameObject.GetInstanceID();
             InstanceIDMap.Add(name, ID);
-            //Debug.Log(name + ID);
         }
 
     }
@@ -386,8 +385,11 @@ public abstract class ExperimentController : MonoBehaviour
         // loop through all the cues. IN this example we do not set the cues position. 
         foreach (GameObject go in taskInfo.CueObjects)
         {
+            // For the sample task "hiding" the cues means setting the default material back
+            // on the object, hiding the cue color. 
             if (default_cue_material != null)
                 go.GetComponentInChildren<MeshRenderer>().material = default_cue_material;
+            
             // Can be set to hide the objects too. 
             //if (!go.activeSelf)
             //    go.SetActive(false);

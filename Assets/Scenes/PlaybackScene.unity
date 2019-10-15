@@ -1171,7 +1171,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: asdasd 34
+  m_Text: None [33]
 --- !u!222 &1173711823
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1626,14 +1626,14 @@ MonoBehaviour:
   - {fileID: 1889925188}
   TargetOnsetTriggers:
   - {fileID: 1838012129}
-  NTargets: 2
-  NDistractors: 2
   TargetObjects:
   - {fileID: 1212506357}
   - {fileID: 1794806191}
   DistractorObjects:
   - {fileID: 1203584620}
   - {fileID: 124398726}
+  NTargets: 2
+  NDistractors: 2
   PossiblePositions:
   - {fileID: 1467267434}
   - {fileID: 1354769328}
