@@ -8,7 +8,7 @@
 */
 
 using UnityEngine;
- 
+using UnityEngine.InputSystem;
 
 namespace FirstPerson
 {
@@ -62,10 +62,10 @@ namespace FirstPerson
         {
 
             // Manual On Black
-            //if (Input.GetKey("v"))
-            //    OnBlack(false);
-            //if (Input.GetKey("b"))
-            //    OnBlack(true);
+            if (Keyboard.current.vKey.wasPressedThisFrame)
+                OnBlack(false);
+            if (Keyboard.current.bKey.wasPressedThisFrame)
+                OnBlack(true);
             Vector2 move = inputCtrl.ReadAxes();
 
             if (m_CanMove)

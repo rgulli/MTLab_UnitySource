@@ -102,6 +102,7 @@
     <Compile Include="Assets\Scripts\State System\EndOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\InterTrialInterval.cs" />
     <Compile Include="Assets\Scripts\State System\Misc.cs" />
+    <Compile Include="Assets\Scripts\State System\SetupPhase.cs" />
     <Compile Include="Assets\Scripts\State System\StartOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\StateSystemCommon.cs" />
     <Compile Include="Assets\Scripts\State System\TargetOnset.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Assets\Scripts\Tasks\PlaybackTask\PlaybackTaskInfo.cs" />
     <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskExpController.cs" />
     <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskTaskInfo.cs" />
+    <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskTaskInfoInspector.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\DisplayMarker.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\ForceRenderRate.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\FullScreenView.cs" />

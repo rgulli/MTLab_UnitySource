@@ -31,6 +31,13 @@ public abstract class TaskInfo : MonoBehaviour
     [Tooltip("Extra time added to ITI in seconds.")] public float ErrorPenalty = 0.0f;
     [Tooltip("Penalize out of time trials.")] public float IgnorePenalty = 0.0f;
 
+    [Header("Fixation Targets")]
+    public GameObject[] FixationObjects;
+    [Tooltip("Relative position of fixation object ON-SCREEN, from 0 to 1.")]public Vector2[] ScreenFixationOffsets;
+    [Tooltip("Absolute world position of fixation object.")] public Vector3[] WorldFixationOffsets;
+    public float FixationObjectSize = 0.005f;
+    [Tooltip("Radius is relative fraction of fixation size. So 0.5 == actual fixation size.")]public float FixationWindow = 5.0f;
+
     [Header("Cues/Contexts")]
     // This class (defined at the bottom), can be expanded a lot to add condition specific start positions, 
     // target positions,... 
@@ -94,8 +101,8 @@ public abstract class TaskInfo : MonoBehaviour
             NTargets = Mathf.Max(0, NTargets - (diff - NDistractors));
             NDistractors = Mathf.Max(0, (NDistractors - diff));
         }
-
     }
+
     public void GenerateTrials()
     {
         if (ExperimentController.instance != null)

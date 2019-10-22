@@ -19,6 +19,7 @@ namespace Misc
         Feedback,
         Pause,
         Resume,
+        Setup,
         Null
     }
 

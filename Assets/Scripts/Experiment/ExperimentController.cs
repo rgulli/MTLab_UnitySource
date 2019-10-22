@@ -12,8 +12,8 @@ public abstract class ExperimentController : MonoBehaviour
     // Such as the various state system states, collider scripts and player controller. 
     #region Access
 
-    public static ExperimentController instance = null; 
-    public void Awake() 
+    public static ExperimentController instance = null;
+    public void Awake()
     {
         if (instance == null)
         {
@@ -21,7 +21,7 @@ public abstract class ExperimentController : MonoBehaviour
         }
     }
     #endregion Access
-    
+
     // Load the current experiment configuration, and generate trials. 
     #region ExperimentConfig
     // Controllers
@@ -86,8 +86,8 @@ public abstract class ExperimentController : MonoBehaviour
 
                         for (int ii = 0; ii < targs.Length; ii++)
                         {
-                            targ_mat[ii] = 
-                                taskInfo.Conditions[cnd_index].TargetMaterials[Mathf.Min(ii, taskInfo.Conditions[cnd_index].TargetMaterials.Length-1)];
+                            targ_mat[ii] =
+                                taskInfo.Conditions[cnd_index].TargetMaterials[Mathf.Min(ii, taskInfo.Conditions[cnd_index].TargetMaterials.Length - 1)];
                         }
 
                         for (int ii = 0; ii < dists.Length; ii++)
@@ -102,7 +102,7 @@ public abstract class ExperimentController : MonoBehaviour
                             // and get the position values in Vector3 format;
                             List<Vector3> targ_pos = new List<Vector3>();
                             List<Vector3> dist_pos = new List<Vector3>();
-                            for(int ii=0; ii<poss.Length; ii++)
+                            for (int ii = 0; ii < poss.Length; ii++)
                             {
                                 if (ii < targs.Length)
                                 {
@@ -114,6 +114,37 @@ public abstract class ExperimentController : MonoBehaviour
                                 }
                             }
 
+                            // Convert fixation screen positions to world positions
+                            // This should loop through and generate various trials according
+                            // to your experiment. For example purposes we only have 1. 
+                            Vector3[] fixPositions;
+                            if (taskInfo.WorldFixationOffsets.Length > 0)
+                            {
+                                fixPositions = taskInfo.WorldFixationOffsets;
+                            }
+                            else if (taskInfo.ScreenFixationOffsets.Length > 0 )
+                            {
+                                List<Vector3> lstVec = new List<Vector3>();
+
+                                Vector3[] frustumCorners = new Vector3[4];
+                                foreach(Vector2 vct in taskInfo.ScreenFixationOffsets)
+                                {
+                                    Camera.main.CalculateFrustumCorners(new Rect(vct.x, vct.y, 0, 0),
+                                                                    Camera.main.nearClipPlane + (0.5f * taskInfo.FixationObjectSize),
+                                                                    Camera.MonoOrStereoscopicEye.Mono, frustumCorners);
+                                    lstVec.Add(frustumCorners[0]);
+                                }
+                                
+                                // normalize
+                                fixPositions = lstVec.ToArray();
+
+                            }
+                            else
+                            {
+                                fixPositions = new Vector3[1];
+                                fixPositions[0] = Vector3.negativeInfinity;
+                            }
+
                             // At this point we have everything. Add to trial list N times:
                             for (int ii = 0; ii < taskInfo.NumberOfSets; ii++)
                             {
@@ -122,6 +153,10 @@ public abstract class ExperimentController : MonoBehaviour
                                     {
                                         Trial_Number = 0,
                                         Start_Position = taskInfo.StartPositions[start_index].transform.position,
+                                        // Fix point
+                                        Fix_Objects = taskInfo.FixationObjects,
+                                        Fix_Positions = fixPositions,
+
                                         // Current Cue
                                         Cue_Objects = taskInfo.CueObjects,
                                         Cue_Material = taskInfo.Conditions[cnd_index].CueMaterial,
@@ -143,6 +178,7 @@ public abstract class ExperimentController : MonoBehaviour
         }
         // shuffle trials
         _allTrials = _allTrials.OrderBy(x => UnityEngine.Random.value).ToList();
+        Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count / taskInfo.NumberOfSets) + " of which are different.");
     }
 
     // The following scripts (GenerateCombinations and GeneratePermutations) are not intuitive to follow. 
@@ -168,7 +204,7 @@ public abstract class ExperimentController : MonoBehaviour
     // This means that when we pass the in_array argument to the recursive function calls, it writes
     // to the same arrary without explicitely having a return/out parameter. This is also why we need to 
     // define the temp_obj and temp_list variables as new so we don't overwrite the original ones. 
-    
+
     // Combinations are the possible N groups not taking order into account. For example if N = 2 and in_objs = [A,B,C]
     // we get 3 combinations: [AB, AC, BC] since [AB] == [BA] in this case. 
     protected void GenerateCombinations(List<GameObject> in_objs, int N, List<GameObject> in_list, List<GameObject[]> in_array)
@@ -201,7 +237,7 @@ public abstract class ExperimentController : MonoBehaviour
         // Missing GameObjects in permutation list
         if (in_list.Count < N)
         {
-            
+
             foreach (GameObject go in in_objs)
             {
                 List<GameObject> temp_obj = new List<GameObject>(in_objs);
@@ -234,8 +270,8 @@ public abstract class ExperimentController : MonoBehaviour
         // Get Controllers instance
         playerController.OnBlack(true);
 
-        PrepareAllTrials();
-        Debug.Log("Generated :" + _allTrials.Count + " trials. " + (_allTrials.Count / taskInfo.NumberOfSets) + " of which are different.");
+        //PrepareAllTrials();
+        
     }
 
     // Generate dictionary mapping object name to instance ID
@@ -261,7 +297,7 @@ public abstract class ExperimentController : MonoBehaviour
 
     public string IDToName(int ID)
     {
-        foreach(KeyValuePair<string, int> kv in InstanceIDMap)
+        foreach (KeyValuePair<string, int> kv in InstanceIDMap)
         {
             if (kv.Value == ID)
                 return kv.Key;
@@ -291,7 +327,7 @@ public abstract class ExperimentController : MonoBehaviour
 
     protected void PauseExperiment()
     {
-        if(IsRunning && !IsPaused)
+        if (IsRunning && !IsPaused)
         {
             IsPaused = true;
             currentState = StateNames.Pause;
@@ -315,7 +351,7 @@ public abstract class ExperimentController : MonoBehaviour
             _pauseTrialTimer = Mathf.Infinity;
             _stateTimer = Mathf.Abs(Time.realtimeSinceStartup - _pauseStateTimer);
             _pauseStateTimer = Mathf.Infinity;
-            if(_stateTimer != Mathf.Infinity && _trialTimer != Mathf.Infinity)
+            if (_stateTimer != Mathf.Infinity && _trialTimer != Mathf.Infinity)
                 playerController.OnBlack(false);
             IsPaused = false;
         }
@@ -338,6 +374,8 @@ public abstract class ExperimentController : MonoBehaviour
         _currentTrial.Trial_Number = _trialNumber;
 
         // Prepare cues and targets. 
+        HideFixationObject();
+        PrepareFixationObject();
         HideCues();
         PrepareCues(); // Empty for this example, cue objects are visible. 
         HideTargets();
@@ -361,6 +399,45 @@ public abstract class ExperimentController : MonoBehaviour
         _trialTimer = Time.realtimeSinceStartup;
         playerController.OnBlack(false);
 
+    }
+
+    // Fixation objects. We use fixation "objects" and not "point" because 
+    // fixation can be required on any object. 
+    public virtual void PrepareFixationObject()
+    {
+
+        int pos_idx;
+
+        for (int ii = 0; ii < _currentTrial.Fix_Objects.Length; ii++)
+        {
+            pos_idx = Mathf.Min(_currentTrial.Fix_Positions.Length - 1, ii);
+
+            _currentTrial.Fix_Objects[ii].transform.localPosition = _currentTrial.Fix_Positions[pos_idx];
+            _currentTrial.Fix_Objects[ii].transform.localScale = new Vector3 { x = taskInfo.FixationObjectSize, y = taskInfo.FixationObjectSize, z = taskInfo.FixationObjectSize };
+            _currentTrial.Fix_Objects[ii].GetComponent<SphereCollider>().radius = taskInfo.FixationWindow;
+
+        }
+
+    }
+
+    public virtual void ShowFixationObject()
+    {
+        // loop through all the cues. IN this example we do not set the cues position. 
+        foreach (GameObject go in _currentTrial.Fix_Objects)
+        {
+            go.GetComponent<BoxCollider>().enabled = true;
+            go.GetComponent<Renderer>().enabled = true;
+        }
+    }
+
+    public virtual void HideFixationObject()
+    {
+        // loop through all the cues. IN this example we do not set the cues position. 
+        foreach (GameObject go in _currentTrial.Fix_Objects)
+        {
+            go.GetComponent<BoxCollider>().enabled = false;
+            go.GetComponent<Renderer>().enabled = false;
+        }
     }
 
     // Cues
@@ -561,7 +638,7 @@ public abstract class ExperimentController : MonoBehaviour
                 _previousTrialError = 2;
                 return true;
             }
-            else if (fixRequired && !isFixating)
+            else if (fixRequired && !isFixating())
             {
                 Outcome = "break_fixation";
                 _previousTrialError = 1;
@@ -592,7 +669,12 @@ public abstract class ExperimentController : MonoBehaviour
     protected float _stateTimer;
 
     protected bool fixRequired;
-    protected bool isFixating = false;
+    protected virtual bool isFixating()
+    {
+        // also check whether objects are fixation objects
+        return _frameData.GazeTargets.Any(x => _currentTrial.Fix_Objects.Any(y => (float)y.GetInstanceID() == x));
+    }
+    
 
     protected List<string> triggerGroup = new List<string>();
     public bool IsTouchingTrigger
@@ -711,7 +793,9 @@ public abstract class ExperimentController : MonoBehaviour
             for (int i = 0; i < Mathf.Min(5, gazeTargets.Length); i++)
             {
                 if (gazeTargets[i] != null)
+                {
                     gazeTargetIDs[i] = NameToID(gazeTargets[i]);
+                }
             }
         }
         _frameData.GazeTargets = gazeTargetIDs;

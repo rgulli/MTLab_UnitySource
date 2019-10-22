@@ -7,6 +7,10 @@ public class TrialData
     public int Trial_Number;
     public Vector3 Start_Position;
 
+    [System.NonSerialized] public GameObject[] Fix_Objects;
+    public string[] fix_Objects;
+    public Vector3[] Fix_Positions;
+    
     [System.NonSerialized] public GameObject[] Cue_Objects;
     public string[] cue_Objects;
 
