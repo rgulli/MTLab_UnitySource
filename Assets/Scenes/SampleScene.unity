@@ -1911,7 +1911,7 @@ MonoBehaviour:
   FixationObjects:
   - {fileID: 419919399}
   ScreenFixationOffsets:
-  - {x: 0, y: 0}
+  - {x: 0.5, y: 0.5}
   WorldFixationOffsets: []
   FixationObjectSize: 0.01
   FixationWindow: 5

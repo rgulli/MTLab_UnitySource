@@ -227,7 +227,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             catch (ArgumentException aex)
             {
                 Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                enabled = false;
+                this.enabled = false;
                 Debug.LogException(aex, this);
             }
 
@@ -236,13 +236,13 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
 
     public abstract class InletStringSamples : ABaseInlet
     {
-        protected abstract void Process(string[] newSample, double timeStamp);
+        protected abstract void Process(String[] newSample, double timeStamp);
 
-        protected string[] sample;
+        protected String[] sample;
 
         protected override void pullSamples()
         {
-            sample = new string[expectedChannels];
+            sample = new String[expectedChannels];
 
             try
             {
@@ -263,7 +263,7 @@ namespace Assets.LSL4Unity.Scripts.AbstractInlets
             catch (ArgumentException aex)
             {
                 Debug.LogError("An Error on pulling samples deactivating LSL inlet on...", this);
-                enabled = false;
+                this.enabled = false;
                 Debug.LogException(aex, this);
             }
 
