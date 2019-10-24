@@ -62,11 +62,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\LSL4Unity\Editor\BuildHooks.cs" />
-    <Compile Include="Assets\Scripts\LSL4Unity\Editor\LSLEditorIntegration.cs" />
-    <Compile Include="Assets\Scripts\LSL4Unity\Editor\LSLEditorWindow.cs" />
-    <Compile Include="Assets\Scripts\LSL4Unity\Editor\ScriptOrderManagement.cs" />
-    <Compile Include="Assets\Scripts\LSL4Unity\Editor\TimeSyncEditor.cs" />
+    <Compile Include="Assets\LSL4Unity\Editor\BuildHooks.cs" />
+    <Compile Include="Assets\LSL4Unity\Editor\LSLEditorIntegration.cs" />
+    <Compile Include="Assets\LSL4Unity\Editor\LSLEditorWindow.cs" />
+    <Compile Include="Assets\LSL4Unity\Editor\ScriptOrderManagement.cs" />
+    <Compile Include="Assets\LSL4Unity\Editor\TimeSyncEditor.cs" />
     <Reference Include="UnityEditor.TestRunner">
       <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
     </Reference>

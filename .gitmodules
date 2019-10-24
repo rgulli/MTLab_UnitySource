@@ -1,3 +1,6 @@
 [submodule "LSL4Unity"]
 	path = Assets/LSL4Unity
 	url = https://github.com/xfleckx/LSL4Unity.git
+[submodule "Assets/Tasks"]
+	path = Assets/Tasks
+	url = https://github.com/Doug1983/MTLab_UnityExampleTask.git
