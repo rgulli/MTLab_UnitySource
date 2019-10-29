@@ -88,6 +88,9 @@ public class MonkeyLogicController : MonoBehaviour
         inlet.OnCalibrationReceived += ForwardEyecalibration;
         inlet.OnCommand += ForwardCommand;
 
+        EventsController.OnPublishFrame += PublishFrame;
+        EventsController.OnPublishTrial += PublishTrial;
+
 }
     private IDictionary<string, IDictionary<string, int>> GenerateXMLMetaData()
     {

@@ -106,15 +106,15 @@
     <Compile Include="Assets\Scripts\State System\StartOfTrial.cs" />
     <Compile Include="Assets\Scripts\State System\StateSystemCommon.cs" />
     <Compile Include="Assets\Scripts\State System\TargetOnset.cs" />
-    <Compile Include="Assets\Scripts\Tasks\PlaybackTask\PlaybackExpController.cs" />
-    <Compile Include="Assets\Scripts\Tasks\PlaybackTask\PlaybackTaskInfo.cs" />
-    <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskExpController.cs" />
-    <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskTaskInfo.cs" />
-    <Compile Include="Assets\Scripts\Tasks\SampleTask\SampleTaskTaskInfoInspector.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\DisplayMarker.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\ForceRenderRate.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\FullScreenView.cs" />
     <Compile Include="Assets\Scripts\ViewInEditor\GazeView.cs" />
+    <Compile Include="Assets\Tasks\PlaybackTask\PlaybackExpController.cs" />
+    <Compile Include="Assets\Tasks\PlaybackTask\PlaybackTaskInfo.cs" />
+    <Compile Include="Assets\Tasks\SampleTask\SampleTaskExpController.cs" />
+    <Compile Include="Assets\Tasks\SampleTask\SampleTaskTaskInfo.cs" />
+    <Compile Include="Assets\Tasks\SampleTask\SampleTaskTaskInfoInspector.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

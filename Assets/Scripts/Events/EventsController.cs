@@ -111,4 +111,20 @@ public class EventsController : MonoBehaviour
         OnResume?.Invoke();
     }
     #endregion Events
+
+    // MonkeyLogic publish events
+    public delegate void PublishFrame(double[] to_publish);
+    public static event PublishFrame OnPublishFrame;
+    public void SendPublishFrame(double[] to_publish)
+    {
+        OnPublishFrame?.Invoke(to_publish);
+    }
+
+    public delegate void PublishTrial(string to_publish);
+    public static event PublishTrial OnPublishTrial;
+    public void SendPublishTrial(string to_publish)
+    {
+        OnPublishTrial?.Invoke(to_publish);
+    }
+
 }

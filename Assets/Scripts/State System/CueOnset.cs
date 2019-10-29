@@ -10,12 +10,7 @@ public class CueOnset : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        ExperimentController expControl = ExperimentController.instance;
-        expControl.ShowCues();
-        
-        // AS an example we will disable movement during the cue epoch
-        expControl.FreezePlayer(true);
-
+        ExperimentController.instance.ShowCues(); 
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -28,7 +23,6 @@ public class CueOnset : StateMachineBehaviour
     {
         // As an example here we have the cues disappearing
         ExperimentController.instance.HideCues();
-        ExperimentController.instance.FreezePlayer(false);
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Profiling;
 using System.Linq;
 using Misc;
+using LSL;
 
 public abstract class ExperimentController : MonoBehaviour
 {
@@ -26,9 +27,6 @@ public abstract class ExperimentController : MonoBehaviour
     #region ExperimentConfig
     // Controllers
     public FirstPerson.PlayerController playerController;
-    public MonkeyLogicController monkeyLogicController;
-    public EyeLinkController eyeLinkController;
-    public UserInputController userInputController;
 
     // Data structures
     protected FrameData _frameData = new FrameData();
@@ -261,6 +259,7 @@ public abstract class ExperimentController : MonoBehaviour
         Initialize();
     }
 
+    // Protected since should only be called from Start()
     protected virtual void Initialize()
     {
         QualitySettings.maxQueuedFrames = 0;
@@ -287,7 +286,7 @@ public abstract class ExperimentController : MonoBehaviour
         }
 
     }
-    public int NameToID(string name)
+    protected int NameToID(string name)
     {
         if (InstanceIDMap.TryGetValue(name, out int ID))
             return ID;
@@ -295,7 +294,7 @@ public abstract class ExperimentController : MonoBehaviour
             return -1;
     }
 
-    public string IDToName(int ID)
+    protected string IDToName(int ID)
     {
         foreach (KeyValuePair<string, int> kv in InstanceIDMap)
         {
@@ -316,7 +315,6 @@ public abstract class ExperimentController : MonoBehaviour
     protected void StartExperiment()
     {
         IsRunning = true;
-        _previousTrialError = 0;
         _previousTrialError = 0;
     }
     protected void StopExperiment()
@@ -394,7 +392,7 @@ public abstract class ExperimentController : MonoBehaviour
         Outcome = "aborted";
     }
 
-    public void StartTrial()
+    public virtual void StartTrial()
     {
         _trialTimer = Time.realtimeSinceStartup;
         playerController.OnBlack(false);
@@ -435,7 +433,7 @@ public abstract class ExperimentController : MonoBehaviour
         // loop through all the cues. IN this example we do not set the cues position. 
         foreach (GameObject go in _currentTrial.Fix_Objects)
         {
-            go.GetComponent<BoxCollider>().enabled = false;
+            go.GetComponent<SphereCollider>().enabled = false;
             go.GetComponent<Renderer>().enabled = false;
         }
     }
@@ -455,6 +453,9 @@ public abstract class ExperimentController : MonoBehaviour
             if (!go.activeSelf)
                 go.SetActive(true);
         }
+        
+        // AS an example we will disable movement during the cue epoch
+        FreezePlayer(true);
     }
 
     public virtual void HideCues()
@@ -471,7 +472,7 @@ public abstract class ExperimentController : MonoBehaviour
             //if (!go.activeSelf)
             //    go.SetActive(false);
         }
-
+        FreezePlayer(false);
     }
 
     // Targets
@@ -669,7 +670,7 @@ public abstract class ExperimentController : MonoBehaviour
     protected float _stateTimer;
 
     protected bool fixRequired;
-    protected virtual bool isFixating()
+    public virtual bool isFixating()
     {
         // also check whether objects are fixation objects
         return _frameData.GazeTargets.Any(x => _currentTrial.Fix_Objects.Any(y => (float)y.GetInstanceID() == x));
@@ -821,7 +822,8 @@ public abstract class ExperimentController : MonoBehaviour
             if (TrialEnded)
             {
                 _currentTrial.Outcome = Outcome;
-                monkeyLogicController.PublishTrial(_currentTrial.GetData(monkeyLogicController.GetLSLTime()));
+
+                EventsController.instance.SendPublishTrial(_currentTrial.GetData(liblsl.local_clock()));
                 TrialEnded = false;
             }
 
@@ -829,7 +831,7 @@ public abstract class ExperimentController : MonoBehaviour
             // Time information in defined in the _frameData.GetData() script; 
             // Set current frame trial state; 
             _frameData.Trial_State = currentState;
-            monkeyLogicController.PublishFrame(_frameData.GetData(monkeyLogicController.GetLSLTime()));
+            EventsController.instance.SendPublishFrame(_frameData.GetData(liblsl.local_clock()));
             _frameData.Clear();
             yield return null;
         }

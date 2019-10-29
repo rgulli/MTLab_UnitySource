@@ -10,6 +10,7 @@ public class FullScreenView : MonoBehaviour
     public int ScreenOffset = 0;
     public int MenuBarHeight = 21;
     public bool AutoLaunch = true;
+    public float CameraFOV = 90; 
 
     public static int ResolutionX;
     public static int ResolutionY;
@@ -23,6 +24,7 @@ public class FullScreenView : MonoBehaviour
         ResolutionY = ScreenHeight;
         XOffset = ScreenOffset;
         MenuOffset = MenuBarHeight;
+        Camera.main.fieldOfView = CameraFOV;
     }
 
     // FullScreen Game Window
