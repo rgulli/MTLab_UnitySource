@@ -24,9 +24,9 @@ public class EventsController : MonoBehaviour
 
     #region Events
     // EyeLink Controller Events.
-    public delegate void EyeLateUpdate(Vector2 gazePosition, string[] gazeTargets, float[] gazeCounts);
+    public delegate void EyeLateUpdate(Vector2 gazePosition, float[] gazeTargets, float[] gazeCounts);
     public static event EyeLateUpdate OnEyeLateUpdate;
-    public void SendEyeLateUpdateEvent(Vector2 gazePosition, string[] gazeTargets, float[] gazeCounts)
+    public void SendEyeLateUpdateEvent(Vector2 gazePosition, float[] gazeTargets, float[] gazeCounts)
     {
         // this line uses a shortcut (?) as a condition, basically it means: 
         // If OnEyeLateUpdate is not null (?), then call the (.)Invoke method. 
@@ -34,9 +34,9 @@ public class EventsController : MonoBehaviour
     }
 
     // Player Controller Events.
-    public delegate void PlayerLateUpdate(Vector3 position, float rotation, string state, float hInput, float vInput);
+    public delegate void PlayerLateUpdate(Vector3 position, float rotation, float state, float hInput, float vInput);
     public static event PlayerLateUpdate OnPlayerLateUpdate;
-    public void SendPlayerLateUpdateEvent(Vector3 position, float rotation, string state, float hInput, float vInput)
+    public void SendPlayerLateUpdateEvent(Vector3 position, float rotation, float state, float hInput, float vInput)
     {
         OnPlayerLateUpdate?.Invoke(position, rotation, state, hInput, vInput);
     }

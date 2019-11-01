@@ -44,7 +44,8 @@ namespace FirstPerson
         // from the gameobject transform.
         private float _hInput;
         private float _vInput;
-        private string _CollisionStatus = "";
+        // -1: Nothing; -Infinity: OnBlack; [0 Infinity]: object instance ID
+        private float _CollisionStatus = -1;
         
         // Use this for initialization
         private void Start()
@@ -113,18 +114,19 @@ namespace FirstPerson
         // volumes does not call a trigger exit. 
         public void ClearCollisionStatus()
         {
-            _CollisionStatus = "";
+            _CollisionStatus = -1;
         }
 
         // To detect collisions with trigger volumes
         private void OnTriggerEnter(Collider other)
         {
-            _CollisionStatus = other.name;
+            _CollisionStatus = other.gameObject.GetInstanceID();
+            
         }
         
         private void OnTriggerExit(Collider other)
         {
-            _CollisionStatus = "";
+            _CollisionStatus = -1;
         }
        
         private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -152,7 +154,7 @@ namespace FirstPerson
                 m_CanMove = false;
                 m_Camera.cullingMask = 0;
                 m_Camera.clearFlags = CameraClearFlags.SolidColor;
-                _CollisionStatus = "OnBlack";
+                _CollisionStatus = Mathf.NegativeInfinity;
             }
             else
             {
@@ -160,7 +162,7 @@ namespace FirstPerson
                 m_CanMove = true;
                 m_Camera.cullingMask = m_CullMask; // what to render
                 m_Camera.clearFlags = CameraClearFlags.Skybox; // what to render when no geometry present
-                _CollisionStatus = "";
+                _CollisionStatus = -1;
             }
         }
 

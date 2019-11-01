@@ -100,7 +100,7 @@ public class EyeLinkController : MonoBehaviour
     private Vector2 _eyeRaw = new Vector2();
     private Vector2 _eyeDeg = new Vector2();
     private Vector2 _eyePix = new Vector2();
-    private string[] _gazeTargets;
+    private float[] _gazeTargets;
     private float[] _gazeCounts;
     
     // Eye Link settings
@@ -221,7 +221,7 @@ public class EyeLinkController : MonoBehaviour
 
                 eyecal.RawToPix(_eyeRaw, out _eyeDeg, out _eyePix);
                 
-                gazeProcess.ProcessGaze(_eyePix, out string[] gazeTargets, out float[] gazeCounts, out Vector3[] hitPoints);
+                gazeProcess.ProcessGaze(_eyePix, out float[] gazeTargets, out float[] gazeCounts, out Vector3[] hitPoints);
                 gazeView.ShowGaze(hitPoints);
 
                 _gazeTargets = gazeTargets;

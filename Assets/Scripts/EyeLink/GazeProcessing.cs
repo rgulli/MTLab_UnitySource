@@ -86,11 +86,11 @@ public class GazeProcessing : MonoBehaviour
     // Called on Update from the EyeLinkController when it has the calibration value
     // and a connection to the eyelink. Input gaze position in pixels and maps to objects
     // in the environment. 
-    public void ProcessGaze(Vector2 eyePix, out string[] targets, out float[] counts, out Vector3[] hitPoints)
+    public void ProcessGaze(Vector2 eyePix, out float[] targets, out float[] counts, out Vector3[] hitPoints)
     {
         _x_res = FullScreenView.ResolutionX;
         _y_res = FullScreenView.ResolutionY;
-        Dictionary<string, int> gazeDict = new Dictionary<string, int>();
+        Dictionary<int, int> gazeDict = new Dictionary<int, int>();
 
         // at this point the eyePix data assumes that the viewport resolution is 1920x1080
         // or whatever is defined in the ScreenSettings. We have 2 viewports, one of which is 
@@ -163,13 +163,14 @@ public class GazeProcessing : MonoBehaviour
                     hitPoints[idx] = hit.point;
                     // Dictionnary contains the name of hit object and the number 
                     // of rays colliding out of the 33. 
-                    if (gazeDict.ContainsKey(hit.collider.name))
+                    if (gazeDict.ContainsKey(hit.collider.gameObject.GetInstanceID()))
                     {
-                        gazeDict[hit.collider.name] += 1;
+                        gazeDict[hit.collider.gameObject.GetInstanceID()] += 1;
+                        
                     }
                     else
                     {
-                        gazeDict.Add(hit.collider.name, 1);
+                        gazeDict.Add(hit.collider.gameObject.GetInstanceID(), 1);
                     }
 
                 }
@@ -184,23 +185,23 @@ public class GazeProcessing : MonoBehaviour
 
         if (gazeDict.Count == 0)
         {
-            gazeDict.Add("None0", 0);
-            gazeDict.Add("None1", 0);
-            gazeDict.Add("None2", 0);
-            gazeDict.Add("None3", 0);
-            gazeDict.Add("None4", 0);
+            gazeDict.Add(-1, 0);
+            gazeDict.Add(-1, 0);
+            gazeDict.Add(-1, 0);
+            gazeDict.Add(-1, 0);
+            gazeDict.Add(-1, 0);
         }
 
         DictToArray(gazeDict, out targets, out counts);
     }
 
-    private void DictToArray(Dictionary<string, int> gazeDict, out string[] targets, out float[] counts)
+    private void DictToArray(Dictionary<int, int> gazeDict, out float[] targets, out float[] counts)
     {
         int cntr = 0;
-        string[] tar = new string[5];
+        float[] tar = new float[5];
         float[] cnts = new float[5];
 
-        foreach (KeyValuePair<string, int> kvp in gazeDict)
+        foreach (KeyValuePair<int, int> kvp in gazeDict)
         {
             tar[cntr] = kvp.Key;
             cnts[cntr] = kvp.Value;

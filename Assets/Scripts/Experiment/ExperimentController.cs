@@ -6,6 +6,7 @@ using UnityEngine.Profiling;
 using System.Linq;
 using Misc;
 using LSL;
+using UnityEditor;
 
 public abstract class ExperimentController : MonoBehaviour
 {
@@ -112,62 +113,84 @@ public abstract class ExperimentController : MonoBehaviour
                                 }
                             }
 
-                            // Convert fixation screen positions to world positions
-                            // This should loop through and generate various trials according
-                            // to your experiment. For example purposes we only have 1. 
+                            // If fixation object offset is set to world position, just move it there
+                            // and set it's scale to 1.
                             Vector3[] fixPositions;
+                            float fixScale;
                             if (taskInfo.WorldFixationOffsets.Length > 0)
                             {
                                 fixPositions = taskInfo.WorldFixationOffsets;
+                                fixScale = 1;
                             }
-                            else if (taskInfo.ScreenFixationOffsets.Length > 0 )
+                            // else if it's in screen position, set its scale to be a fraction of the screen
+                            else if (taskInfo.ScreenFixationOffsets.Length > 0)
                             {
-                                List<Vector3> lstVec = new List<Vector3>();
+                                // Convert fixation screen positions to world positions
+                                // This should loop through and generate various trials according
+                                // to your experiment. For example purposes we only have 1. 
 
-                                Vector3[] frustumCorners = new Vector3[4];
-                                foreach(Vector2 vct in taskInfo.ScreenFixationOffsets)
+                                // To compute the proper fixationpoint size we will get the ViewPortToWorldPoint
+                                // functions for both edges of the viewport, then get the distance between the two points
+                                // The transform scale is the actual width of the object in Unity units. 
+                                Vector3 leftEdge = Camera.main.ViewportToWorldPoint(new Vector3 { x = 0, y = 0, z = Camera.main.nearClipPlane });
+                                Vector3 rightEdge = Camera.main.ViewportToWorldPoint(new Vector3 { x = 1, y = 0, z = Camera.main.nearClipPlane });
+                                // Fixation object size is fraction of screen width.
+                                fixScale = Vector3.Distance(leftEdge, rightEdge) * taskInfo.FixationObjectSize;
+
+                                // Fix scale in Z will always remain 0.01 (i.e. flat disk)
+                                List<Vector3> lstVec = new List<Vector3>();
+                                foreach (Vector2 vct in taskInfo.ScreenFixationOffsets)
                                 {
-                                    Camera.main.CalculateFrustumCorners(new Rect(vct.x, vct.y, 0, 0),
-                                                                    Camera.main.nearClipPlane + (0.5f * taskInfo.FixationObjectSize),
-                                                                    Camera.MonoOrStereoscopicEye.Mono, frustumCorners);
-                                    lstVec.Add(frustumCorners[0]);
+                                    lstVec.Add(Camera.main.ViewportToWorldPoint(new Vector3 { x = vct.x, y = vct.y, z = Camera.main.nearClipPlane + 0.05f })); 
                                 }
-                                
+
                                 // normalize
                                 fixPositions = lstVec.ToArray();
+
 
                             }
                             else
                             {
                                 fixPositions = new Vector3[1];
                                 fixPositions[0] = Vector3.negativeInfinity;
+                                fixScale = 1;
                             }
-
-                            // At this point we have everything. Add to trial list N times:
-                            for (int ii = 0; ii < taskInfo.NumberOfSets; ii++)
+                            foreach (Vector3 fixPosition in fixPositions)
                             {
-                                _allTrials.Add(
-                                    new TrialData
+                                foreach(GameObject fixObject in taskInfo.FixationObjects)
+                                {
+                                    // At this point we have everything. Add to trial list N times:
+                                    for (int ii = 0; ii < taskInfo.NumberOfSets; ii++)
                                     {
-                                        Trial_Number = 0,
-                                        Start_Position = taskInfo.StartPositions[start_index].transform.position,
-                                        // Fix point
-                                        Fix_Objects = taskInfo.FixationObjects,
-                                        Fix_Positions = fixPositions,
+                                        _allTrials.Add(
+                                            new TrialData
+                                            {
+                                                Trial_Number = 0,
+                                                Start_Position = taskInfo.StartPositions[start_index].transform.position,
+                                                // Fix point
+                                                Fix_Object = fixObject,
+                                                // Subracting the camera position to get the fixation point local space (i.e. child of camera)
+                                                Fix_Position_World = fixPosition - Camera.main.transform.position,
+                                                Fix_Position_Screen = Camera.main.WorldToViewportPoint(fixPosition),
+                                                Fix_Size = fixScale,
+                                                Fix_Window = taskInfo.FixationWindow,
 
-                                        // Current Cue
-                                        Cue_Objects = taskInfo.CueObjects,
-                                        Cue_Material = taskInfo.Conditions[cnd_index].CueMaterial,
-                                        // Targets
-                                        Target_Objects = targs,
-                                        Target_Materials = targ_mat,
-                                        Target_Positions = targ_pos.ToArray(),
-                                        //Distractors
-                                        Distractor_Objects = dists,
-                                        Distractor_Materials = dist_mat,
-                                        Distractor_Positions = dist_pos.ToArray()
+                                                // Current Cue
+                                                Cue_Objects = taskInfo.CueObjects,
+                                                Cue_Material = taskInfo.Conditions[cnd_index].CueMaterial,
 
-                                    });
+                                                // Targets
+                                                Target_Objects = targs,
+                                                Target_Materials = targ_mat,
+                                                Target_Positions = targ_pos.ToArray(),
+                                                //Distractors
+                                                Distractor_Objects = dists,
+                                                Distractor_Materials = dist_mat,
+                                                Distractor_Positions = dist_pos.ToArray()
+
+                                            });
+                                    }
+                                }
                             }
                         }
                     }
@@ -285,6 +308,18 @@ public abstract class ExperimentController : MonoBehaviour
             InstanceIDMap.Add(name, ID);
         }
 
+        // Add materials
+        Material[] materials = Resources.FindObjectsOfTypeAll<Material>();
+        foreach (Material mat in materials)
+        {
+            if (mat.hideFlags == HideFlags.None)
+            {
+                string name = mat.name;
+                int ID = mat.GetInstanceID();
+                InstanceIDMap.Add(name, ID);
+            }
+        }
+
     }
     protected int NameToID(string name)
     {
@@ -396,46 +431,30 @@ public abstract class ExperimentController : MonoBehaviour
     {
         _trialTimer = Time.realtimeSinceStartup;
         playerController.OnBlack(false);
-
+        ShowFixationObject();
     }
 
     // Fixation objects. We use fixation "objects" and not "point" because 
     // fixation can be required on any object. 
     public virtual void PrepareFixationObject()
     {
-
-        int pos_idx;
-
-        for (int ii = 0; ii < _currentTrial.Fix_Objects.Length; ii++)
-        {
-            pos_idx = Mathf.Min(_currentTrial.Fix_Positions.Length - 1, ii);
-
-            _currentTrial.Fix_Objects[ii].transform.localPosition = _currentTrial.Fix_Positions[pos_idx];
-            _currentTrial.Fix_Objects[ii].transform.localScale = new Vector3 { x = taskInfo.FixationObjectSize, y = taskInfo.FixationObjectSize, z = taskInfo.FixationObjectSize };
-            _currentTrial.Fix_Objects[ii].GetComponent<SphereCollider>().radius = taskInfo.FixationWindow;
-
-        }
+        _currentTrial.Fix_Object.transform.localPosition = _currentTrial.Fix_Position_World;
+        _currentTrial.Fix_Object.transform.localScale = new Vector3 { x = _currentTrial.Fix_Size, y = _currentTrial.Fix_Size, z = 0.01f };
+        _currentTrial.Fix_Object.GetComponent<SphereCollider>().radius = _currentTrial.Fix_Window;
 
     }
 
     public virtual void ShowFixationObject()
     {
-        // loop through all the cues. IN this example we do not set the cues position. 
-        foreach (GameObject go in _currentTrial.Fix_Objects)
-        {
-            go.GetComponent<BoxCollider>().enabled = true;
-            go.GetComponent<Renderer>().enabled = true;
-        }
+            _currentTrial.Fix_Object.GetComponent<SphereCollider>().enabled = true;
+            _currentTrial.Fix_Object.GetComponent<Renderer>().enabled = true;
     }
 
     public virtual void HideFixationObject()
     {
         // loop through all the cues. IN this example we do not set the cues position. 
-        foreach (GameObject go in _currentTrial.Fix_Objects)
-        {
-            go.GetComponent<SphereCollider>().enabled = false;
-            go.GetComponent<Renderer>().enabled = false;
-        }
+        _currentTrial.Fix_Object.GetComponent<SphereCollider>().enabled = false;
+        _currentTrial.Fix_Object.GetComponent<Renderer>().enabled = false;
     }
 
     // Cues
@@ -453,9 +472,6 @@ public abstract class ExperimentController : MonoBehaviour
             if (!go.activeSelf)
                 go.SetActive(true);
         }
-        
-        // AS an example we will disable movement during the cue epoch
-        FreezePlayer(true);
     }
 
     public virtual void HideCues()
@@ -472,7 +488,6 @@ public abstract class ExperimentController : MonoBehaviour
             //if (!go.activeSelf)
             //    go.SetActive(false);
         }
-        FreezePlayer(false);
     }
 
     // Targets
@@ -568,6 +583,12 @@ public abstract class ExperimentController : MonoBehaviour
         _trialTimer = Mathf.Infinity;
         ResponseOK = false;
         
+        HideCues();
+        HideTargets();
+        HideDistractors();
+        // Publish DATA
+        TrialEnded = true;
+
         if (!taskInfo.ContinuousTrials)
         {
             playerController.OnBlack(true);
@@ -577,11 +598,6 @@ public abstract class ExperimentController : MonoBehaviour
         // as soon as the trial starts. 
         playerController.ClearCollisionStatus();
 
-        HideCues();
-        HideTargets();
-        HideDistractors();
-        // Publish DATA
-        TrialEnded = true;
     }
 
     // Will check whether the TRIAL is over (fixation break, time run out)
@@ -594,7 +610,7 @@ public abstract class ExperimentController : MonoBehaviour
         {
             foreach (GameObject go in _currentTrial.Target_Objects)
             {
-                if (IDToName((int)_frameData.Player_State) == go.name)
+                if ((int)_frameData.Player_State == go.GetInstanceID())
                 {
                     targ = true;
                 }
@@ -602,7 +618,7 @@ public abstract class ExperimentController : MonoBehaviour
 
             foreach (GameObject go in _currentTrial.Distractor_Objects)
             {
-                if (IDToName((int)_frameData.Player_State) == go.name)
+                if ((int)_frameData.Player_State == go.GetInstanceID())
                 {
                     dist = true;
                 }
@@ -673,7 +689,7 @@ public abstract class ExperimentController : MonoBehaviour
     public virtual bool isFixating()
     {
         // also check whether objects are fixation objects
-        return _frameData.GazeTargets.Any(x => _currentTrial.Fix_Objects.Any(y => (float)y.GetInstanceID() == x));
+        return _frameData.GazeTargets.Any(x => _currentTrial.Fix_Object.GetInstanceID() == x);
     }
     
 
@@ -682,7 +698,7 @@ public abstract class ExperimentController : MonoBehaviour
     {
         get
         {
-            if (_frameData.Player_State != -1 && triggerGroup.Count > 0)
+            if (_frameData.Player_State != -1 && _frameData.Player_State != Mathf.NegativeInfinity && triggerGroup.Count > 0)
             {
                 return triggerGroup.IndexOf(IDToName((int)_frameData.Player_State)) != -1;
             }
@@ -776,19 +792,19 @@ public abstract class ExperimentController : MonoBehaviour
         EventsController.OnResume -= ResumeExperiment;
     }
 
-    void UpdatePlayer(Vector3 position, float rotation, string status, float hInput, float vInput)
+    void UpdatePlayer(Vector3 position, float rotation, float status, float hInput, float vInput)
     {
         _frameData.Position = position;
         _frameData.Rotation = rotation;
-        _frameData.Player_State = NameToID(status);
+        _frameData.Player_State = status;
         _frameData.JoystickPosition.x = hInput;
         _frameData.JoystickPosition.y = vInput;
     }
 
-    void UpdateEye(Vector2 gazePosition, string[] gazeTargets, float[] gazeCounts)
+    void UpdateEye(Vector2 gazePosition, float[] gazeTargets, float[] gazeCounts)
     {
         _frameData.GazePosition = gazePosition;
-        float[] gazeTargetIDs = new float[] { -1, -1, -1, -1, -1 };
+        /*float[] gazeTargetIDs = new float[] { -1, -1, -1, -1, -1 };
         if (gazeTargets != null)
         {
             for (int i = 0; i < Mathf.Min(5, gazeTargets.Length); i++)
@@ -798,8 +814,8 @@ public abstract class ExperimentController : MonoBehaviour
                     gazeTargetIDs[i] = NameToID(gazeTargets[i]);
                 }
             }
-        }
-        _frameData.GazeTargets = gazeTargetIDs;
+        }*/
+        _frameData.GazeTargets = gazeTargets;
         _frameData.GazeRayCounts = gazeCounts;
     }
 

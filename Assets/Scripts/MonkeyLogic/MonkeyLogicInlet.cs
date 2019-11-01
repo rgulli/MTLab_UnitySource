@@ -198,13 +198,13 @@ public class PlaybackTrialParameters
 {
     public int Trial_Number;
     public Vector3 Start_Position;
-    public string[] cue_Objects;
-    public string cue_Material;
-    public string[] target_Objects;
-    public string[] target_Materials;
+    public string[] Cue_Objects;
+    public string Cue_Material;
+    public string[] Target_Objects;
+    public string[] Target_Materials;
     public Vector3[] Target_Positions;
-    public string[] distractor_Objects;
-    public string[] distractor_Materials;
+    public string[] Distractor_Objects;
+    public string[] Distractor_Materials;
     public Vector3[] Distractor_Positions;
     public int n_Frames; 
 }
