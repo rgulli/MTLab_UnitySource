@@ -184,6 +184,10 @@ public class EyeLinkController : MonoBehaviour
             {
                 Debug.Log("EyeLink Connected");
                 checker.StopThread();
+
+                // 
+                el.resetData();
+                el.dataSwitch(4 | 8);
             }
             s = null;
         }
@@ -193,8 +197,6 @@ public class EyeLinkController : MonoBehaviour
         {
             try
             {
-                //el.resetData();
-                //el.dataSwitch(4 | 8);
                 s = el.getNewestSample();
             }
             catch

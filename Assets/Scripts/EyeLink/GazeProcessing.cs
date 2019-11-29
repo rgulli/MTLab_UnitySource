@@ -186,10 +186,10 @@ public class GazeProcessing : MonoBehaviour
         if (gazeDict.Count == 0)
         {
             gazeDict.Add(-1, 0);
-            gazeDict.Add(-1, 0);
-            gazeDict.Add(-1, 0);
-            gazeDict.Add(-1, 0);
-            gazeDict.Add(-1, 0);
+            gazeDict.Add(-2, 0);
+            gazeDict.Add(-3, 0);
+            gazeDict.Add(-4, 0);
+            gazeDict.Add(-5, 0);
         }
 
         DictToArray(gazeDict, out targets, out counts);
