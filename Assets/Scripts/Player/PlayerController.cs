@@ -102,7 +102,8 @@ namespace FirstPerson
                 transform.localRotation *= Quaternion.Euler(0f, move.x * inputCtrl.Turn_Sensitivity, 0f);
             }
             // Update values to experiment controller
-            EventsController.instance.SendPlayerLateUpdateEvent(transform.position, transform.rotation.eulerAngles.y, _CollisionStatus, move.y, move.x);
+            if (EventsController.instance != null)
+                EventsController.instance.SendPlayerLateUpdateEvent(transform.position, transform.rotation.eulerAngles.y, _CollisionStatus, move.y, move.x);
         }
 
         public void ToStart(Vector3 position, Quaternion rotation)
