@@ -12,7 +12,6 @@ public class TargetOnset : StateMachineBehaviour
     {
         ExperimentController expControl = ExperimentController.instance;
         expControl.ShowTargets();
-        expControl.ShowDistractors();
         expControl.CanRespond(true);
 
     }
