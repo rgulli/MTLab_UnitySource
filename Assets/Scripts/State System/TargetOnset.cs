@@ -12,8 +12,6 @@ public class TargetOnset : StateMachineBehaviour
     {
         ExperimentController expControl = ExperimentController.instance;
         expControl.ShowTargets();
-        expControl.CanRespond(true);
-
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

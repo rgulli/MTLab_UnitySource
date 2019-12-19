@@ -81,6 +81,7 @@
     <Compile Include="Assets\LSL4Unity\Scripts\LSLTransformOutlet.cs" />
     <Compile Include="Assets\LSL4Unity\Scripts\Resolver.cs" />
     <Compile Include="Assets\LSL4Unity\Scripts\ScriptOrder.cs" />
+    <Compile Include="Assets\ResponseOnset.cs" />
     <Compile Include="Assets\Scripts\DataStructs\FrameData.cs" />
     <Compile Include="Assets\Scripts\DataStructs\TrialData.cs" />
     <Compile Include="Assets\Scripts\Events\EventsController.cs" />
