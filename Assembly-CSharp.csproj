@@ -118,6 +118,8 @@
     <Compile Include="Assets\Tasks\SampleTask\SampleTaskExpController.cs" />
     <Compile Include="Assets\Tasks\SampleTask\SampleTaskTaskInfo.cs" />
     <Compile Include="Assets\Tasks\SampleTask\SampleTaskTaskInfoInspector.cs" />
+    <Compile Include="Assets\Tasks\XMazeTask\XMaze_ExperimentCtrl.cs" />
+    <Compile Include="Assets\Tasks\XMazeTask\XMaze_TaskInfo.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

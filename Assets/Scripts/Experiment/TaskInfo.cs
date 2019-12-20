@@ -25,8 +25,8 @@ public abstract class TaskInfo : MonoBehaviour
     public int NumberOfSets = 15;
 
     [Header("Trials")]
-    public GameObject[] StartPositions;
-    public bool ContinuousTrials = true;
+    [Tooltip("List of possible positions. Will automatically randomize from the list.")] public GameObject[] StartPositions;
+    [Tooltip("Is there an ITI? Duration is defined in the animator.")] public bool ContinuousTrials = true;
     [Tooltip("In seconds.")] public float MaxTrialTime = 50.0f;
     [Tooltip("Extra time added to ITI in seconds.")] public float ErrorPenalty = 0.0f;
     [Tooltip("Penalize out of time trials.")] public float IgnorePenalty = 0.0f;
@@ -42,25 +42,17 @@ public abstract class TaskInfo : MonoBehaviour
     // This class (defined at the bottom), can be expanded a lot to add condition specific start positions, 
     // target positions,... 
     public GameObject[] CueOnsetTriggers;
-    //public bool CueNavTrigger = true;
-    //[Tooltip("Use gaze to trigger cue onsets.")] public bool CueGazeTrigger = false;
-    //public Material[] CueMaterials;
     public GameObject[] CueObjects;
-    // [Tooltip("Timed cue duration (s). Set to Infinity for trigger based cues.")] public float CueDuration = Mathf.Infinity;
     
     [Header("Targets/Distractors")]
     public GameObject[] TargetOnsetTriggers;
-    //public bool TargetNavTrigger = true;
-    //[Tooltip("Use gaze to trigger target onsets/hits.")] public bool TargetGazeTrigger = false; 
     public GameObject[] TargetObjects;
     public GameObject[] DistractorObjects;
 
     public int NTargets = 1;
     [Tooltip("Set to 0 to not use Distractors")]public int NDistractors = 1; 
-    //public Material[] TargetMaterials;
-    
+        
     public GameObject[] PossiblePositions;
-    [Tooltip("Response time (s).")] public float ResponseTime = 1.0f;
 
     [Header("Conditions")]
     public Condition[] Conditions;
