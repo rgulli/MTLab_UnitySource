@@ -13,6 +13,7 @@ namespace Misc
         Delay_2,
         Distractor,
         Delay_3,
+        ForceFOV,
         Target,
         Response,
         EndOfTrial,

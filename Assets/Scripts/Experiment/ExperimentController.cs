@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.Profiling;
 using System.Linq;
 using Misc;
 using LSL;
-using UnityEditor;
 
 public abstract class ExperimentController : MonoBehaviour
 {
@@ -23,6 +21,14 @@ public abstract class ExperimentController : MonoBehaviour
         }
     }
     #endregion Access
+
+    #region Getters
+    // To get values from sub-classes
+    // need to cast return object to specific value: 
+    //  e.g.: private int trialNumber = (int)returnValue("trialNumber");
+    public virtual object ReturnValue(string name) { return null; }
+
+    #endregion Getters
 
     // Load the current experiment configuration, and generate trials. 
     #region ExperimentConfig
@@ -154,9 +160,13 @@ public abstract class ExperimentController : MonoBehaviour
                                 fixPositions = new Vector3[1];
                                 fixPositions[0] = Vector3.negativeInfinity;
                                 fixScale = 1;
+
                             }
                             foreach (Vector3 fixPosition in fixPositions)
                             {
+                                if (taskInfo.FixationObjects.Length == 0)
+                                    taskInfo.FixationObjects = new GameObject[1] { null };
+
                                 foreach(GameObject fixObject in taskInfo.FixationObjects)
                                 {
                                     // At this point we have everything. Add to trial list N times:
@@ -292,7 +302,7 @@ public abstract class ExperimentController : MonoBehaviour
         // Get Controllers instance
         playerController.OnBlack(true);
 
-        //PrepareAllTrials();
+        PrepareAllTrials();
         
     }
 
@@ -438,23 +448,31 @@ public abstract class ExperimentController : MonoBehaviour
     // fixation can be required on any object. 
     public virtual void PrepareFixationObject()
     {
-        _currentTrial.Fix_Object.transform.localPosition = _currentTrial.Fix_Position_World;
-        _currentTrial.Fix_Object.transform.localScale = new Vector3 { x = _currentTrial.Fix_Size, y = _currentTrial.Fix_Size, z = 0.01f };
-        _currentTrial.Fix_Object.GetComponent<SphereCollider>().radius = _currentTrial.Fix_Window;
-
+        if (_currentTrial.Fix_Object != null)
+        {
+            _currentTrial.Fix_Object.transform.localPosition = _currentTrial.Fix_Position_World;
+            _currentTrial.Fix_Object.transform.localScale = new Vector3 { x = _currentTrial.Fix_Size, y = _currentTrial.Fix_Size, z = 0.01f };
+            _currentTrial.Fix_Object.GetComponent<SphereCollider>().radius = _currentTrial.Fix_Window;
+        }
     }
 
     public virtual void ShowFixationObject()
     {
+        if (_currentTrial.Fix_Object != null)
+        {
             _currentTrial.Fix_Object.GetComponent<SphereCollider>().enabled = true;
             _currentTrial.Fix_Object.GetComponent<Renderer>().enabled = true;
+        }
     }
 
     public virtual void HideFixationObject()
     {
-        // loop through all the cues. IN this example we do not set the cues position. 
-        _currentTrial.Fix_Object.GetComponent<SphereCollider>().enabled = false;
-        _currentTrial.Fix_Object.GetComponent<Renderer>().enabled = false;
+        if (_currentTrial.Fix_Object != null)
+        {
+            // loop through all the cues. IN this example we do not set the cues position. 
+            _currentTrial.Fix_Object.GetComponent<SphereCollider>().enabled = false;
+            _currentTrial.Fix_Object.GetComponent<Renderer>().enabled = false;
+        }
     }
 
     // Cues
@@ -503,7 +521,7 @@ public abstract class ExperimentController : MonoBehaviour
 
             _currentTrial.Target_Objects[ii].transform.position = _currentTrial.Target_Positions[pos_idx];
             _currentTrial.Target_Objects[ii].GetComponent<MeshRenderer>().material = _currentTrial.Target_Materials[mat_idx];
-            _currentTrial.Target_Objects[ii].GetComponent<BoxCollider>().enabled = false;
+            _currentTrial.Target_Objects[ii].GetComponent<Collider>().enabled = false;
             _currentTrial.Target_Objects[ii].GetComponent<Renderer>().enabled = false;
         }
     }
@@ -512,7 +530,7 @@ public abstract class ExperimentController : MonoBehaviour
     {
         foreach (GameObject go in _currentTrial.Target_Objects)
         {
-            go.GetComponent<BoxCollider>().enabled = true;
+            go.GetComponent<Collider>().enabled = true;
             go.GetComponent<Renderer>().enabled = true;
         }
     }
@@ -521,7 +539,7 @@ public abstract class ExperimentController : MonoBehaviour
     {
         foreach (GameObject go in taskInfo.TargetObjects)
         {
-            go.GetComponent<BoxCollider>().enabled = false;
+            go.GetComponent<Collider>().enabled = false;
             go.GetComponent<Renderer>().enabled = false;
         }
     }
@@ -545,7 +563,7 @@ public abstract class ExperimentController : MonoBehaviour
 
             _currentTrial.Distractor_Objects[ii].transform.position = _currentTrial.Distractor_Positions[pos_idx];
             _currentTrial.Distractor_Objects[ii].GetComponent<MeshRenderer>().material = _currentTrial.Distractor_Materials[mat_idx];
-            _currentTrial.Distractor_Objects[ii].GetComponent<BoxCollider>().enabled = false;
+            _currentTrial.Distractor_Objects[ii].GetComponent<Collider>().enabled = false;
             _currentTrial.Distractor_Objects[ii].GetComponent<Renderer>().enabled = false;
         }
     }
@@ -553,7 +571,7 @@ public abstract class ExperimentController : MonoBehaviour
     {
         foreach (GameObject go in _currentTrial.Distractor_Objects)
         {
-            go.GetComponent<BoxCollider>().enabled = true;
+            go.GetComponent<Collider>().enabled = true;
             go.GetComponent<Renderer>().enabled = true;
         }
     }
@@ -562,7 +580,7 @@ public abstract class ExperimentController : MonoBehaviour
     {
         foreach (GameObject go in taskInfo.DistractorObjects)
         {
-            go.GetComponent<BoxCollider>().enabled = false;
+            go.GetComponent<Collider>().enabled = false;
             go.GetComponent<Renderer>().enabled = false;
         }
     }

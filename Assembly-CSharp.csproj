@@ -11,7 +11,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{C9C49F94-9259-A70C-A553-CADFE2C9FAD7}</ProjectGuid>
+    <ProjectGuid>{0986900B-871F-09C9-73AB-CE7D3C407FD6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -119,39 +119,40 @@
     <Compile Include="Assets\Tasks\SampleTask\SampleTaskTaskInfo.cs" />
     <Compile Include="Assets\Tasks\SampleTask\SampleTaskTaskInfoInspector.cs" />
     <Compile Include="Assets\Tasks\XMazeTask\XMaze_ExperimentCtrl.cs" />
+    <Compile Include="Assets\Tasks\XMazeTask\XMaze_ForceFOV.cs" />
     <Compile Include="Assets\Tasks\XMazeTask\XMaze_TaskInfo.cs" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.InputSystem.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0b3/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -328,10 +329,10 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0b3/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="Interop.SREYELINKLib">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Assets/Scripts/EyeLink/DLLs/Interop.SREYELINKLib.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Assets/Scripts/EyeLink/DLLs/Interop.SREYELINKLib.dll</HintPath>
     </Reference>
     <Reference Include="stdole">
-      <HintPath>D:/MT_Lab/Recording_setup_update/Unity3D/Dev/ML_Clean/Assets/Scripts/EyeLink/DLLs/stdole.dll</HintPath>
+      <HintPath>D:/MT_Lab/Unity/MTLab_UnitySource/Assets/Scripts/EyeLink/DLLs/stdole.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0b3/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Tasks/SampleTask/SampleScene.unity
+- path: Assets/Tasks/XMazeTask/XMaze_End.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
