@@ -607,7 +607,7 @@ public abstract class ExperimentController : MonoBehaviour
         // Publish DATA
         TrialEnded = true;
 
-        if (!taskInfo.ContinuousTrials)
+        if (!taskInfo.ContinuousTrials || _previousTrialError == 2 )
         {
             playerController.OnBlack(true);
         }
@@ -651,7 +651,7 @@ public abstract class ExperimentController : MonoBehaviour
             }
             else if (ResponseOK && dist)
             {
-                Outcome = "distractor";
+                Outcome = "incorrect";
                 _previousTrialError = 1;
                 return true;
             }

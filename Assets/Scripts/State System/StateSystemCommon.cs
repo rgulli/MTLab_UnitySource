@@ -47,6 +47,7 @@ public class StateSystemCommon : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         ExperimentController exp = ExperimentController.instance;
+
         // Just Started
         if (exp.IsRunning && !wasRunning)
         {

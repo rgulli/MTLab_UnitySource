@@ -24,7 +24,9 @@ public class FullScreenView : MonoBehaviour
         ResolutionY = ScreenHeight;
         XOffset = ScreenOffset;
         MenuOffset = MenuBarHeight;
-        Camera.main.fieldOfView = CameraFOV;
+        
+        // The camera FOV value is for the Vertical FOV, convert to Horizontal
+        Camera.main.fieldOfView = 2 * Mathf.Atan(Mathf.Tan(CameraFOV * Mathf.Deg2Rad * 0.5f) / Camera.main.aspect) * Mathf.Rad2Deg;
     }
 
     // FullScreen Game Window

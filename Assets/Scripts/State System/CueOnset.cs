@@ -6,7 +6,7 @@ public class CueOnset : StateMachineBehaviour
 {
     // This state predetermines all of the trial's task parameters,
     // resets task objects, and prepares the cue.
-
+    [Tooltip("Hide Cues at the end of the state. Set to false to keep the cues visible until the end of the trial.")]public bool HideCues = true; 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -21,8 +21,8 @@ public class CueOnset : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        // As an example here we have the cues disappearing
-        ExperimentController.instance.HideCues();
+        if (HideCues)
+            ExperimentController.instance.HideCues();
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
