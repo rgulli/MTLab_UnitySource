@@ -4,3 +4,6 @@
 [submodule "Assets/Tasks"]
 	path = Assets/Tasks
 	url = https://github.com/Doug1983/MTLab_UnityExampleTask.git
+[submodule "Wiki"]
+	path = Wiki
+	url = https://github.com/doug1983/MTLab_UnitySource.wiki.git
