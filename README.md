@@ -3,13 +3,13 @@ This repository contains code run a virtual reality experiment using Unity, unde
 
 See the [Wiki page](https://github.com/Doug1983/MTLab_UnitySource/wiki/1.-Installation) for detailed instructions, and a lot of really useful detail on MonkeyLogic, Lab Streaming Layer, Unity, C#, and more. 
 
-This project was originally built by [Guillaume Doucet](https://www.github.com/Doug1983/), and modified by [Roberto Gulli](https://www.github.com/rgulli)
+This project was originally built by [Guillaume Doucet](https://www.github.com/Doug1983/), and modified by [Roberto Gulli](https://www.github.com/rgulli).
 
 ## Requirements
 * PC running Windows 10
 * [git](https://git-scm.com/download/win)
 * Matlab (tested R2019b)
-* Unity, downloaded via Unity Hub(https://unity3d.com/get-unity/download). Tested versions include 2019.3.0b3 and 2019.3.12f1. 
+* Unity, downloaded via Unity Hub(https://unity3d.com/get-unity/download). Tested versions include 2019.3.0b3 and 2019.3.0f6. 
 
 ## Installation
 
@@ -35,11 +35,25 @@ This project was originally built by [Guillaume Doucet](https://www.github.com/D
 
 ## Getting started
 
-To start off, try to replicate a version of the associative memory task used in [Gulli <em>et al.<em> 2020, <em>Nature Neuroscience</em>](https://www.nature.com/articles/s41593-019-0548-3).
+To start off, try to replicate a version of the associative memory task used in [Gulli <em>et al.</em> 2020, <em>Nature Neuroscience</em>](https://www.nature.com/articles/s41593-019-0548-3).
 
-* To get started clone the repository and add the example files from [the Tasks folder in the Temp repo](https://github.com/Doug1983/Temp) to : Assets/Scripts/Tasks. These files are not necessary but provide an example task and it's playback to use. 
+* In a terminal window, navigate to the Tasks folder of your local MonkeyLogic-Unity Source repo
+  `$ cd <yourLocalSourceRepoPath>/Assets/Tasks/`
+* Clone the example task repo called `Temp` to this folder 
+  `$ git clone https://github.com/Doug1983/MTLab_UnityExampleTask.git`
+* Move all of the files now in `<yourLocalSourceRepoPath>/Assets/Tasks/MTLab_UnityExampleTask/` to `<yourLocalSourceRepoPath>/Assets/Tasks/`
+* In Unity Hub, add your local repository as a new project. 
+* Open the project using Unity v2019.3.0**
 
-If Unity project won't open, run : `git clean -fxd`
+> Note, I got a pop-up asking: 
+>> Do you want to upgrade the project to use Asset Database Version 2?
+>> 
+>> Note: Version 1 is deprecated from 2019.3. If you upgrade to version 2, the project will be re-imported. 
+>> 
+>> You can always change back to version 1 in the project settings.
+> I selected "No". 
+
+>~Note, if Unity project won't open, run : `$ git clean -fxd` in the `~/Assets/Tasks/` folder.~ This seemed to remove a lot of the components necessary to register each scene in the Tasks folder. 
 
 
 
