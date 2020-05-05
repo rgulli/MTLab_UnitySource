@@ -64,24 +64,24 @@ To test that your installation is working, you can try to run a replicate of the
 * Move all of the files now in `<yourLocalSourceRepoPath>/Assets/Tasks/MTLab_UnityExampleTask/` to `<yourLocalSourceRepoPath>/Assets/Tasks/`
 * In Unity Hub, add your local repository as a new project. 
 * Open the project using Unity v2019.3.0**
-> Note, I got a pop-up asking: 
+> Note, you may get a pop-up asking: 
 >> Do you want to upgrade the project to use Asset Database Version 2?
 >> 
 >> Note: Version 1 is deprecated from 2019.3. If you upgrade to version 2, the project will be re-imported. 
 >> 
 >> You can always change back to version 1 in the project settings.
-> I selected "No". 
+> Select "No". 
 
 > ~Note, if Unity project won't open, run : `$ git clean -fxd` in the `<project>/Assets/Tasks/` folder.~ This seemed to remove a lot of the components necessary to register each scene in the Tasks folder. 
 
 ### Running the task
-####Unity
+#### Unity
  * Launch Unity-MonkeyLogic2 project
  * Load the X-Maze End scene
  * Ensure that there are no errors in the console
  * Hit "Play" (ctrl+P)
 
-####MonkeyLogic2 
+#### MonkeyLogic2 
 * In Matlab, run: <br>
   `addpath(genpath(C:\MonkeyLogic))`<br>
   `>> monkeylogic()`
