@@ -1,4 +1,5 @@
-# ML_Clean
+# Getting started with an experiment using virtual reality
+
 This repository contains code run a virtual reality experiment using Unity, under continuous control of and communication with the experimental control software MonkeyLogic2. Communication between these programs, behavioural recording devices, and electrophysiological devices is handled by Lab Streaming Layer. 
 
 See the [Wiki page](https://github.com/Doug1983/MTLab_UnitySource/wiki/1.-Installation) for detailed instructions, and a lot of really useful detail on MonkeyLogic, Lab Streaming Layer, Unity, C#, and more. 
@@ -63,9 +64,10 @@ To test that your installation is working, you can try to run a replicate of the
 * In Unity Hub, add your local repository as a new project. 
 * Open the project using Unity v2019.3.0**
 > Note, you may get a pop-up asking: 
->> Do you want to upgrade the project to use Asset Database Version 2?
->> Note: Version 1 is deprecated from 2019.3. If you upgrade to version 2, the project will be re-imported. 
->> You can always change back to version 1 in the project settings.
+>> Do you want to upgrade the project to use Asset Database Version 2? <br>
+>> Note: Version 1 is deprecated from 2019.3. If you upgrade to version 2, the project will be re-imported. <br> 
+>> You can always change back to version 1 in the project settings. <br>
+
 > Select "No". 
 
 > ~Note, if Unity project won't open, run : `$ git clean -fxd` in the `<project>/Assets/Tasks/` folder.~ This seemed to remove a lot of the components necessary to register each scene in the Tasks folder. 
