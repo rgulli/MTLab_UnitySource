@@ -41,16 +41,14 @@ This project was originally built by [Guillaume Doucet](https://www.github.com/D
 * Clone repository
   `$ git clone --recurse-submodules https://github.com/<yourGitHubUserName>/MTLab_UnitySource.git .`
 
-### Install EyeLink SDK
-* Download [customized EyeLink SDK here](https://drive.google.com/drive/folders/1ggGMG3ZsGim3Runcfe7JXZoaC2rzDwap)
-* Run the EyeLink SDK installer (.exe)
+### Install the EyeLink SDK
+* From the EyeLink SDK folder, run the EyeLink SDK installer (.exe)
 	* Choose "Typical" installation when prompted
 * Extract `mousesimulator_mar25_2019.zip`
 * Run the mouse simulator. Approve the necessary permission requests. 
-
-> Note,*do not download the latest SDK from the EyeLink support forums*. The above version contains a few functions not available in the one provided by SR Research.
-> 
-> It also uses a specific DLL file that is provided by SR-Research without the source code. This file is included in the MonkeyLogic Unity source (this repository): `UnityProject\Assets\Scripts\EyeLink\DLLs\interop.SREYELINKLib.dll`.
+> Note, this EyeLink SDK is modified, and also [hosted by Guillaume on Google Drive](https://drive.google.com/drive/folders/1ggGMG3ZsGim3Runcfe7JXZoaC2rzDwap) <br>
+> *Do not download the latest SDK from the EyeLink support forums*. Our modified version contains a few functions not available in the one provided by SR Research. <br>
+> It also uses a specific DLL file that is provided by SR-Research without the source code. This file is included in the MonkeyLogic Unity source (this repository): `Unity-MonkeyLogic2_source\Assets\Scripts\EyeLink\DLLs\interop.SREYELINKLib.dll`.
 
 ## Test using the X-Maze associative learning task
 
@@ -66,9 +64,7 @@ To test that your installation is working, you can try to run a replicate of the
 * Open the project using Unity v2019.3.0**
 > Note, you may get a pop-up asking: 
 >> Do you want to upgrade the project to use Asset Database Version 2?
->> 
 >> Note: Version 1 is deprecated from 2019.3. If you upgrade to version 2, the project will be re-imported. 
->> 
 >> You can always change back to version 1 in the project settings.
 > Select "No". 
 
