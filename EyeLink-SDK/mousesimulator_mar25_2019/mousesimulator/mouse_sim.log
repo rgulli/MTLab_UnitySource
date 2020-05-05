@@ -1,0 +1,402 @@
+****************************************************
+** Session beginning Tue May 05, 2020 09:50:07 AM **
+** Mouse Simulation version 1.1 Built Mar 21 2019 **
+****************************************************
+000001 000000 Could not find cfg_file_name preinit.ini
+000002 000003 File= Cmd: include "eyenet.ini"    // TCP/IP address
+000003 000006 File= Cmd: host_address = 100.1.1.1,  255.255.255.0
+000004 000006 >>set_sysvar: UNHANDLED id 241
+000005 000006 File= Cmd: eyelink_port = 589
+000006 000006 >>set_sysvar: UNHANDLED id 246
+000007 000006 File= Cmd: enable_full_duplex = OFF
+000008 000006 >>set_sysvar: UNHANDLED id 256
+000009 000006 File= Cmd: disable_link_test = ON
+000010 000006 >>set_sysvar: UNHANDLED id 257
+000011 000006 File= Cmd: disable_backoff = ON
+000012 000006 >>set_sysvar: UNHANDLED id 258
+000013 000006 File= Cmd: garp_send_interval = 60000
+000014 000006 >>set_sysvar: UNHANDLED id 260
+000015 000006 File= Cmd: name_entry = eyelink, 100.1.1.1
+000016 000006 >>set_sysvar: UNHANDLED id 255
+000017 000006 File= Cmd: include "physical.ini"  // marker, display parameters
+000018 000009 File= Cmd: screen_phys_coords = -200.0, 150.0, 200.0, -150.0
+000019 000009 File= Cmd: screen_pixel_coords = 0, 0, 1023, 767
+000020 000009 File= Cmd: screen_distance = 700 760
+000021 000009 >>set_sysvar: UNHANDLED id 426
+000022 000009 File= Cmd: include "buttons.ini"   // USB and digital buttons, button commands
+000023 000012 File= Cmd: button_debounce_time = 30;
+000024 000012 >>set_sysvar: UNHANDLED id 188
+000025 000012 File= Cmd: input_data_ports  = 9;
+000026 000012 >>set_sysvar: UNHANDLED id 200
+000027 000012 File= Cmd: input_data_masks = 0xFF;
+000028 000012 >>set_sysvar: UNHANDLED id 201
+000029 000012 File= Cmd: last_button_pressed = 0
+000030 000012 File= Cmd: button_status_display = ON
+000031 000012 >>set_sysvar: UNHANDLED id 570
+000032 000012 File= Cmd: include "keys.ini"      // keyboard commands
+000033 000017 File= Cmd: key_function ctrl+alt+q "exit_program"		;; keys to exit EyeLink
+000034 000017 >>add_key_function: not supported
+000035 000017 File= Cmd: key_function ctrl+alt+d "shutdown_host"		;; shutdown host
+000036 000017 >>add_key_function: not supported
+000037 000017 File= Cmd: key_function alt+F7 "screen_dump"		;; keys to create screen dump 
+000038 000017 >>add_key_function: not supported
+000039 000018 File= Cmd: user_record_key_item = " CTRL-ALT-A ", "Abort Trial  ", ctrl+alt+a, "display_user_menu 1"
+000040 000018 >>set_sysvar: UNHANDLED id 237
+000041 000018 File= Cmd: create_user_menu 1 "Trial Aborted"
+000042 000018 >>set_sysvar: UNHANDLED id 238
+000043 000018 File= Cmd: add_user_menu_item " S " "Setup (Calibrate, camera setup)" s 1 "call_setup_menu_mode"
+000044 000018 >>set_sysvar: UNHANDLED id 239
+000045 000018 File= Cmd: add_user_menu_item " R " "Repeat Trial" r 2 ""
+000046 000018 >>set_sysvar: UNHANDLED id 239
+000047 000018 File= Cmd: add_user_menu_item " N " "Next Trial" n 3 ""
+000048 000018 >>set_sysvar: UNHANDLED id 239
+000049 000018 File= Cmd: add_user_menu_item " CTRL-ALT-T " "Terminate Experiment" ctrl+alt+t 4 ""
+000050 000018 >>set_sysvar: UNHANDLED id 239
+000051 000018 File= Cmd: add_user_menu_item " CTRL-ALT-Q " "Terminate program" ctrl+alt+q 5 "exit_program"
+000052 000018 >>set_sysvar: UNHANDLED id 239
+000053 000018 File= Cmd: lock_record_exit = NO
+000054 000018 File= Cmd: include "parser.ini"    // saccade detector setup
+000055 000022 File= Cmd: select_parser_configuration  0
+000056 000022 File= Cmd: fast_velocity_filter = YES;
+000057 000022 File= Cmd: saccade_velocity_threshold = 30          
+000058 000022 File= Cmd: saccade_acceleration_threshold = 8000    
+000059 000022 File= Cmd: saccade_motion_threshold = 0.1   
+000060 000022 File= Cmd: saccade_pursuit_fixup = 60      
+000061 000022 File= Cmd: saccade_extend_velocity = 25     
+000062 000022 File= Cmd: saccade_max_extend_start = 0     
+000063 000022 File= Cmd: saccade_max_extend_after = 0
+000064 000022 File= Cmd: saccade_onset_verify_time = 4     
+000065 000022 File= Cmd: saccade_offset_verify_time = 20 
+000066 000022 File= Cmd: blink_offset_verify_time = 12     
+000067 000022 File= Cmd: select_parser_configuration  1
+000068 000022 File= Cmd: fast_velocity_filter = YES;
+000069 000022 File= Cmd: saccade_velocity_threshold = 22         
+000070 000022 File= Cmd: saccade_acceleration_threshold = 3800    
+000071 000022 File= Cmd: saccade_motion_threshold = 0.0   
+000072 000022 File= Cmd: saccade_pursuit_fixup = 60       
+000073 000022 File= Cmd: saccade_extend_velocity = 25     
+000074 000022 File= Cmd: saccade_max_extend_start = 0     
+000075 000022 File= Cmd: saccade_max_extend_after = 0
+000076 000022 File= Cmd: saccade_onset_verify_time = 4    
+000077 000022 File= Cmd: saccade_offset_verify_time = 20   
+000078 000022 File= Cmd: blink_offset_verify_time = 12     
+000079 000022 File= Cmd: parser_discard_startup = NO
+000080 000022 File= Cmd: fixation_update_interval = 50
+000081 000022 File= Cmd: fixation_update_accumulate = 50
+000082 000022 File= Cmd: select_parser_configuration  0
+000083 000022 File= Cmd: include "data.ini"      // file and link setings
+000084 000027 File= Cmd: data_drive_name = "."
+000085 000027 >>set_sysvar: UNHANDLED id 179
+000086 000027 File= Cmd: data_drive_directory = "../data"
+000087 000027 >>set_sysvar: UNHANDLED id 180
+000088 000027 File= Cmd: data_file_path = "."
+000089 000027 >>set_sysvar: UNHANDLED id 181
+000090 000027 File= Cmd: required_disk_space = 2048
+000091 000027 >>set_sysvar: UNHANDLED id 182
+000092 000027 File= Cmd: screen_write_prescale = 10;
+000093 000027 File= Cmd: velocity_write_prescale = 10;
+000094 000027 File= Cmd: file_event_filter = LEFT,RIGHT,FIXATION,BLINK,MESSAGE,BUTTON,SACCADE,INPUT
+000095 000027 File= Cmd: link_event_filter = LEFT,RIGHT,FIXATION,BLINK,BUTTON,SACCADE
+000096 000027 File= Cmd: file_event_data = GAZE,GAZERES,HREF,AREA,VELOCITY
+000097 000027 File= Cmd: link_event_data = GAZE,GAZERES,HREF,AREA,FIXAVG,NOSTART
+000098 000027 File= Cmd: file_sample_data = LEFT,RIGHT,GAZE,GAZERES,PUPIL,HREF,AREA,STATUS,INPUT,HTARGET
+000099 000027 SV_file_sample_data
+000100 000027 File= Cmd: link_sample_data = LEFT,RIGHT,GAZE,HREF,GAZERES,AREA,STATUS,HTARGET
+000101 000027 SV_link_sample_data
+000102 000027 File= Cmd: file_sample_control = 1, 0.0, 0  
+000103 000027 File= Cmd: link_sample_control = 1, 0.0, 0           
+000104 000027 File= Cmd: link_update_interval = 0
+000105 000027 File= Cmd: samples_between_timestamps = 10
+000106 000027 File= Cmd: samples_between_resolution = 0
+000107 000027 File= Cmd: samples_between_status = 0
+000108 000027 File= Cmd: samples_between_pupil_area = 0
+000109 000027 File= Cmd: link_flush_age = 1
+000110 000027 File= Cmd: link_motion_flush = NO  ;; flush updates
+000111 000027 File= Cmd: link_sample_recency = 1 ;; make sure we have recent data
+000112 000027 File= Cmd: link_pacing_usec = 0
+000113 000027 >>set_sysvar: UNHANDLED id 366
+000114 000027 File= Cmd: link_echo_filter = DOWN, REPEAT, BUTTONS
+000115 000027 >>set_sysvar: UNHANDLED id 197
+000116 000027 File= Cmd: do_mode_start_flush = ON
+000117 000027 >>set_sysvar: UNHANDLED id 376
+000118 000027 File= Cmd: enable_file_buffer = ON
+000119 000027 >>set_sysvar: UNHANDLED id 499
+000120 000027 File= Cmd: include "calibr.ini"    // calibration settings
+000121 000032 File= Cmd: calibration_type = HV9
+000122 000032 File= Cmd: x_gaze_constraint = AUTO
+000123 000032 >>set_sysvar: UNHANDLED id 144
+000124 000032 File= Cmd: y_gaze_constraint = AUTO
+000125 000032 >>set_sysvar: UNHANDLED id 145
+000126 000032 File= Cmd: calibration_bicubic_weights 10 2 2 2 2 1 1 1 1 4 4 4 4
+000127 000032 >>set_sysvar: UNHANDLED id 104
+000128 000032 File= Cmd: calibration_bicubic_correction OFF
+000129 000032 >>set_sysvar: UNHANDLED id 103
+000130 000032 File= Cmd: generate_default_targets = YES
+000131 000032 >>set_sysvar: UNHANDLED id 147
+000132 000032 File= Cmd: horizontal_target_y = 200;
+000133 000032 >>set_sysvar: UNHANDLED id 146
+000134 000032 File= Cmd: calibration_targets = 320,240  320,40  320,440  40,240  600,240  40,40  600,40, 40,440  600,440
+000135 000032 >>set_sysvar: UNHANDLED id 102
+000136 000032 File= Cmd: validation_targets = 320,240  320,40  320,440  40,240  600,240  40,40  600,40, 40,440  600,440
+000137 000032 >>set_sysvar: UNHANDLED id 118
+000138 000032 File= Cmd: calibration_area_proportion 0.88 0.83
+000139 000032 >>set_sysvar: UNHANDLED id 105
+000140 000032 File= Cmd: validation_area_proportion  0.88 0.83
+000141 000032 >>set_sysvar: UNHANDLED id 106
+000142 000032 File= Cmd: calibration_corner_scaling 1.0
+000143 000032 >>set_sysvar: UNHANDLED id 107
+000144 000032 File= Cmd: validation_corner_scaling 0.88
+000145 000032 >>set_sysvar: UNHANDLED id 108
+000146 000032 File= Cmd: randomize_calibration_order = YES
+000147 000032 >>set_sysvar: UNHANDLED id 112
+000148 000032 File= Cmd: randomize_validation_order = YES
+000149 000032 >>set_sysvar: UNHANDLED id 115
+000150 000032 File= Cmd: cal_repeat_first_target = YES
+000151 000032 >>set_sysvar: UNHANDLED id 113
+000152 000032 File= Cmd: val_repeat_first_target = YES
+000153 000032 >>set_sysvar: UNHANDLED id 114
+000154 000032 File= Cmd: auto_calibration_messages = YES
+000155 000032 >>set_sysvar: UNHANDLED id 110
+000156 000032 File= Cmd: calibration_samples = 10   ; total length of calibration sequence
+000157 000032 >>set_sysvar: UNHANDLED id 99
+000158 000032 File= Cmd: calibration_average = NO   
+000159 000032 >>set_sysvar: UNHANDLED id 100
+000160 000032 File= Cmd: calibration_sequence = 0,1,2,3,4,5,6,7,8,0
+000161 000032 >>set_sysvar: UNHANDLED id 101
+000162 000032 File= Cmd: validation_samples = 9
+000163 000032 >>set_sysvar: UNHANDLED id 116
+000164 000032 File= Cmd: validation_sequence = 0,1,2,3,4,5,6,7,8,0
+000165 000032 >>set_sysvar: UNHANDLED id 117
+000166 000032 File= Cmd: validation_weights = 4,2,2,2,2,1,1,1,1
+000167 000032 >>set_sysvar: UNHANDLED id 119
+000168 000032 File= Cmd: validation_online_fixup  = AUTO
+000169 000032 >>set_sysvar: UNHANDLED id 121
+000170 000032 File= Cmd: validation_correct_drift = AUTO
+000171 000032 >>set_sysvar: UNHANDLED id 405
+000172 000032 File= Cmd: validation_resample_worst = 2
+000173 000032 >>set_sysvar: UNHANDLED id 122
+000174 000032 File= Cmd: validation_worst_error = 1.0
+000175 000032 >>set_sysvar: UNHANDLED id 123
+000176 000032 File= Cmd: calibration_collection_interval = 100
+000177 000032 >>set_sysvar: UNHANDLED id 97
+000178 000032 File= Cmd: manual_collection_minimum_fixation = 300
+000179 000032 >>set_sysvar: UNHANDLED id 95
+000180 000032 File= Cmd: manual_collection_fixation_lookback = 200
+000181 000032 >>set_sysvar: UNHANDLED id 96
+000182 000032 File= Cmd: enable_automatic_calibration = YES
+000183 000032 >>set_sysvar: UNHANDLED id 109
+000184 000032 File= Cmd: autocal_minimum_saccade = 2.5   ;; CONSERVATIVE for small-deviation trigger
+000185 000032 >>set_sysvar: UNHANDLED id 93
+000186 000032 File= Cmd: autocal_saccade_fraction = 0  3
+000187 000032 >>set_sysvar: UNHANDLED id 569
+000188 000032 File= Cmd: autocal_minimum_fixation = 500
+000189 000032 >>set_sysvar: UNHANDLED id 94
+000190 000032 File= Cmd: automatic_calibration_pacing = 1000
+000191 000032 >>set_sysvar: UNHANDLED id 111
+000192 000032 File= Cmd: validation_maximum_deviation = 7.0
+000193 000033 >>set_sysvar: UNHANDLED id 120
+000194 000033 File= Cmd: drift_correction_rpt_error = 2.0
+000195 000033 >>set_sysvar: UNHANDLED id 128
+000196 000033 File= Cmd: drift_correction_rpt_beep = YES
+000197 000033 >>set_sysvar: UNHANDLED id 129
+000198 000033 File= Cmd: minimum_eyecam_x_upd = 0.5
+000199 000033 >>set_sysvar: UNHANDLED id 131
+000200 000033 File= Cmd: maximum_eyecam_x_upd = 10.0
+000201 000033 >>set_sysvar: UNHANDLED id 132
+000202 000033 File= Cmd: minimum_eyecam_y_upd = 0.25
+000203 000033 >>set_sysvar: UNHANDLED id 133
+000204 000033 File= Cmd: maximum_eyecam_y_upd = 5.0
+000205 000033 >>set_sysvar: UNHANDLED id 134
+000206 000033 File= Cmd: maximum_xy_gain_ratio = 5.0;
+000207 000033 >>set_sysvar: UNHANDLED id 135
+000208 000033 File= Cmd: minimum_xy_gain_ratio = 1.0;
+000209 000033 >>set_sysvar: UNHANDLED id 136
+000210 000033 File= Cmd: maximum_linear_crossterm = 0.8;
+000211 000033 >>set_sysvar: UNHANDLED id 137
+000212 000033 File= Cmd: maximum_nonlinearity = 2.0, 4.0;
+000213 000033 >>set_sysvar: UNHANDLED id 138
+000214 000033 File= Cmd: maximum_corner_fixup = 0.6;
+000215 000033 >>set_sysvar: UNHANDLED id 139
+000216 000033 File= Cmd: default_eye_mapping = -15360, 80, -12800, 160
+000217 000033 >>set_sysvar: UNHANDLED id 143
+000218 000033 File= Cmd: online_dcorr_collection_time = 100, 300
+000219 000033 >>set_sysvar: UNHANDLED id 310
+000220 000033 File= Cmd: online_dcorr_max_lookback = 250
+000221 000033 >>set_sysvar: UNHANDLED id 311
+000222 000033 File= Cmd: online_dcorr_refposn = 512, 384
+000223 000033 >>set_sysvar: UNHANDLED id 312
+000224 000033 File= Cmd: online_dcorr_maxangle = 5.0
+000225 000033 >>set_sysvar: UNHANDLED id 313
+000226 000033 File= Cmd: drift_correction_samples = 1
+000227 000033 >>set_sysvar: UNHANDLED id 124
+000228 000033 File= Cmd: drift_correction_weights = 1
+000229 000033 >>set_sysvar: UNHANDLED id 126
+000230 000033 File= Cmd: drift_correction_targets = 512, 384
+000231 000033 File= Cmd: drift_correction_fraction = 1.0
+000232 000033 >>set_sysvar: UNHANDLED id 127
+000233 000033 File= Cmd: drift_correct_mouse = ON
+000234 000033 >>set_sysvar: UNHANDLED id 130
+000235 000033 File= Cmd: driftcorrect_cr_disable = AUTO
+000236 000033 >>set_sysvar: UNHANDLED id 425
+000237 000033 File= Cmd: remote_cal_enable = OFF
+000238 000033 >>set_sysvar: UNHANDLED id 356
+000239 000033 File= Cmd: disable_cal_auto_sequence = NO
+000240 000033 >>set_sysvar: UNHANDLED id 357
+000241 000033 File= Cmd: disable_cal_trigger = NO
+000242 000033 >>set_sysvar: UNHANDLED id 358
+000243 000033 File= Cmd: disable_cal_backspace = NO
+000244 000033 >>set_sysvar: UNHANDLED id 359
+000245 000033 File= Cmd: disable_cal_auto_manual_switch = NO
+000246 000033 >>set_sysvar: UNHANDLED id 360
+000247 000033 File= Cmd: show_cal_target_while_waiting = NO
+000248 000033 >>set_sysvar: UNHANDLED id 363
+000249 000033 File= Cmd: normal_click_dcorr = OFF
+000250 000033 >>set_sysvar: UNHANDLED id 383
+000251 000033 File= Cmd: online_dcorr_button = OFF;
+000252 000033 >>set_sysvar: UNHANDLED id 384
+000253 000033 File= Cmd: always_default_calibration = ON
+000254 000033 >>set_sysvar: UNHANDLED id 571
+000255 000033 File= Cmd: include "defaults.ini"	// default settings other than above
+000256 000036 File= Cmd: elcl_detect_tt " " " " " " " "  " "  " "  " "
+000257 000036 >>set_sysvar: UNHANDLED id 462
+000258 000036 File= Cmd: active_eye = RIGHT
+000259 000036 File= Cmd: binocular_enabled = YES
+000260 000036 Not available in EyeLink CL mode
+000261 000036 File= Cmd: current_camera = RIGHT
+000262 000036 >>set_sysvar: UNHANDLED id 13
+000263 000036 File= Cmd: initial_thresholds = 66, 40, 66, 150, 150
+000264 000036 >>set_sysvar: UNHANDLED id 9
+000265 000036 File= Cmd: lock_active_eye = YES
+000266 000036 >>set_sysvar: UNHANDLED id 15
+000267 000036 File= Cmd: lock_eye_after_calibration = YES
+000268 000036 >>set_sysvar: UNHANDLED id 16
+000269 000036 File= Cmd: select_eye_after_validation = NO
+000270 000036 >>set_sysvar: UNHANDLED id 17
+000271 000036 File= Cmd: randomize_calibration_order = YES
+000272 000036 >>set_sysvar: UNHANDLED id 112
+000273 000036 File= Cmd: randomize_validation_order = YES
+000274 000036 >>set_sysvar: UNHANDLED id 115
+000275 000036 File= Cmd: enable_automatic_calibration = YES
+000276 000036 >>set_sysvar: UNHANDLED id 109
+000277 000037 File= Cmd: automatic_calibration_pacing = 1000
+000278 000037 >>set_sysvar: UNHANDLED id 111
+000279 000037 File= Cmd: drift_correction_fraction = 1.000
+000280 000037 >>set_sysvar: UNHANDLED id 127
+000281 000037 File= Cmd: pupil_size_diameter = AREA
+000282 000037 File= Cmd: set_record_data_defaults DATA=1,1,0,0
+000283 000037 >>exec_command: UNHANDLED id 2011
+000284 000037 File= Cmd: cal_repeat_first_target = YES
+000285 000037 >>set_sysvar: UNHANDLED id 113
+000286 000037 File= Cmd: val_repeat_first_target = YES
+000287 000037 >>set_sysvar: UNHANDLED id 114
+000288 000037 File= Cmd: select_parser_configuration 0
+000289 000037 File= Cmd: heuristic_filter 1 2
+000290 000037 >>set_sysvar: UNHANDLED id 46
+000291 000037 File= Cmd: aux_mouse_simulation = NO
+000292 000037 >>set_sysvar: UNHANDLED id 33
+000293 000037 File= Cmd: corneal_mode = YES
+000294 000037 >>set_sysvar: UNHANDLED id 263
+000295 000037 File= Cmd: use_high_speed = YES
+000296 000037 >>set_sysvar: UNHANDLED id 264
+000297 000037 File= Cmd: file_sample_data = LEFT,RIGHT,GAZE,GAZERES,HREF,PUPIL,AREA,HTARGET,INPUT,STATUS
+000298 000037 SV_file_sample_data
+000299 000037 File= Cmd: recording_parse_type = GAZE
+000300 000037 File= Cmd: logfile_contents = ALL
+000301 000037 >>exec_command: UNHANDLED id 2041
+000302 000037 File= Cmd: disable_head_camera = NO
+000303 000037 >>set_sysvar: UNHANDLED id 298
+000304 000037 File= Cmd: disable_corneal_reflection = NO
+000305 000037 >>set_sysvar: UNHANDLED id 299
+000306 000037 File= Cmd: ambient_filter_constant = 0.2
+000307 000037 File= Cmd: black_filter_constant= 0.01
+000308 000037 File= Cmd: disable_gaze_cursors = NO
+000309 000037 >>set_sysvar: UNHANDLED id 367
+000310 000037 File= Cmd: image_from_setup_menu = OFF
+000311 000037 >>set_sysvar: UNHANDLED id 265
+000312 000037 File= Cmd: draw_link_crosshairs = ON
+000313 000037 >>set_sysvar: UNHANDLED id 365
+000314 000037 File= Cmd: hcam_center = -22400, -15700 
+000315 000037 >>set_sysvar: UNHANDLED id 37
+000316 000037 File= Cmd: hcam_scale = -585, -245 
+000317 000037 >>set_sysvar: UNHANDLED id 38
+000318 000037 File= Cmd: mirror_eyecam_image = YES, YES
+000319 000037 File= Cmd: mirror_headcam_image = NO, NO
+000320 000037 File= Cmd: left_eye_head_camera_offset  = 40.0 70.0 0.0 70.0
+000321 000037 >>set_sysvar: UNHANDLED id 41
+000322 000037 File= Cmd: right_eye_head_camera_offset = -40.0 70.0 0.0 70.0
+000323 000037 >>set_sysvar: UNHANDLED id 40
+000324 000037 File= Cmd: pupil_crosstalk_fixup = 0.000, -0.001
+000325 000037 File= Cmd: sticky_mode_data_enable DATA = 0 0 0 0 
+000326 000037 >>exec_command: UNHANDLED id 2067
+000327 000037 File= Cmd: sticky_mode_parse_type GAZE
+000328 000037 >>set_sysvar: UNHANDLED id 350
+000329 000037 File= Cmd: force_elcl_mode = TRUE
+000330 000037 >>set_sysvar: UNHANDLED id 428
+000331 000037 File= Cmd: cl_edf_identifier = "SR_RESEARCH_1000FILE"
+000332 000037 >>set_sysvar: UNHANDLED id 392
+000333 000037 File= Cmd: allow_pupil_without_cr = FALSE
+000334 000037 >>set_sysvar: UNHANDLED id 407
+000335 000037 File= Cmd: autothreshold_click = TRUE
+000336 000037 >>set_sysvar: UNHANDLED id 396
+000337 000037 File= Cmd: autothreshold_repeat = TRUE
+000338 000037 >>set_sysvar: UNHANDLED id 397
+000339 000037 File= Cmd: enable_camera_position_detect = TRUE
+000340 000037 >>set_sysvar: UNHANDLED id 398
+000341 000037 File= Cmd: force_network_present = TRUE
+000342 000037 >>set_sysvar: UNHANDLED id 430
+000343 000037 File= Cmd: elcl_pupil_symmetry_gain 0.0 0.0
+000344 000037 >>set_sysvar: UNHANDLED id 457
+000345 000037 File= Cmd: force_corneal_reflection =TRUE 
+000346 000037 >>set_sysvar: UNHANDLED id 424
+000347 000037 File= Cmd: elcl_hold_if_no_corneal = OFF
+000348 000037 >>set_sysvar: UNHANDLED id 476
+000349 000037 File= Cmd: elcl_search_if_no_corneal = ON
+000350 000037 >>set_sysvar: UNHANDLED id 477
+000351 000037 File= Cmd: elcl_use_pcr_matching = ON
+000352 000037 >>set_sysvar: UNHANDLED id 478
+000353 000037 File= Cmd: file_buffer_record_display = OFF
+000354 000037 >>set_sysvar: UNHANDLED id 501
+000355 000037 File= Cmd: enable_search_limits = ON
+000356 000037 >>set_sysvar: UNHANDLED id 394
+000357 000037 File= Cmd: track_search_limits = OFF
+000358 000037 >>set_sysvar: UNHANDLED id 395
+000359 000037 File= Cmd: search_limits_shape = 1
+000360 000037 >>set_sysvar: UNHANDLED id 482
+000361 000037 File= Cmd: search_limits_size = 500 500
+000362 000037 >>set_sysvar: UNHANDLED id 399
+000363 000037 File= Cmd: search_limits_rect = -1
+000364 000037 >>set_sysvar: UNHANDLED id 400
+000365 000037 File= Cmd: enable_file_buffer = ON
+000366 000037 >>set_sysvar: UNHANDLED id 499
+000367 000037 File= Cmd: camera_color_ramp 2, 0.000, 0.00, 0.400, 0.620, 0.400, 0.620
+000368 000037 >>set_sysvar: UNHANDLED id 562
+000369 000037 File= Cmd: start_in_camera_setup TRUE
+000370 000037 >>set_sysvar: UNHANDLED id 515
+000371 000037 File= Cmd: use_camimg_palette_colors = ON
+000372 000037 >>set_sysvar: UNHANDLED id 567
+000373 000037 File= Cmd: eyelink_file_xfer_packets 0
+000374 000037 >>set_sysvar: UNHANDLED id 568
+000375 000037 File= Cmd: include "ellipse.ini"   // ellipse fitting settings
+000376 000040 File= Cmd: efit2_params 0.85 400 1000 0 0 0.4 0.6 1
+000377 000040 >>set_sysvar: UNHANDLED id 539
+000378 000040 File= Cmd: efit2_cr_clip 7 10 3 2
+000379 000040 >>set_sysvar: UNHANDLED id 540
+000380 000040 File= Cmd: use_efit3 1 0
+000381 000040 >>set_sysvar: UNHANDLED id 549
+000382 000040 File= Cmd: display_ellipse TRUE
+000383 000040 >>set_sysvar: UNHANDLED id 435
+000384 000040 File= Cmd: efit3_params 0.92  0.78  1.08  0.99  6  0.2  0
+000385 000040 >>set_sysvar: UNHANDLED id 550
+000386 000040 File= Cmd: efit3_retrim_params  0.15  0.1  0.1  3
+000387 000040 >>set_sysvar: UNHANDLED id 551
+000388 000040 File= Cmd: large_offset_to_blink 1 3.0
+000389 000040 >>set_sysvar: UNHANDLED id 552
+000390 000045 verify_my_ip_address: ip 0.0.0.0 (Intel(R) Ethernet Connection (7) I219-V)
+000391 000045 verify_my_ip_address: ip 0.0.0.0 (Bluetooth Device (Personal Area Network))
+000392 000045 verify_my_ip_address: ip 192.168.1.253 (Intel(R) Wireless-AC 9462)
+000393 000045 verify_my_ip_address: ip 0.0.0.0 (Microsoft Wi-Fi Direct Virtual Adapter)
+000394 000045 verify_my_ip_address: ip 0.0.0.0 (Microsoft Wi-Fi Direct Virtual Adapter #2)
+000395 000045 verify_my_ip_address: couldn't find address 100.1.1.2 --> using 127.0.0.1
+000396 000045 Running tracker on IP Address 127.0.0.1.
+000397 000046 FTPD thread created
+********  END OF Mouse Simulation LOG FILE  ********
