@@ -2,9 +2,9 @@
 
 This repository contains code run a virtual reality experiment using Unity, under continuous control of and communication with the experimental control software MonkeyLogic2. Communication between these programs, behavioural recording devices, and electrophysiological devices is handled by Lab Streaming Layer. 
 
-See the [Wiki page](https://github.com/Doug1983/MTLab_UnitySource/wiki/1.-Installation) for detailed instructions, and a lot of really useful detail on MonkeyLogic, Lab Streaming Layer, Unity, C#, and more. 
+See the [Wiki page](https://github.com/Doug1983/MTLab_UnitySource/wiki/1.-Installation) for detailed instructions, and a lot of really useful detail on MonkeyLogic, Lab Streaming Layer, Unity, C#, and more. If you have trouble installing or running any of this software, you can also check out the [Wiki Troubleshooting section](https://github.com/Doug1983/MTLab_UnitySource/wiki/5.-Misc-and-Troubleshooting). 
 
-This project was originally built by [Guillaume Doucet](https://www.github.com/Doug1983/), and modified by [Roberto Gulli](https://www.github.com/rgulli).
+This project was originally built by [Guillaume Doucet](https://www.github.com/Doug1983/).
 
 ## Requirements & Dependencies
 * PC running Windows 10
@@ -78,7 +78,7 @@ To test that your installation is working, you can try to run a copy of the asso
 * Move all of the files now in `<yourLocalSourceRepoPath>/Assets/Tasks/MTLab_UnityExampleTask/` to `<yourLocalSourceRepoPath>/Assets/Tasks/`
 * In Unity Hub, add your local repository as a new project. 
 * Open the project using Unity v2019.3.0**
-     * ~Note, if Unity project won't open, run : `$ git clean -fxd` in the `<project>/Assets/Tasks/` folder.~ This seemed to remove a lot of the components necessary to register each scene in the Tasks folder. 
+     * If you're having trouble opening Unity, check out the [Wiki section on Troubleshooting](https://github.com/Doug1983/MTLab_UnitySource/wiki/5.-Misc-and-Troubleshooting).
 
 > Note, you may get a pop-up asking: 
 >> 
