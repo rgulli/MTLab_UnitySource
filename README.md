@@ -14,7 +14,8 @@ This project was originally built by [Guillaume Doucet](https://www.github.com/D
 **MonkeyLogic2 resources** <br>  
 * [NIMH MonkeyLogic2](https://monkeylogic.nimh.nih.gov/download.html)
 * [Customisted task for MonkeyLogic2](https://github.com/JMTNeuroLab/MTLab_ML_UnityTask.git)
-
+	* This task contains a subfolder named `libLSL`. This subfolder contains all of the code for [Lab Streaming Layer version 1.13.0](https://github.com/labstreaminglayer/liblsl-Matlab/releases), which is compatible with Matlab 2019b. 
+	
 **Unity resources** <br>
 * Unity, downloaded via [Unity Hub](https://unity3d.com/get-unity/download). Install one of the tested versions (2019.3.0b3, 2019.3.0f6). 
 * Unity-MonkeyLogic project source code (this repository)
@@ -35,13 +36,6 @@ This project was originally built by [Guillaume Doucet](https://www.github.com/D
   `$ cd /c/MonkeyLogic/task/`
 * Clone Unity task for MonkeyLogic2
   `$ git clone --recurse-submodules https://github.com/JMTNeuroLab/MTLab_ML_UnityTask.git `
-  
-#### Install Lab Streaming Layer
-* Add Lab Streaming Layer to the task. First, download the latest release of [Lab Streaming Layer](https://github.com/labstreaminglayer/liblsl-Matlab/releases), then extract the contents of the release to `C:\MonkeyLogic\task\MTLab_ML_UnityTask\libLSL\bin\`
-* Copy the library file `C:\MonkeyLogic\task\MTLab_ML_UnityTask\libLSL\bin\liblsl-Matlab\bin\liblsl64.dll` to `C:\MonkeyLogic\task\MTLab_ML_UnityTask\libLSL\bin\liblsl64.dll`.
-* In Matlab, add LSL folder to path: <br>
-  `>> addpath(genpath('C:\MonkeyLogic\task\MTLab_ML_UnityTask\libLSL'))`
-> If the installation does not work, run the script `C:\MonkeyLogic\task\MTLab_ML_UnityTask\libLSL\build_mex.m`
 
 ### Unity
 
